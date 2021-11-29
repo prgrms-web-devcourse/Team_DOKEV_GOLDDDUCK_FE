@@ -5,7 +5,10 @@
       "@app": ["./App.tsx"],
       "@pages/*": ["./pages/*"],
       "@components/*": ["./components/*"],
-      "@styles/*": ["./styles/*"]
+      "@styles/*": ["./styles/*"],
+      "@domains/*": ["./domains/*"],
+      "@hooks/*": ["./hooks/*"],
+      "@contexts/*": ["./contexts/*"],
     }
   }
 }
