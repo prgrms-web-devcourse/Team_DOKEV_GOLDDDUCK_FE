@@ -1,8 +1,10 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import { AppProps } from 'next/app'
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
+  const a = 123
+  const b = [1, 2, 3, 4]
+
   return <Component {...pageProps} />
 }
 
-export default MyApp
+export default App
