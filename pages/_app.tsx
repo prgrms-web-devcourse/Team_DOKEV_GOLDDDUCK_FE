@@ -1,9 +1,7 @@
 import { AppProps } from 'next/app'
+import '../styles/globals.css'
 
 function App({ Component, pageProps }: AppProps) {
-  const a = 123
-  const b = [1, 2, 3, 4]
-
   return <Component {...pageProps} />
 }
 
