@@ -15,8 +15,18 @@
     "project": "./tsconfig.json"
   },
   "rules": {
-    "@typescript-eslint/semi": "off",
     "@typescript-eslint/space-before-function-paren": "off",
-    "newline-before-return": "error"
+    "no-var": "error", // var 변수를 사용하지 않는다.
+    "object-curly-spacing": ["error", "always", { "objectsInObjects": false }], // 시작 괄호 바로 다음과 끝 괄호 바로 이전에 공백이 있으면 안 된다.
+    "key-spacing": ["error", { "beforeColon": false }], // 키워드, 연산자와 다른 코드 사이에 공백이 있어야 한다.
+    "newline-before-return": "error", // return문 바로 위는 한 칸 비워 놓는다.
+    "eqeqeq": ["error", "always"], // 삼중 등호 연산자인 ===, !==만 사용한다.
+    "prefer-template": "error", // 변수 등을 조합해서 문자열을 생성하는 경우 템플릿 문자열을 이용한다.
+    "implicit-arrow-linebreak": ["error", "beside"], // 암시적 반환을 사용할 경우 함수 본문 전에 개행을 하지 않는다.
+    "arrow-parens": ["error", "as-needed"], // 화살표 함수의 파라미터가 하나이면 괄호를 생략한다.
+    "prefer-arrow-callback": "error", // 함수 표현식 대신 화살표 함수를 사용한다.
+    "lines-between-class-members": ["error", "always"], // 메서드 문법 사용 시 메서드 사이에 개행을 추가한다.
+    "object-shorthand": ["error", "always"], // 객체의 메서드 표현 시 축약 메소드 표기를 사용한다.
+    "no-self-assign": ["error", { "props": true }] // 자기 참조 할당은 하지 않는다.
   }
 }
