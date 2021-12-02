@@ -1,4 +1,3 @@
-import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { ICON_TYPES } from '../../utils/constants/icons'
 import { FONT_SIZES } from '../../utils/constants/sizes'
