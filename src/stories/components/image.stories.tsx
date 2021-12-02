@@ -1,50 +1,31 @@
 import Image from '@components/Image'
 
+interface IImage {
+  style?: React.CSSProperties
+  display?: string
+  iscircle?: boolean
+  mode?: 'fill' | 'contain' | 'cover'
+  width?: number | string
+  height?: number | string
+  lazy?: boolean
+  threshold?: number
+  placeholder?: string
+}
+
 export default {
   title: 'Components/Image',
   component: Image,
-  argTypes: {
-    width: {
-      defaultValue: 180,
-      control: { type: 'number' },
-    },
-    height: {
-      defaultValue: 240,
-      control: { type: 'number' },
-    },
-    mode: {
-      defaultValue: 'contain',
-      options: ['cover', 'fill', 'contain'],
-      control: { type: 'inline-radio' },
-    },
-    block: {
-      defaultValue: false,
-      control: { type: 'boolean' },
-    },
-    lazy: {
-      defaultValue: false,
-      control: { type: 'boolean' },
-    },
-    threshold: {
-      defaultValue: 0.9,
-      control: { type: 'number' },
-    },
-    iscircle: {
-      defaultValue: false,
-      control: { type: 'boolean' },
-    },
-  },
 }
 
-export const Default = (args: any) => {
+export const Default = (args: IImage) => {
   return (
     <>
-      <Image src="https://picsum.photos/200" block={true} {...args} />
-      <Image src="https://picsum.photos/200" block={true} {...args} />
-      <Image src="https://picsum.photos/200" block={true} {...args} />
+      <Image src="https://picsum.photos/200" display="block" {...args} />
+      <Image src="https://picsum.photos/200" display="block" {...args} />
+      <Image src="https://picsum.photos/200" display="block" {...args} />
       <Image
         src="https://picsum.photos/200"
-        block={true}
+        display="block"
         style={{ marginLeft: '24px' }}
         {...args}
       />

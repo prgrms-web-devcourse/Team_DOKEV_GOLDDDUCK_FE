@@ -1,14 +1,13 @@
-import styled from '@emotion/styled'
 import { useRef, useEffect, useState } from 'react'
 
 interface IImage {
   src: string
-  block: boolean
-  iscircle: boolean
   style?: React.CSSProperties
+  display?: string
+  iscircle?: boolean
   mode?: 'fill' | 'contain' | 'cover'
-  width?: number
-  height?: number
+  width?: number | string
+  height?: number | string
   lazy?: boolean
   threshold?: number
   placeholder?: string
@@ -28,9 +27,9 @@ const onIntersection: IntersectionObserverCallback = (entries, io) => {
 
 const Image = ({
   src,
-  block,
-  iscircle,
   style,
+  display = 'block',
+  iscircle = false,
   mode = 'cover',
   width = 180,
   height = 240,
@@ -42,7 +41,7 @@ const Image = ({
   const imgRef = useRef<HTMLImageElement>(null)
 
   const imageStyle: React.CSSProperties = {
-    display: block ? 'block' : 'inline',
+    display,
     objectFit: mode,
     borderRadius: iscircle ? '50%' : undefined,
     ...style,
