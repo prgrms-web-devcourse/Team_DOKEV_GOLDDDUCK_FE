@@ -1,25 +1,19 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import Button from '@mui/material/Button'
 
 interface Props {
   onClick?(): void
-  text?: string
-  color?: string
   variant?: 'text' | 'contained' | 'outlined'
   href?: string
-  height?: string
-  width?: string
-  backgroundColor?: string
-  borderRadius?: string
-  fontSize?: string
+  style?: CSSProperties
 }
 
 const MUIButton: React.FC<Props> = ({
   onClick,
-  text,
+  children,
   variant = 'contained',
   href,
-  ...props
+  style,
 }) => {
   return (
     <>
@@ -27,8 +21,8 @@ const MUIButton: React.FC<Props> = ({
         variant={variant}
         href={href}
         onClick={onClick}
-        style={{ ...props }}>
-        {text}
+        style={{ ...style }}>
+        {children}
       </Button>
     </>
   )
