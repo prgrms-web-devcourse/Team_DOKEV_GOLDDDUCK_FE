@@ -9,12 +9,15 @@ const sign = () => {
     <>
       <MUIButton
         onClick={onButtonClick}
-        color={'white'}
-        height={'90px'}
-        width={'80%'}
-        text={'테스트버튼'}
-        border-radius={'50px'}
-        background-color={'red'}></MUIButton>
+        style={{
+          color: 'white',
+          height: '90px',
+          width: '80%',
+          borderRadius: '50px',
+          backgroundColor: 'red',
+        }}>
+        테스트버튼
+      </MUIButton>
     </>
   )
 }
