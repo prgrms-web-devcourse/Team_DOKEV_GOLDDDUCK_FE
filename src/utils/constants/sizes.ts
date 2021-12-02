@@ -3,7 +3,7 @@ interface IFontSize {
 }
 
 export const FONT_SIZES: IFontSize = {
-  micro: '12px',
+  micro: '0.75rem',
   small: '0.875rem',
   base: '1rem',
   medium: '1.125rem',
