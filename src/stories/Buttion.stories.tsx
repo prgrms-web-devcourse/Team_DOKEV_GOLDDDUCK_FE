@@ -9,6 +9,8 @@ interface Props {
   height?: string
   width?: string
   backgroundColor?: string
+  borderRadius?: string
+  fontSize?: string
 }
 
 export default {

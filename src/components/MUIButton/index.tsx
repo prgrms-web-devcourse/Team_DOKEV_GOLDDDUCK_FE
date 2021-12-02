@@ -10,6 +10,8 @@ interface Props {
   height?: string
   width?: string
   backgroundColor?: string
+  borderRadius?: string
+  fontSize?: string
 }
 
 const MUIButton: React.FC<Props> = ({
