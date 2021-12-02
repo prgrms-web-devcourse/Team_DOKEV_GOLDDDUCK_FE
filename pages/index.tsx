@@ -1,20 +1,9 @@
 import styled from '@emotion/styled'
 
 export default function Home() {
-  return (
-    <AppContainer>
-      <ExampleBtn>Button</ExampleBtn>
-    </AppContainer>
-  )
+  return <ExampleBtn>Button</ExampleBtn>
 }
 
-const AppContainer = styled.div`
-  max-width: 425px;
-  min-width: 320px;
-  height: 100vh;
-  margin: 0 auto;
-  background-color: #000000;
-`
 const ExampleBtn = styled.button`
   background-color: red;
   width: calc(80% - 32px);
