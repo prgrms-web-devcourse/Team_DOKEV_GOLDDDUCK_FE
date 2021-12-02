@@ -6,8 +6,8 @@ interface IInputRadio {
   value: string
   id: string
   name: string
-  checked?: boolean
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  checked: boolean
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   style?: React.CSSProperties
 }
 

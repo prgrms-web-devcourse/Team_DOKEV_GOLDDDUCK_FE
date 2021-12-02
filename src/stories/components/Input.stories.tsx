@@ -24,12 +24,13 @@ export const TextInput = () => {
   return (
     <Contaier>
       <Div>
-        <label htmlFor="text" style={{ color: '#FFFFFF', marginRight: '24px' }}>
+        <label
+          htmlFor="input-text"
+          style={{ color: '#FFFFFF', marginRight: '24px' }}>
           제목
         </label>
         <InputText
-          id="text"
-          type="text"
+          id="input-text"
           width="65%"
           value={value}
           name={'textInput'}

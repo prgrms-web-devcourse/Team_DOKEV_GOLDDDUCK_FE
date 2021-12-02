@@ -1,18 +1,16 @@
 import styled from '@emotion/styled'
 
 interface IInputText {
-  type: 'text' | 'radio'
   value: string | number
   id: string
   name: string
   width: string
   height?: string
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   style?: React.CSSProperties
 }
 
 const InputText = ({
-  type,
   value,
   id,
   name,
@@ -30,7 +28,7 @@ const InputText = ({
   return (
     <InputStyled
       id={id}
-      type={type}
+      type="text"
       value={value}
       name={name}
       onChange={onChange}
