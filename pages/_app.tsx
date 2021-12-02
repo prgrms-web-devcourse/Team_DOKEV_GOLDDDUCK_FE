@@ -1,10 +1,20 @@
 import { AppProps } from 'next/app'
-
+import styled from '@emotion/styled'
+import '../styles/globals.css'
 function App({ Component, pageProps }: AppProps) {
-  const a = 123
-  const b = [1, 2, 3, 4]
-
-  return <Component {...pageProps} />
+  return (
+    <>
+      <RootContainer>
+        <Component {...pageProps}></Component>
+      </RootContainer>
+    </>
+  )
 }
-
+const RootContainer = styled.div`
+  max-width: 425px;
+  min-width: 320px;
+  height: 100vh;
+  margin: 0 auto;
+  background-color: #000000;
+`
 export default App
