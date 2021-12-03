@@ -9,6 +9,7 @@
       "@domains/*": ["./domains/*"],
       "@hooks/*": ["./hooks/*"],
       "@contexts/*": ["./contexts/*"],
+      "@utils/*": ["./utils/*"]
     }
   }
 }
