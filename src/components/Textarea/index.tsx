@@ -1,5 +1,7 @@
 import styled from '@emotion/styled'
 import React from 'react'
+import { COLORS } from '@utils/constants/colors'
+import { FONT_SIZES } from '@utils/constants/sizes'
 
 interface ITextarea {
   id: string
@@ -23,10 +25,9 @@ const Textarea = ({ id, name, value, onChange }: ITextarea): JSX.Element => {
 }
 
 const TextareaStyled = styled.textarea`
-  background-color: #ffffff;
-  box-sizing: border-box; /* 삭제할것 스토리북 전용 */
+  background-color: ${COLORS.WHITE};
   border: none;
-  border-top: 2px solid #ce000b;
+  border-top: 2px solid ${COLORS.RED};
   padding: 8px;
   width: 98%;
   height: 190px;
@@ -34,7 +35,7 @@ const TextareaStyled = styled.textarea`
   outline: none;
   margin: 0 auto;
   display: block;
-  font-size: 1.5rem;
+  font-size: ${FONT_SIZES.LARGE};
   white-space: break-spaces;
   line-height: 1.3;
   letter-spacing: 1px;
