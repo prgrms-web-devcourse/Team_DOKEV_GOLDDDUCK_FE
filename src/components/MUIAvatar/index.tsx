@@ -9,7 +9,7 @@ interface Props {
   style?: CSSProperties
 }
 
-const MUIAvatar: React.FC<Props> = ({
+const MUIAvatar: React.ReactElement = ({
   onClick,
   width,
   height,
