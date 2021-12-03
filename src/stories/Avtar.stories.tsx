@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default {
-  title: 'Components/Button',
+  title: 'Components/Avtar',
   component: Avtar,
 }
 
