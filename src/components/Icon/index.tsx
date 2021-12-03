@@ -1,6 +1,6 @@
-import { ICON_TYPES } from '../../utils/constants/icons'
-import { FONT_SIZES } from '../../utils/constants/sizes'
-import { COLORS } from '../../utils/constants/colors'
+import { ICON_TYPES } from '@utils/constants/icons'
+import { FONT_SIZES } from '@utils/constants/sizes'
+import { COLORS } from '@utils/constants/colors'
 import { CSSProperties } from 'react'
 
 interface IIcon {
@@ -13,7 +13,7 @@ interface IIcon {
 
 const Icon = ({
   name,
-  size = 'base',
+  size = 'BASE',
   color = 'WHITE',
   onIconClick,
   ...style
