@@ -12,11 +12,8 @@ export const TextInput = () => {
 
   const handleOnChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
-      console.log('handleOnChange')
       const newValue = e.target.value
-      if (newValue.length < 15) {
-        setValue(() => newValue)
-      }
+      setValue(() => newValue)
     },
     [],
   )
@@ -24,18 +21,15 @@ export const TextInput = () => {
   return (
     <Contaier>
       <Div>
-        <label
-          htmlFor="input-text"
-          style={{ color: '#FFFFFF', marginRight: '24px' }}>
-          제목
-        </label>
+        <LabelStyled htmlFor="input-text" style={{ color: '#FFFFFF' }}>
+          제목*
+        </LabelStyled>
         <InputText
           id="input-text"
-          width="65%"
           value={value}
           name={'textInput'}
+          maxlength={15}
           onChange={handleOnChange}
-          style={{ marginTop: '24px' }}
         />
       </Div>
     </Contaier>
@@ -47,7 +41,6 @@ export const RadioInput = () => {
 
   const handleOnChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>): void => {
-      console.log('handleOnChange')
       const newInputState = e.target.value
       if (inputState !== newInputState) {
         setInputState(() => newInputState)
@@ -95,6 +88,13 @@ const Contaier = styled.div`
 `
 
 const Div = styled.div`
-  width: calc(85% - 32px);
+  width: calc(100% - 32px);
   margin: 0 auto;
+  display: flex;
+`
+
+const LabelStyled = styled.label`
+  display: block;
+  width: 30%;
+  font-size: 1.5rem;
 `

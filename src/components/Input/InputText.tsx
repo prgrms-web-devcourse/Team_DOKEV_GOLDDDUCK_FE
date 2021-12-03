@@ -1,30 +1,24 @@
 import styled from '@emotion/styled'
+import { COLORS } from '@utils/constants/colors'
+import { FONT_SIZES } from '@utils/constants/sizes'
 
 interface IInputText {
   value: string | number
   id: string
   name: string
-  width: string
-  height?: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  maxlength?: number
   style?: React.CSSProperties
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const InputText = ({
   value,
   id,
   name,
-  width,
-  height = '32px',
   onChange,
   style,
+  maxlength = 15,
 }: IInputText): JSX.Element => {
-  const inputStyle: React.CSSProperties = {
-    width,
-    height,
-    ...style,
-  }
-
   return (
     <InputStyled
       id={id}
@@ -32,7 +26,8 @@ const InputText = ({
       value={value}
       name={name}
       onChange={onChange}
-      style={{ ...inputStyle }}
+      maxLength={maxlength}
+      style={{ ...style }}
     />
   )
 }
@@ -40,11 +35,13 @@ const InputText = ({
 const InputStyled = styled.input`
   padding: 8px;
   border-radius: 4px;
-  border: 1px solid #bebebe; // TEXT_GRAY_LIGHT
+  border: 1px solid ${COLORS.TEXT_GRAY_LIGHT};
   background: none;
-  color: #ffffff; // WHITE
+  color: ${COLORS.WHITE};
   font-weight: bold;
-  font-size: 1.125rem;
+  font-size: ${FONT_SIZES.MEDIUM};
+  height: 32px;
+  width: 70%;
 `
 
 export default InputText
