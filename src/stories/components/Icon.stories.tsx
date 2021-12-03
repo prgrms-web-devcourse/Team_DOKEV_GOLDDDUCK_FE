@@ -13,7 +13,7 @@ interface IIcon {
 }
 
 export default {
-  title: 'Component/Icon',
+  title: 'Components/Icon',
   component: Icon,
   argTypes: {
     name: {

@@ -9,7 +9,7 @@ interface ITimer {
 }
 
 export default {
-  title: 'Component/Timer',
+  title: 'Components/Timer',
   component: Timer,
   argTypes: {
     time: {
