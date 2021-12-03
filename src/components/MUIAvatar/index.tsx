@@ -9,13 +9,13 @@ interface Props {
   style?: CSSProperties
 }
 
-const MUIAvatar: React.ReactElement = ({
+const MUIAvatar = ({
   onClick,
   width,
   height,
   src = '"/static/images/avatar/1.jpg"',
   style,
-}) => {
+}: Props): JSX.Element => {
   return (
     <>
       <Avatar
