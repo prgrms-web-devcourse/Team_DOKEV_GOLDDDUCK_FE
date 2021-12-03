@@ -4,12 +4,13 @@
     "paths": {
       "@app": ["./App.tsx"],
       "@pages/*": ["./pages/*"],
+      "@utils/*": ["./utils/*"],
       "@components/*": ["./components/*"],
       "@styles/*": ["./styles/*"],
       "@domains/*": ["./domains/*"],
       "@hooks/*": ["./hooks/*"],
       "@contexts/*": ["./contexts/*"],
-      "@utils/*": ["./utils/*"]
+      
     }
   }
 }
