@@ -9,6 +9,7 @@ module.exports = {
       '../src/components',
     )
     config.resolve.alias['@hooks'] = path.resolve(__dirname, '../src/hooks')
+    config.resolve.alias['@utils'] = path.resolve(__dirname, '../src/utils')
     config.resolve.alias['@contexts'] = path.resolve(
       __dirname,
       '../src/contexts',
