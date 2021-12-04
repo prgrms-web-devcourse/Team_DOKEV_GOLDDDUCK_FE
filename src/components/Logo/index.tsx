@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { useRouter } from 'next/dist/client/router'
 import logo from '/public/logo.png'
 
 interface Props {
@@ -6,13 +7,19 @@ interface Props {
   size: 'large' | 'small'
 }
 
-const Logo = ({ size, onClick }: Props): JSX.Element => {
+const Logo = ({ size }: Props): JSX.Element => {
+  const router = useRouter()
+
   return (
     <>
       {size === 'large' ? (
-        <Image onClick={onClick} src={logo} width={240} height={120}></Image>
+        <Image src={logo} width={240} height={120}></Image>
       ) : (
-        <Image onClick={onClick} src={logo} width={144} height={72}></Image>
+        <Image
+          onClick={() => router.push('/main')}
+          src={logo}
+          width={144}
+          height={72}></Image>
       )}
     </>
   )
