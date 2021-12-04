@@ -13,9 +13,7 @@ const Text: React.FC<Props> = ({ size, color, children }) => {
   const { [size]: fontSize } = FONT_SIZES
   const { [color]: fontColor } = COLORS
 
-  return (
-    <span style={{ fontSize, color: fontColor, ...style }}>{children}</span>
-  )
+  return <div style={{ fontSize, color: fontColor, ...style }}>{children}</div>
 }
 
 export default Text
