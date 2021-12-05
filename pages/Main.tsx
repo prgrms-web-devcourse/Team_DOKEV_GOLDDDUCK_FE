@@ -1,10 +1,10 @@
 import Header from '@domains/Header'
 import styled from '@emotion/styled'
-import { DEFAULT_MARGIN, FONT_SIZES } from '@utils/constants/sizes'
+import { FONT_SIZES } from '@utils/constants/sizes'
 import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
 
-const Main = () => {
+const main = () => {
   const onButtonClick = () => {
     alert('안녕')
   }
@@ -34,8 +34,6 @@ const Main = () => {
 const MainContainer = styled.div`
   width: 100%;
   height: 100%;
-  /* margin-left: ${DEFAULT_MARGIN};
-  margin-right: ${DEFAULT_MARGIN}; */
   background-color: blue;
   display: flex;
   flex-direction: column;
@@ -56,4 +54,4 @@ const VideoBox = styled.video`
   bottom: 40px;
 `
 
-export default Main
+export default main
