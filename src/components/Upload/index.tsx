@@ -1,197 +1,99 @@
 import styled from '@emotion/styled'
-import React, { useState, useCallback, useRef, CSSProperties } from 'react'
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  CSSProperties,
+  useEffect,
+} from 'react'
 import { COLORS } from '@utils/constants/colors'
 import { FONT_SIZES } from '@utils/constants/sizes'
+import Image from '@components/Image'
 
 interface IUpload {
   id: string
   name: string
-  value?: File
-  droppable: boolean
-  onChange?: any
-  onClick?: any
+  onClick?: (string: File[]) => void
   style?: CSSProperties
 }
 
-const Upload: React.FC<IUpload> = ({
-  id,
-  name,
-  value,
-  droppable,
-  onChange,
-  onClick,
-  style,
-  children,
-}): JSX.Element => {
-  const [file, setFile] = useState<File[] | null>(null)
-  // const [file, setFile] = useState<File[]>([])
-  const [dragging, setDragging] = useState(false)
-  // const [url, setUrl] = useState('')
-  const [url, setUrl] = useState('')
-  const [isShow, setIsShow] = useState(true)
+const Upload = ({ id, name, style, onClick }: IUpload): JSX.Element => {
+  const [fileList, setFileList] = useState<File[]>([])
+  const [urlList, setUrlList] = useState<string[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleChooseFile = () => {
+  // Input 요소에 직접 접근하여 클릭이벤트 호출. (display:none)
+  const handleChooseFile = useCallback(() => {
     inputRef.current?.click()
-  }
+  }, [])
 
+  /**
+   * 선택한 파일로 상태를 업데이트.
+   * fildDate : 파일 객체를 담는 데이터.
+   * urlData : 파일 객체를 URL로 변환하여 미리보기에 사용함.
+   */
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    e.preventDefault()
-    const files = e.target.files
-    if (files) {
-      console.log(files)
-      // 파일 하나인 경우
-      // const changedFile = files[0]
-      // const fileReader = new FileReader()
-      // fileReader.readAsDataURL(changedFile)
-      // console.log(fileReader, 11, fileReader.result)
-      // fileReader.onload = (e: any) => {
-      //   setUrl(e.target.result)
-      // }
-
-      //멅티플
-      Array.from(files).forEach((el: File) => {
-        const fileReader = new FileReader()
-        fileReader.readAsDataURL(el)
-        fileReader.onload = (e: any) => {
-          const url = e.target.result
-          // console.log([{ el, url }], el)
-          setFile((prev: []) => [...prev, { ...el, url }])
-        }
+    const files = e.target.files || []
+    if (files.length < 11 && urlList.length + files.length < 11) {
+      const fileData: File[] = []
+      const urlData: string[] = []
+      Array.from(files).forEach((file: File) => {
+        fileData.push(file)
+        urlData.push(URL.createObjectURL(file))
       })
-
-      // const fileData: File[] = []
-      // const urlData: string[] = []
-      // const fileReader = new FileReader()
-      // Array.from(files).forEach((el: File) => {
-      //   console.log(el)
-      //   fileData.push(el)
-      //   fileReader.readAsDataURL(el)
-      //   fileReader.onload = (e: any) => {
-      //     console.log('onload')
-      //     urlData.push(e.target.result)
-      //     setUrl((prev) => prev.push(e.target.result))
-      //   }
-      // })
-      // console.log(fileData, 'fileData')
-      // console.log(urlData, 'urlData')
-      // setFile(fileData)
-      // setUrl(urlData)
-
-      // const fileReader = new FileReader()
-      // const fileData: File[] = Array.from(files).map((file) =>
-      //   {
-      //     fileReader.readAsDataURL(file)
-
-      //   }
-      // )
-      // console.log(fileData, 'fileData')
-      // setFile(fileData)
-
-      // const changedFile = files[0]
-      // const fileReader = new FileReader()
-      // fileReader.readAsDataURL(changedFile)
-      // console.log(fileReader, 11, fileReader.result)
-      // fileReader.onload = (e: any) => {
-      //   console.log(e.target.result)
-      // }
-
-      // fileData.forEach((el: File) => {
-      //   fileReader.readAsDataURL(el)
-      //   fileReader.onload = (e: any) => {
-      //     setUrl(e.target.result)
-      //   }
-      // })
-
-      // onChange && onChange(changedFile)
+      setFileList((prevState: File[]) => [...fileData, ...prevState])
+      setUrlList((prevState: string[]) => [...urlData, ...prevState])
+    } else {
+      alert('파일 갯수 10개를 초과하였습니다!')
     }
   }
 
-  const handleRemoveOnClick = (e: any) => {
-    console.log('111')
-    e.stopPropagation()
-  }
-
-  const handleDragEnter = (e: React.DragEvent) => {
-    if (!droppable) return
-
-    e.preventDefault() // 브라우저 기본 이벤트를 막는다.
-    e.stopPropagation() // 부모나 자식 컴포넌트로 이벤트가 전파되는 것을 막는다.
-
-    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
-      setDragging(true)
-    }
-  }
-  const handleDragLeave = (e: React.DragEvent) => {
-    if (!droppable) return
-
+  /**
+   * fileList 와 urlList에서 해당 이미지 파일을 모두 삭제함.
+   * Submit 이벤트 관련 preventDefault 추후 여부에 따라 삭제 할 것.
+   */
+  const handleRemoveOnClick = (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ): void => {
     e.preventDefault()
-    e.stopPropagation()
-
-    setDragging(false)
+    const fileIndex = e.target as HTMLButtonElement
+    setFileList(
+      fileList.filter((_: File, index) => index !== parseInt(fileIndex.id, 10)),
+    )
+    setUrlList(
+      urlList.filter(
+        (_: string, index) => index !== parseInt(fileIndex.id, 10),
+      ),
+    )
   }
-  const handleDragOver = (e: React.DragEvent) => {
-    if (!droppable) return
 
-    e.preventDefault()
-    e.stopPropagation()
-  }
-  const handleFileDrop = (e: React.DragEvent) => {
-    if (!droppable) return
-
-    e.preventDefault()
-    e.stopPropagation()
-
-    const files = e.dataTransfer.files
-    const changedFile = files[0]
-    // setFile(changedFile)
-    onChange && onChange(changedFile)
-    setDragging(false)
-  }
-  console.log(file, 'file')
+  useEffect(() => {
+    onClick && onClick(fileList)
+  }, [fileList])
 
   return (
     <>
-      {file ? (
-        file.map((element, index) => (
-          <UploadStyled
-            key={index}
-            onClick={handleChooseFile}
-            style={{ ...style }}>
-            <InputStyled
-              ref={inputRef}
-              type="file"
-              name={element.name}
-              accept="image/*"
-              onChange={handleFileChange}
-              multiple
-            />
-            {url ? (
-              <RemoveUpload onClick={handleRemoveOnClick}>x</RemoveUpload>
-            ) : (
-              <UploadBtn>+</UploadBtn>
-            )}
-            {url && <ImageStyled src={url ? url : ''} />}
+      <UploadStyled onClick={handleChooseFile} style={{ ...style }}>
+        <InputStyled
+          ref={inputRef}
+          id={id}
+          type="file"
+          name={name}
+          accept="image/*"
+          onChange={handleFileChange}
+          multiple
+        />
+        <UploadBtn>+</UploadBtn>
+      </UploadStyled>
+      {fileList?.length !== 0 &&
+        fileList.map((_, index) => (
+          <UploadStyled key={index} id={id + index} style={{ ...style }}>
+            <RemoveUpload id={String(index)} onClick={handleRemoveOnClick}>
+              x
+            </RemoveUpload>
+            <Image src={urlList[index]} width={80} height={120} />
           </UploadStyled>
-        ))
-      ) : (
-        <UploadStyled onClick={handleChooseFile} style={{ ...style }}>
-          <InputStyled
-            ref={inputRef}
-            type="file"
-            name={name}
-            accept="image/*"
-            onChange={handleFileChange}
-            multiple
-          />
-          {url ? (
-            <RemoveUpload onClick={handleRemoveOnClick}>x</RemoveUpload>
-          ) : (
-            <UploadBtn>+</UploadBtn>
-          )}
-          {url && <ImageStyled src={url ? url : ''} />}
-        </UploadStyled>
-      )}
+        ))}
     </>
   )
 }
@@ -206,12 +108,11 @@ const UploadStyled = styled.div`
   height: 120px;
   background-color: ${COLORS.TEXT_GRAY_LIGHT};
   cursor: pointer;
-`
-
-const ImageStyled = styled.img`
-  width: 80px;
-  height: 120px;
-  object-fit: cover;
+  position: relative;
+  margin-left: 8px;
+  &:first-of-type {
+    margin: 0;
+  }
 `
 
 const UploadBtn = styled.button`
@@ -223,10 +124,10 @@ const UploadBtn = styled.button`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  cursor: pointer;
 `
 
 const RemoveUpload = styled.button`
-  color: ${COLORS.TEXT_BLACK};
   font-size: ${FONT_SIZES.MEDIUM};
   background: ${COLORS.RED};
   color: ${COLORS.WHITE};
@@ -234,6 +135,7 @@ const RemoveUpload = styled.button`
   position: absolute;
   right: 0;
   border-radius: 50%;
+  cursor: pointer;
 `
 
 export default Upload

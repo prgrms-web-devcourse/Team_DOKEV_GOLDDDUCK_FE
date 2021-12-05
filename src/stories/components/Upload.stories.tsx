@@ -1,5 +1,5 @@
 import Upload from '@components/Upload'
-import styled from '@emotion/styled'
+import { useState } from 'react'
 
 export default {
   title: 'Components/Upload',
@@ -7,24 +7,18 @@ export default {
 }
 
 export const Default = () => {
+  const [files, setFiles] = useState<File[]>([])
+
+  const testShowfiles = (fileList: File[]) => {
+    console.log('자식으로 부터 전달된 파일 리스트', fileList)
+    setFiles(fileList)
+  }
+
+  console.log('부모에서의 파일 상태 리스트', files)
+
   return (
     <>
-      <Upload id="1" name="abc" droppable style={{ position: 'relative' }} />
-      <Upload id="2" name="cc" droppable style={{ position: 'relative' }} />
+      <Upload id="upload" name="abc" onClick={testShowfiles} />
     </>
   )
 }
-
-export const Multiple = () => {
-  return <Upload id="1" name="abc" droppable style={{ position: 'relative' }} />
-}
-
-const Btn = styled.button`
-  border: none;
-  background: none;
-  font-size: 1.5rem;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`
