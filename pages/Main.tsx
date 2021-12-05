@@ -22,7 +22,8 @@ const main = () => {
           borderRadius: '50px',
           backgroundColor: 'red',
           position: 'absolute',
-          top: '240px',
+          top: '210px',
+          zIndex: '99',
         }}>
         이벤트 등록하기
       </MUIButton>
@@ -34,7 +35,6 @@ const main = () => {
 const MainContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: blue;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,7 +51,8 @@ const Text = styled.text`
 const VideoBox = styled.video`
   width: 100%;
   position: absolute;
-  bottom: 40px;
+  bottom: 0;
+  z-index: 9;
 `
 
 export default main
