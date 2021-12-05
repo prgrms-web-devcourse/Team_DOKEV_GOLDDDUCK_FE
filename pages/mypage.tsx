@@ -67,20 +67,19 @@ const MUITab = (): JSX.Element => {
             width: '18%',
             marginLeft: '16%',
           },
-        }}
-        sx={{ color: COLORS.RED }}>
+        }}>
         <Tab
           label="받은 선물함"
           {...a11yProps(0)}
           sx={{
             width: '50%',
-            color: COLORS.TEXT_GRAY_LIGHT,
+            color: COLORS.WHITE,
           }}
         />
         <Tab
           label="나의 이벤트"
           {...a11yProps(1)}
-          sx={{ width: '50%', color: COLORS.TEXT_GRAY_LIGHT }}
+          sx={{ width: '50%', color: COLORS.WHITE }}
         />
       </Tabs>
       <TabPanel value={value} index={0}>
