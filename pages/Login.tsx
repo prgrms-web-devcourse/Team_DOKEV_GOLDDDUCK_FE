@@ -1,9 +1,9 @@
 import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
-import { DEFAULT_MARGIN, FONT_SIZES } from '@utils/constants/sizes'
+import { FONT_SIZES } from '@utils/constants/sizes'
 import { COLORS } from '@utils/constants/colors'
 
-const Login = () => {
+const login = () => {
   const onButtonClick = () => {
     alert('안녕')
   }
@@ -32,9 +32,8 @@ const Login = () => {
 }
 
 const LoginContainer = styled.div`
-  width: calc(100%-32px);
+  width: 100%;
   height: 100%;
-  margin: ${DEFAULT_MARGIN};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -60,4 +59,4 @@ const Text = styled.text`
   top: 240px;
 `
 
-export default Login
+export default login
