@@ -5,7 +5,7 @@ import { COLORS } from '@utils/constants/colors'
 import Image from '@components/Image'
 import MUIButton from '@components/MUIButton'
 
-const Fifo = () => {
+const fifo = () => {
   const onButtonClick = () => {
     alert('안녕')
   }
@@ -17,102 +17,6 @@ const Fifo = () => {
       <Timer>타이머 컴포넌트</Timer>
       <TimerText>텍스트 컴포넌트</TimerText>
       <GiftWrapper>
-        <Gift>
-          <Image
-            src="/vercel.svg"
-            width={'60px'}
-            height={'60px'}
-            mode="contain"
-            style={{ backgroundColor: 'white' }}
-          />
-          <GiftTextWrapper>
-            <GiftTitle>시원한 아이스 아메리카노</GiftTitle>
-            <GiftQuantity>수량 : 5개</GiftQuantity>
-          </GiftTextWrapper>
-          <MUIButton
-            onClick={onButtonClick}
-            style={{
-              color: 'white',
-              height: '36px',
-              width: '86px',
-              borderRadius: '50px',
-              backgroundColor: 'red',
-            }}>
-            GET
-          </MUIButton>
-        </Gift>
-        <Gift>
-          <Image
-            src="/vercel.svg"
-            width={'60px'}
-            height={'60px'}
-            mode="contain"
-            style={{ backgroundColor: 'white' }}
-          />
-          <GiftTextWrapper>
-            <GiftTitle>시원한 아이스 아메리카노</GiftTitle>
-            <GiftQuantity>수량 : 5개</GiftQuantity>
-          </GiftTextWrapper>
-          <MUIButton
-            onClick={onButtonClick}
-            style={{
-              color: 'white',
-              height: '36px',
-              width: '86px',
-              borderRadius: '50px',
-              backgroundColor: 'red',
-            }}>
-            GET
-          </MUIButton>
-        </Gift>
-        <Gift>
-          <Image
-            src="/vercel.svg"
-            width={'60px'}
-            height={'60px'}
-            mode="contain"
-            style={{ backgroundColor: 'white' }}
-          />
-          <GiftTextWrapper>
-            <GiftTitle>시원한 아이스 아메리카노</GiftTitle>
-            <GiftQuantity>수량 : 5개</GiftQuantity>
-          </GiftTextWrapper>
-          <MUIButton
-            onClick={onButtonClick}
-            style={{
-              color: 'white',
-              height: '36px',
-              width: '86px',
-              borderRadius: '50px',
-              backgroundColor: 'red',
-            }}>
-            GET
-          </MUIButton>
-        </Gift>
-        <Gift>
-          <Image
-            src="/vercel.svg"
-            width={'60px'}
-            height={'60px'}
-            mode="contain"
-            style={{ backgroundColor: 'white' }}
-          />
-          <GiftTextWrapper>
-            <GiftTitle>시원한 아이스 아메리카노</GiftTitle>
-            <GiftQuantity>수량 : 5개</GiftQuantity>
-          </GiftTextWrapper>
-          <MUIButton
-            onClick={onButtonClick}
-            style={{
-              color: 'white',
-              height: '36px',
-              width: '86px',
-              borderRadius: '50px',
-              backgroundColor: 'red',
-            }}>
-            GET
-          </MUIButton>
-        </Gift>
         <Gift>
           <Image
             src="/vercel.svg"
@@ -189,7 +93,7 @@ const Timer = styled.div`
   color: ${COLORS.WHITE};
   background-color: gray;
   position: absolute;
-  top: 240px;
+  top: 180px;
 `
 
 const TimerText = styled.text`
@@ -197,15 +101,15 @@ const TimerText = styled.text`
   color: ${COLORS.WHITE};
   background-color: gray;
   position: absolute;
-  top: 260px;
+  top: 200px;
 `
 
 const GiftWrapper = styled.div`
   width: 100%;
   position: absolute;
   overflow: auto;
-  top: 320px;
-  height: 300px;
+  bottom: 0;
+  height: 60vh;
   padding-left: ${DEFAULT_MARGIN};
   padding-right: ${DEFAULT_MARGIN};
   background-color: greenyellow;
@@ -215,7 +119,11 @@ const Gift = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  margin-top: ${DEFAULT_MARGIN};
   background-color: green;
+  &:first-of-type {
+    margin: 0;
+  }
 `
 
 const GiftTextWrapper = styled.div`
@@ -237,4 +145,4 @@ const GiftQuantity = styled.text`
   background-color: gray;
 `
 
-export default Fifo
+export default fifo
