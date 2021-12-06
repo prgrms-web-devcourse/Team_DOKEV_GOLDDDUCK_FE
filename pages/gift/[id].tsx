@@ -6,19 +6,33 @@ import Icon from '@components/Icon'
 import Text from '@components/Text'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import giftImage from '/src/assets/gift_test.png'
-import { COLORS } from '@utils/constants/colors'
-import Switch from '@mui/material/Switch'
 import { useState } from 'react'
+import Switch from '@mui/material/Switch'
+import { COLORS } from '@utils/constants/colors'
+
+const CustomSwitch = styled(Switch)(() => ({
+  '& .MuiSwitch-switchBase': {},
+  '& .MuiSwitch-switchBase.Mui-checked': {
+    color: 'red',
+  },
+  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
+    backgroundColor: `${COLORS.RED}`,
+  },
+  '& .MuiSwitch-track': {
+    backgroundColor: `${COLORS.TEXT_GRAY_DARK}`,
+    padding: 0,
+  },
+}))
 
 const MUISwitch = () => {
-  const [checked, setChecked] = useState(true)
+  const [checked, setChecked] = useState(false)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked)
   }
 
   return (
-    <Switch
+    <CustomSwitch
       checked={checked}
       onChange={handleChange}
       inputProps={{ 'aria-label': 'controlled' }}
@@ -26,7 +40,6 @@ const MUISwitch = () => {
   )
 }
 
-//Header, Icon, Text, text, switch, Text, Text, Text, Image, Button(download)
 const GiftDetailPage = () => {
   return (
     <>
@@ -43,7 +56,7 @@ const GiftDetailPage = () => {
               {'시원한 아이스아메리카노'}
             </Text>
             <StyledSwitch>
-              <Text size={'MICRO'} color={'TEXT_GRAY_LIGHT'}>
+              <Text size={'MICRO'} color={'TEXT_GRAY_DARK'}>
                 {'사용 여부'}
               </Text>
               <MUISwitch />
@@ -53,22 +66,19 @@ const GiftDetailPage = () => {
             <Text size={'MICRO'} color={'TEXT_GRAY_LIGHT'}>
               {'받은 날짜'}
             </Text>
-            <Text size={'MICRO'} color={'TEXT_GRAY_LIGHT'}>
+            <Text
+              size={'MICRO'}
+              color={'TEXT_GRAY_LIGHT'}
+              style={{ fontWeight: 'bold', marginRight: 8 }}>
               {'2021년 12월 1일 12시 30분'}
             </Text>
             <Text
               size={'MICRO'}
               color={'TEXT_GRAY_LIGHT'}
-              style={{ marginLeft: 'auto' }}>
+              style={{ fontWeight: 'bold', marginLeft: 'auto' }}>
               {'from.문타리'}
             </Text>
           </Wrapper>
-          <Image
-            src={giftImage.src}
-            width={'100%'}
-            height={'100%'}
-            style={{ marginBottom: DEFAULT_MARGIN }}
-          />
           <Image
             src={giftImage.src}
             width={'100%'}
