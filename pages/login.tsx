@@ -1,20 +1,39 @@
-import { FONT_SIZES } from '@utils/constants/sizes'
-import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
+import Image from '@components/Image'
+import Logo from '@components/Logo'
+import Text from '@components/Text'
 
-const login = () => {
-  const onButtonClick = () => {
-    alert('안녕')
+const INTRODUCE = '도깨비님 안녕하세요. \n 금뚝에 오신 것을 환영합니다!'
+
+const login = (): JSX.Element => {
+  const googleLogin = () => {
+    alert('구글 로그인 GET 요청')
   }
 
   return (
     <>
       <LoginContainer>
-        <Logo>로고 컴포넌트</Logo>
-        <Text>텍스트 컴포넌트</Text>
+        <Logo
+          size="large"
+          style={{ position: 'absolute', zIndex: 99, top: '40px' }}
+        />
+        <Text
+          size="LARGE"
+          color="WHITE"
+          style={{
+            position: 'absolute',
+            zIndex: 99,
+            top: '240px',
+            width: '220px',
+            textAlign: 'center',
+            whiteSpace: 'pre-wrap',
+            lineHeight: 1.5,
+          }}>
+          {INTRODUCE}
+        </Text>
         <MUIButton
-          onClick={onButtonClick}
+          onClick={googleLogin}
           style={{
             color: 'white',
             height: '40px',
@@ -25,7 +44,21 @@ const login = () => {
             bottom: '80px',
             zIndex: 99,
           }}>
-          테스트버튼
+          <BtnText>
+            <Image
+              src="/google.png"
+              iscircle={true}
+              width="30px"
+              height="30px"
+              style={{ backgroundColor: 'white' }}
+            />
+            <Text
+              size="BASE"
+              color="WHITE"
+              style={{ width: '100%', fontWeight: 'bold' }}>
+              구글 계정으로 로그인하기
+            </Text>
+          </BtnText>
         </MUIButton>
         <VideoBox src={'/video/Snow.mp4'} autoPlay muted loop />
       </LoginContainer>
@@ -43,31 +76,16 @@ const LoginContainer = styled.div`
   align-items: center;
 `
 
-const Logo = styled.div`
-  width: 240px;
-  height: 120px;
-  background-color: grey;
-  position: absolute;
-  top: 40px;
-  z-index: 99;
-`
-
-const Text = styled.text`
-  width: 240px;
-  height: 120px;
-  background-color: gray;
-  position: absolute;
-  color: ${COLORS.WHITE};
-  font-size: ${FONT_SIZES.LARGE};
-  top: 240px;
-  z-index: 99;
-`
-
 const VideoBox = styled.video`
   width: 100%;
   position: absolute;
   bottom: 0;
   z-index: 9;
+`
+const BtnText = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
 `
 
 export default login
