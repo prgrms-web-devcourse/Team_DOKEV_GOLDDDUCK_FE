@@ -13,7 +13,7 @@ const Header = () => {
 
 const HeaderContainer = styled.div`
   width: 100%;
-  /* background-color: green; */
+  background-color: green;
   display: flex;
   justify-content: space-between;
   align-self: center;
