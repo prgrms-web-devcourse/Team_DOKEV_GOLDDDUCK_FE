@@ -1,8 +1,8 @@
-
 import Header from '@domains/Header'
 import { FONT_SIZES } from '@utils/constants/sizes'
 import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
+import styled from '@emotion/styled'
 
 const main = () => {
   const onButtonClick = () => {
