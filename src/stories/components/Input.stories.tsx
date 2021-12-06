@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { useCallback, useState } from 'react'
 
 export default {
-  title: 'Component/Input',
+  title: 'Components/Input',
   component: InputText,
 }
 
