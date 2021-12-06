@@ -3,7 +3,7 @@ import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
 
-const Home = () => {
+const login = () => {
   const onButtonClick = () => {
     alert('안녕')
   }
@@ -59,4 +59,4 @@ const Text = styled.text`
   top: 240px;
 `
 
-export default Home
+export default login
