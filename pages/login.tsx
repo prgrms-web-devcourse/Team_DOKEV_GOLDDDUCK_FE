@@ -23,9 +23,11 @@ const login = () => {
             backgroundColor: 'red',
             position: 'absolute',
             bottom: '80px',
+            zIndex: 99,
           }}>
           테스트버튼
         </MUIButton>
+        <VideoBox src={'/video/Snow.mp4'} autoPlay muted loop />
       </LoginContainer>
     </>
   )
@@ -47,6 +49,7 @@ const Logo = styled.div`
   background-color: grey;
   position: absolute;
   top: 40px;
+  z-index: 99;
 `
 
 const Text = styled.text`
@@ -57,6 +60,14 @@ const Text = styled.text`
   color: ${COLORS.WHITE};
   font-size: ${FONT_SIZES.LARGE};
   top: 240px;
+  z-index: 99;
+`
+
+const VideoBox = styled.video`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  z-index: 9;
 `
 
 export default login
