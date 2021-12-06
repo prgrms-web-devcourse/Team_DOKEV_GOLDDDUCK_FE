@@ -4,6 +4,12 @@ import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import MUIButton from '@components/MUIButton'
+import styled from '@emotion/styled'
+import { css } from '@emotion/react'
+
+interface Props {
+  activeStep: number
+}
 
 const steps = ['이벤트 정보', '타이머 설정', '선물 타입 설정', '선물 등록']
 
@@ -106,19 +112,20 @@ const post = () => {
           </Box>
         </>
       ) :  */}
-      (
+
       <>
         {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
         <div style={{ color: 'white' }}>{getStepContent(activeStep)}</div>
 
         <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-          <MUIButton
-            style={{ color: '#ffffff', backgroundColor: '#000000' }}
-            disabled={activeStep === 0}
-            onClick={handleBack}
-            sx={{ mr: 1 }}>
-            Back
-          </MUIButton>
+          <DisplayStyle activeStep={activeStep}>
+            <MUIButton
+              style={{ color: '#ffffff', backgroundColor: '#000000' }}
+              onClick={handleBack}
+              sx={{ mr: 1 }}>
+              Back
+            </MUIButton>
+          </DisplayStyle>
 
           <Box sx={{ flex: '1 1 auto' }} />
           <MUIButton
@@ -128,9 +135,20 @@ const post = () => {
           </MUIButton>
         </Box>
       </>
-      )
     </Box>
   )
 }
+
+const DisplayStyle = styled.div`
+  ${({ activeStep }: Props) => {
+    return activeStep === 0
+      ? css`
+          display: none;
+        `
+      : css`
+          display: black;
+        `
+  }}
+`
 
 export default post
