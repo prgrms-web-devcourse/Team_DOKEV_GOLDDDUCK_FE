@@ -6,6 +6,7 @@ import StepLabel from '@mui/material/StepLabel'
 import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import Text from '@components/Text'
 
 interface Props {
   activeStep: number
@@ -77,7 +78,7 @@ const post = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Stepper activeStep={activeStep} style={{ color: '#ffffff' }}>
+      <Stepper activeStep={activeStep} alternativeLabel>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {}
           const labelProps: {
@@ -95,7 +96,9 @@ const post = () => {
           return (
             <Step key={label} {...stepProps}>
               <StepLabel {...labelProps}>
-                <div style={{ color: '#ffffff' }}>{label}</div>
+                <Text size={'MICRO'} color={'WHITE'}>
+                  {label}
+                </Text>
               </StepLabel>
             </Step>
           )
