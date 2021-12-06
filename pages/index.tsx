@@ -1,5 +1,5 @@
+
 import Header from '@domains/Header'
-import styled from '@emotion/styled'
 import { FONT_SIZES } from '@utils/constants/sizes'
 import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
