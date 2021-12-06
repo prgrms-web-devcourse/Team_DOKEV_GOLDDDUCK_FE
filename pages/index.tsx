@@ -1,62 +1,58 @@
+import Header from '@domains/Header'
 import { FONT_SIZES } from '@utils/constants/sizes'
 import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
 
-const Home = () => {
+const main = () => {
   const onButtonClick = () => {
     alert('안녕')
   }
 
   return (
-    <>
-      <LoginContainer>
-        <Logo>로고 컴포넌트</Logo>
-        <Text>텍스트 컴포넌트</Text>
-        <MUIButton
-          onClick={onButtonClick}
-          style={{
-            color: 'white',
-            height: '40px',
-            width: '80%',
-            borderRadius: '50px',
-            backgroundColor: 'red',
-            position: 'absolute',
-            bottom: '80px',
-          }}>
-          테스트버튼
-        </MUIButton>
-      </LoginContainer>
-    </>
+    <MainContainer>
+      <Header />
+      <Text>텍스트 컴포넌트</Text>
+      <MUIButton
+        onClick={onButtonClick}
+        style={{
+          color: 'white',
+          height: '40px',
+          width: '70%',
+          borderRadius: '50px',
+          backgroundColor: 'red',
+          position: 'absolute',
+          top: '210px',
+          zIndex: '99',
+        }}>
+        이벤트 등록하기
+      </MUIButton>
+      <VideoBox src={'/video/Christmas_Tree.mp4'} autoPlay muted />
+    </MainContainer>
   )
 }
 
-const LoginContainer = styled.div`
+const MainContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  position: relative;
   align-items: center;
+  position: relative;
 `
-
-const Logo = styled.div`
-  width: 240px;
-  height: 120px;
-  background-color: grey;
-  position: absolute;
-  top: 40px;
-`
-
 const Text = styled.text`
-  width: 240px;
-  height: 120px;
+  font-size: ${FONT_SIZES.LARGE};
+  color: ${COLORS.WHITE};
   background-color: gray;
   position: absolute;
-  color: ${COLORS.WHITE};
-  font-size: ${FONT_SIZES.LARGE};
-  top: 240px;
+  top: 120px;
 `
 
-export default Home
+const VideoBox = styled.video`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  z-index: 9;
+`
+
+export default main
