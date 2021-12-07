@@ -64,7 +64,8 @@ const post = () => {
             participant={participant}
             inputState={inputState}
             handleInput={handleInput}
-            handleRaido={handleRaido}></EventTitle>
+            handleRaido={handleRaido}
+          />
         )
       case 1:
         return '스텝 2에서는 ... 하세요'
