@@ -1,6 +1,6 @@
 import Icon from '@components/Icon'
+import Text from '@components/Text'
 import styled from '@emotion/styled'
-import { css } from '@emotion/react'
 import React, { useState } from 'react'
 import { COLORS } from '@utils/constants/colors'
 
@@ -14,7 +14,8 @@ interface IProps {
 }
 
 const Modal: React.FC<IModal> = ({ children, title = '', confirm = false }) => {
-  if (React.Children.count(children) < 2) {
+  const childrenCount = React.Children.count(children)
+  if (childrenCount < 2) {
     return null
   }
 
@@ -30,13 +31,12 @@ const Modal: React.FC<IModal> = ({ children, title = '', confirm = false }) => {
 
   return (
     <>
-      <div onClick={handleClickOpen}>
-        {React.Children.count(children) > 1 &&
-          React.Children.toArray(children)[0]}
-      </div>
+      <div onClick={handleClickOpen}>{React.Children.toArray(children)[0]}</div>
       <StyledModal open={open}>
         <ModalHeader>
-          {title} {/*Text 컴포넌트 적용 예정 */}
+          <Text color="WHITE" size="BASE">
+            {title}
+          </Text>
           <Icon
             name={'close'}
             style={{ position: 'absolute', top: '16px', right: '16px' }}
@@ -44,12 +44,10 @@ const Modal: React.FC<IModal> = ({ children, title = '', confirm = false }) => {
           />
         </ModalHeader>
         <ModalContent>
-          {React.Children.count(children) > 1 &&
-            React.Children.toArray(children)[1]}
+          {React.Children.toArray(children)[1]}
           {confirm && (
             <ModalBottom onClick={handleClose}>
-              {React.Children.count(children) === 3 &&
-                React.Children.toArray(children)[2]}
+              {React.Children.toArray(children)[2]}
             </ModalBottom>
           )}
         </ModalContent>
@@ -59,18 +57,12 @@ const Modal: React.FC<IModal> = ({ children, title = '', confirm = false }) => {
 }
 
 const StyledModal = styled.div`
-  ${({ open }: IProps) => {
-    return open
-      ? css`
-          display: block;
-        `
-      : css`
-          display: none;
-        `
-  }}
-  position: fixed;
+  display: ${({ open }: IProps) => (open ? 'block' : 'none')};
+  position: absolute;
   top: 0;
-  width: 425px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   height: 100vh;
   background-color: ${COLORS.BLACK};
   /* transition: all 600ms cubic-bezier(0.86, 0, 0.07, 1); //transition 시도 중.. */
@@ -88,12 +80,16 @@ const ModalHeader = styled.div`
 const ModalContent = styled.div`
   height: calc(100% - 48px);
   overflow: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `
 
 const ModalBottom = styled.div`
   width: 100%;
   text-align: center;
-  background-color: ${COLORS.BLACK};
 `
 
 export default Modal

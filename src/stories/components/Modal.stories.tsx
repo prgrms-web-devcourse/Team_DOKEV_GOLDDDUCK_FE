@@ -1,5 +1,4 @@
 import Modal from '@components/Modal'
-import Icon from '@components/Icon'
 import styled from '@emotion/styled'
 import { COLORS } from '@utils/constants/colors'
 
