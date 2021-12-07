@@ -1,8 +1,10 @@
 import useLocalStorage from '@hooks/useLocalStorage'
-import { createContext, ReactChild, useContext } from 'react'
+import { createContext, ReactChild, useCallback, useContext } from 'react'
 
 interface IUserContext {
-  token?: string[]
+  token: string[]
+  user: object
+  clearStorage(): void
 }
 
 interface Props {
@@ -13,10 +15,17 @@ const UserContext = createContext<IUserContext>({} as IUserContext)
 export const useUserContext = () => useContext(UserContext)
 
 const UserProvider = ({ children }: Props) => {
-  const [token, setToken] = useLocalStorage<string[]>('token', [])
+  const [token, setToken] = useLocalStorage<string[]>('Token', [])
+  const [user, setUser] = useLocalStorage<object[]>('User', [])
+
+  const clearStorage = useCallback(() => {
+    localStorage.clear()
+  }, [])
 
   return (
-    <UserContext.Provider value={{ token }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ token, user, clearStorage }}>
+      {children}
+    </UserContext.Provider>
   )
 }
 

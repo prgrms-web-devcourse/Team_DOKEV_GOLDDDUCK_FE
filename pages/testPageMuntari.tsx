@@ -2,13 +2,14 @@ import { useUserContext } from '@contexts/UserProvider'
 import { useEffect } from 'react'
 
 const testPageMuntari = () => {
-  const { token } = useUserContext()
+  const { token, user, clearStorage } = useUserContext()
 
   useEffect(() => {
-    console.log(token)
+    console.log('Token', token)
+    console.log('User', user)
   })
 
-  return <h1>token</h1>
+  return <button onClick={clearStorage}>ClearStorage</button>
 }
 
 export default testPageMuntari
