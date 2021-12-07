@@ -4,7 +4,8 @@ import { createContext, ReactChild, useCallback, useContext } from 'react'
 interface IUserContext {
   token: string[]
   user: object
-  clearStorage(): void
+  clearToken(): void
+  clearUser(): void
 }
 
 interface Props {
@@ -18,12 +19,16 @@ const UserProvider = ({ children }: Props) => {
   const [token, setToken] = useLocalStorage<string[]>('Token', [])
   const [user, setUser] = useLocalStorage<object[]>('User', [])
 
-  const clearStorage = useCallback(() => {
-    localStorage.clear()
+  const clearToken = useCallback(() => {
+    setToken([])
+  }, [])
+
+  const clearUser = useCallback(() => {
+    setUser([])
   }, [])
 
   return (
-    <UserContext.Provider value={{ token, user, clearStorage }}>
+    <UserContext.Provider value={{ token, user, clearToken, clearUser }}>
       {children}
     </UserContext.Provider>
   )
