@@ -3,6 +3,7 @@ import styled from '@emotion/styled'
 import Image from '@components/Image'
 import Logo from '@components/Logo'
 import Text from '@components/Text'
+import { COLORS } from '@utils/constants/colors'
 
 const INTRODUCE = '도깨비님 안녕하세요. \n 금뚝에 오신 것을 환영합니다!'
 
@@ -18,32 +19,10 @@ const login = (): JSX.Element => {
           size="large"
           style={{ position: 'absolute', zIndex: 99, top: '40px' }}
         />
-        <Text
-          size="LARGE"
-          color="WHITE"
-          style={{
-            position: 'absolute',
-            zIndex: 99,
-            top: '240px',
-            width: '220px',
-            textAlign: 'center',
-            whiteSpace: 'pre-wrap',
-            lineHeight: 1.5,
-          }}>
+        <Text size="LARGE" color="WHITE" style={{ ...textStyle }}>
           {INTRODUCE}
         </Text>
-        <MUIButton
-          onClick={googleLogin}
-          style={{
-            color: 'white',
-            height: '40px',
-            width: '80%',
-            borderRadius: '50px',
-            backgroundColor: 'red',
-            position: 'absolute',
-            bottom: '80px',
-            zIndex: 99,
-          }}>
+        <MUIButton onClick={googleLogin} style={{ ...btnStyle }}>
           <BtnText>
             <Image
               src="/google.png"
@@ -53,7 +32,7 @@ const login = (): JSX.Element => {
               style={{ backgroundColor: 'white' }}
             />
             <Text
-              size="BASE"
+              size="MEDIUM"
               color="WHITE"
               style={{ width: '100%', fontWeight: 'bold' }}>
               구글 계정으로 로그인하기
@@ -64,6 +43,26 @@ const login = (): JSX.Element => {
       </LoginContainer>
     </>
   )
+}
+
+const textStyle: React.CSSProperties = {
+  position: 'absolute',
+  zIndex: 99,
+  top: '30%',
+  textAlign: 'center',
+  whiteSpace: 'pre-wrap',
+  lineHeight: 1.5,
+}
+
+const btnStyle: React.CSSProperties = {
+  color: 'white',
+  backgroundColor: COLORS.RED,
+  width: '80%',
+  height: '40px',
+  borderRadius: '50px',
+  position: 'absolute',
+  bottom: '20%',
+  zIndex: 99,
 }
 
 const LoginContainer = styled.div`
@@ -78,10 +77,13 @@ const LoginContainer = styled.div`
 
 const VideoBox = styled.video`
   width: 100%;
+  height: 100%;
   position: absolute;
   bottom: 0;
   z-index: 9;
+  object-fit: cover;
 `
+
 const BtnText = styled.div`
   width: 100%;
   display: flex;
