@@ -4,7 +4,7 @@ import Header from '@domains/Header'
 import MUIAvatar from '@components/MUIAvatar'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import MUITabPanel from '@components/MUITabPanel'
+import MUITabPanel from './MUITabPanel'
 import MUITab from './MUITab'
 import { COLORS } from '@utils/constants/colors'
 
