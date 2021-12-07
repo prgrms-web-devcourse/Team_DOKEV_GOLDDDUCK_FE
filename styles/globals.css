@@ -139,3 +139,11 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+
+.MuiSvgIcon-root circle {
+  color: #1a3c35;
+}
+
+.MuiSvgIcon-root {
+  color: #ce000b !important;
+}

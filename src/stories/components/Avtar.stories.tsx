@@ -1,4 +1,4 @@
-import Avtar from '@components/MUIAvatar'
+import Avatar from '@components/MUIAvatar'
 import { CSSProperties } from 'react'
 
 interface Props {
@@ -10,10 +10,10 @@ interface Props {
 }
 
 export default {
-  title: 'Components/Avtar',
-  component: Avtar,
+  title: 'Components/Avatar',
+  component: Avatar,
 }
 
 export const Default = (args: Props) => {
-  return <Avtar {...args}></Avtar>
+  return <Avatar {...args}></Avatar>
 }

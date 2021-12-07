@@ -11,6 +11,7 @@ function App({ Component, pageProps }: AppProps) {
   )
 }
 const RootContainer = styled.div`
+  position: relative;
   max-width: 425px;
   min-width: 320px;
   height: 100vh;

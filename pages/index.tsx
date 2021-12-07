@@ -10,25 +10,27 @@ const main = () => {
   }
 
   return (
-    <MainContainer>
+    <>
       <Header />
-      <Text>텍스트 컴포넌트</Text>
-      <MUIButton
-        onClick={onButtonClick}
-        style={{
-          color: 'white',
-          height: '40px',
-          width: '70%',
-          borderRadius: '50px',
-          backgroundColor: 'red',
-          position: 'absolute',
-          top: '210px',
-          zIndex: '99',
-        }}>
-        이벤트 등록하기
-      </MUIButton>
-      <VideoBox src={'/video/Christmas_Tree.mp4'} autoPlay muted />
-    </MainContainer>
+      <MainContainer>
+        <Text>텍스트 컴포넌트</Text>
+        <MUIButton
+          onClick={onButtonClick}
+          style={{
+            color: 'white',
+            height: '40px',
+            width: '70%',
+            borderRadius: '50px',
+            backgroundColor: 'red',
+            position: 'absolute',
+            top: '210px',
+            zIndex: '99',
+          }}>
+          이벤트 등록하기
+        </MUIButton>
+        <VideoBox src={'/video/Christmas_Tree.mp4'} autoPlay muted />
+      </MainContainer>
+    </>
   )
 }
 
