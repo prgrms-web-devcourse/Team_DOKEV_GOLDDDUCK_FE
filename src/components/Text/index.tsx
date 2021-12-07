@@ -4,12 +4,22 @@ import { COLORS } from '@utils/constants/colors'
 import { style } from '@mui/system'
 
 interface Props {
-  size: 'MICRO' | 'SMALL' | 'BASE' | 'MEDIUM' | 'LARGE'
-  color: 'WHITE' | 'BLACK' | 'TEXT_GRAY_LIGHT' | 'TEXT_GRAY_DARK' | 'TEXT_BLACK'
+  size?: 'MICRO' | 'SMALL' | 'BASE' | 'MEDIUM' | 'LARGE'
+  color?:
+    | 'WHITE'
+    | 'BLACK'
+    | 'TEXT_GRAY_LIGHT'
+    | 'TEXT_GRAY_DARK'
+    | 'TEXT_BLACK'
   style?: CSSProperties
 }
 
-const Text: React.FC<Props> = ({ size, color, children }) => {
+const Text: React.FC<Props> = ({
+  size = 'BASE',
+  color = 'WHITE',
+  style,
+  children,
+}) => {
   const { [size]: fontSize } = FONT_SIZES
   const { [color]: fontColor } = COLORS
 
