@@ -11,6 +11,7 @@ interface IImage {
   lazy?: boolean
   threshold?: number
   placeholder?: string
+  onClick?(e: React.MouseEvent<HTMLImageElement>): void
 }
 
 let observer = null
@@ -27,7 +28,6 @@ const onIntersection: IntersectionObserverCallback = (entries, io) => {
 
 const Image = ({
   src,
-  style,
   display = 'block',
   iscircle = false,
   mode = 'cover',
@@ -36,6 +36,8 @@ const Image = ({
   lazy = false,
   threshold = 0.2,
   placeholder = 'https://via.placeholder.com/180x240',
+  onClick,
+  style,
 }: IImage): JSX.Element => {
   const [loaded, setLoaded] = useState<boolean>(false)
   const imgRef = useRef<HTMLImageElement>(null)
@@ -77,6 +79,7 @@ const Image = ({
       alt="ImgError..."
       width={width}
       height={height}
+      onClick={onClick}
       style={{ ...imageStyle }}
     />
   )

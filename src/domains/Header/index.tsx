@@ -1,17 +1,34 @@
+import Logo from '@components/Logo'
+import MUIAvatar from '@components/MUIAvatar'
 import styled from '@emotion/styled'
+import { useRouter } from 'next/dist/client/router'
 
-const Header = () => {
+const Header = (): JSX.Element => {
+  const router = useRouter()
+
   return (
-    <>
-      <div>헤더입니다</div>
-      <Title>emotion 적용</Title>
-    </>
+    <Wrapper>
+      <Logo
+        size={'small'}
+        onClick={() => router.push('/')}
+        style={{ cursor: 'pointer' }}
+      />
+      <MUIAvatar
+        width={'60px'}
+        height={'60px'}
+        onClick={() => router.push('/mypage')}
+        style={{ cursor: 'pointer' }}
+      />
+    </Wrapper>
   )
 }
 
-const Title = styled.div`
-  font-size: 30px;
-  color: Red;
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  box-sizing: border-box;
 `
 
 export default Header

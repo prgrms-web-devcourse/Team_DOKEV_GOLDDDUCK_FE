@@ -23,7 +23,7 @@
     "eqeqeq": ["error", "always"], // 삼중 등호 연산자인 ===, !==만 사용한다.
     "prefer-template": "error", // 변수 등을 조합해서 문자열을 생성하는 경우 템플릿 문자열을 이용한다.
     "implicit-arrow-linebreak": ["error", "beside"], // 암시적 반환을 사용할 경우 함수 본문 전에 개행을 하지 않는다.
-    "arrow-parens": ["error", "as-needed"], // 화살표 함수의 파라미터가 하나이면 괄호를 생략한다.
+    "arrow-parens": ["error", "always"], // 화살표 함수의 파라미터가 하나이면 괄호를 생략한다.
     "prefer-arrow-callback": "error", // 함수 표현식 대신 화살표 함수를 사용한다.
     "lines-between-class-members": ["error", "always"], // 메서드 문법 사용 시 메서드 사이에 개행을 추가한다.
     "object-shorthand": ["error", "always"], // 객체의 메서드 표현 시 축약 메소드 표기를 사용한다.
