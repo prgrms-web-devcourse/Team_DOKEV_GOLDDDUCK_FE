@@ -9,6 +9,7 @@ import giftImage from '/src/assets/gift_test.png'
 import { useState } from 'react'
 import Switch from '@mui/material/Switch'
 import { COLORS } from '@utils/constants/colors'
+import { useRouter } from 'next/router'
 
 const CustomSwitch = styled(Switch)(() => ({
   '& .MuiSwitch-switchBase': {},
@@ -41,6 +42,8 @@ const MUISwitch = () => {
 }
 
 const GiftDetailPage = () => {
+  const router = useRouter()
+
   return (
     <>
       <GiftContainerTop>
@@ -51,6 +54,7 @@ const GiftDetailPage = () => {
               name={'arrowBack'}
               color={'WHITE'}
               style={{ marginRight: 8 }}
+              onIconClick={() => router.push('/mypage?tab=gift')}
             />
             <Text size={'BASE'} color={'WHITE'}>
               {'시원한 아이스아메리카노'}
