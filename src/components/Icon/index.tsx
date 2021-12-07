@@ -16,7 +16,7 @@ const Icon = ({
   size = 'BASE',
   color = 'WHITE',
   onIconClick,
-  ...style
+  style,
 }: IIcon): JSX.Element => {
   const { [size]: fontSize } = FONT_SIZES
   const { [name]: IconTag } = ICON_TYPES
@@ -25,7 +25,7 @@ const Icon = ({
   return (
     <IconTag
       onClick={onIconClick}
-      style={{ fontSize, color: fontColor, ...style }}
+      style={{ fontSize, color: fontColor, cursor: 'pointer', ...style }}
     />
   )
 }

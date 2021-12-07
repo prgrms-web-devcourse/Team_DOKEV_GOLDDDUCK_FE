@@ -1,33 +1,51 @@
 import Header from '@domains/Header'
-import { FONT_SIZES } from '@utils/constants/sizes'
-import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
+import { keyframes } from '@emotion/react'
+import Text from '@components/Text'
+import { FONT_SIZES } from '@utils/constants/sizes'
+import { useRouter } from 'next/dist/client/router'
+
+const INTRODUCE =
+  '소중한 사람들에게 \n 색다르게 선물을 전달해보세요. \n\n 금뚝이가 도와드릴게요!'
 
 const main = () => {
-  const onButtonClick = () => {
-    alert('안녕')
+  const router = useRouter()
+
+  const moveToPost = () => {
+    router.push('/post')
   }
 
   return (
     <>
       <Header />
       <MainContainer>
-        <Text>텍스트 컴포넌트</Text>
-        <MUIButton
-          onClick={onButtonClick}
-          style={{
-            color: 'white',
-            height: '40px',
-            width: '70%',
-            borderRadius: '50px',
-            backgroundColor: 'red',
-            position: 'absolute',
-            top: '210px',
-            zIndex: '99',
-          }}>
-          이벤트 등록하기
-        </MUIButton>
+        <Fade style={{ position: 'absolute', bottom: '65%', zIndex: 99 }}>
+          <Text
+            size="LARGE"
+            color="WHITE"
+            style={{
+              textAlign: 'center',
+              lineHeight: 1.5,
+              whiteSpace: 'pre-wrap',
+            }}>
+            {INTRODUCE}
+          </Text>
+        </Fade>
+        <Fade style={{ position: 'absolute', bottom: '55%', zIndex: 99 }}>
+          <MUIButton
+            onClick={moveToPost}
+            style={{
+              color: 'white',
+              height: '40px',
+              width: '272px',
+              borderRadius: '50px',
+              backgroundColor: 'red',
+              fontSize: FONT_SIZES.BASE,
+            }}>
+            이벤트 등록하기
+          </MUIButton>
+        </Fade>
         <VideoBox src={'/video/Christmas_Tree.mp4'} autoPlay muted />
       </MainContainer>
     </>
@@ -36,18 +54,9 @@ const main = () => {
 
 const MainContainer = styled.div`
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
-`
-const Text = styled.text`
-  font-size: ${FONT_SIZES.LARGE};
-  color: ${COLORS.WHITE};
-  background-color: gray;
-  position: absolute;
-  top: 120px;
 `
 
 const VideoBox = styled.video`
@@ -55,6 +64,25 @@ const VideoBox = styled.video`
   position: absolute;
   bottom: 0;
   z-index: 9;
+`
+
+const fadeIn = keyframes`
+  0% {
+    letter-spacing: -0.5em;
+    transform: translateZ(-700px);
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateZ(0);
+    opacity: 1;
+  }
+`
+
+const Fade = styled.div`
+  animation: ${fadeIn} 3s 6.6s cubic-bezier(0.215, 0.61, 0.355, 1) both;
 `
 
 export default main
