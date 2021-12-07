@@ -10,6 +10,7 @@ import { COLORS } from '@utils/constants/colors'
 
 const MyPage = (): JSX.Element => {
   const router = useRouter()
+  const currentTab = router.query.tab === 'event' ? 'event' : 'gift'
   const [selectedTab, setSelectedTab] = useState(
     router.query.tab === 'event' ? 'event' : 'gift',
   )
@@ -32,13 +33,17 @@ const MyPage = (): JSX.Element => {
           <div>santa@email.com</div>
         </div>
       </Profile>
-      <MUITab selectedTab={selectedTab} onChange={handleChange} />
-      <MUITabPanel selectedTab={selectedTab} tab={'gift'} index={0}>
-        <div>gift list</div>
-      </MUITabPanel>
-      <MUITabPanel selectedTab={selectedTab} tab={'event'} index={1}>
-        <div>event list</div>
-      </MUITabPanel>
+      {router.isReady && currentTab === selectedTab && (
+        <>
+          <MUITab selectedTab={selectedTab} onChange={handleChange} />
+          <MUITabPanel selectedTab={selectedTab} tab={'gift'} index={0}>
+            <div>gift list</div>
+          </MUITabPanel>
+          <MUITabPanel selectedTab={selectedTab} tab={'event'} index={1}>
+            <div>event list</div>
+          </MUITabPanel>
+        </>
+      )}
     </>
   )
 }
