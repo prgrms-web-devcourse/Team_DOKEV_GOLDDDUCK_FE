@@ -8,7 +8,7 @@ interface Props {
   style?: CSSProperties
 }
 
-const Text: React.FC<Props> = ({ size, color, children, ...style }) => {
+const Text: React.FC<Props> = ({ size, color, style, children }) => {
   const { [size]: fontSize } = FONT_SIZES
   const { [color]: fontColor } = COLORS
 
