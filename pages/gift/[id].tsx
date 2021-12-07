@@ -92,18 +92,18 @@ const GiftDetailPage = () => {
         </GiftInfo>
       </GiftContainerTop>
       <ContainerBottom>
-        <MUIButton
-          style={{
-            width: '100%',
-            borderRadius: 20,
-            backgroundColor: 'RED',
-          }}>
-          <a href={giftImage.src} download>
+        <a href={giftImage.src} download>
+          <MUIButton
+            style={{
+              width: '100%',
+              borderRadius: 20,
+              backgroundColor: 'RED',
+            }}>
             <Text color={'WHITE'} size={'BASE'}>
               선물 저장
             </Text>
-          </a>
-        </MUIButton>
+          </MUIButton>
+        </a>
       </ContainerBottom>
     </>
   )
