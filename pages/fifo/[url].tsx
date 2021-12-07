@@ -4,8 +4,11 @@ import { DEFAULT_MARGIN, FONT_SIZES } from '@utils/constants/sizes'
 import { COLORS } from '@utils/constants/colors'
 import Image from '@components/Image'
 import MUIButton from '@components/MUIButton'
+import { useRouter } from 'next/dist/client/router'
 
 const fifo = () => {
+  const router = useRouter()
+  console.log('router', router)
   const onButtonClick = () => {
     alert('안녕')
   }
