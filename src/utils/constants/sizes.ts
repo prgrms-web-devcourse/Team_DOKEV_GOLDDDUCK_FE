@@ -8,6 +8,7 @@ export const FONT_SIZES: IFontSize = {
   BASE: '1rem',
   MEDIUM: '1.125rem',
   LARGE: '1.5rem',
+  LARGER: '4rem',
 }
 
 export const DEFAULT_MARGIN = '16px'
