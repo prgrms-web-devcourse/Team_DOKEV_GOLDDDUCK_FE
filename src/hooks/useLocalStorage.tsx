@@ -5,23 +5,29 @@ const useLocalStorage = <T,>(
   initialValue: T,
 ): [T, typeof setValue] => {
   const [storedValue, setStoredValue] = useState(() => {
-    try {
-      const item = localStorage.getItem(key)
+    if (typeof window !== 'undefined') {
+      try {
+        const item = localStorage.getItem(key)
 
-      return item ? JSON.parse(item) : initialValue
-    } catch (e) {
-      console.error(e)
+        return item ? JSON.parse(item) : initialValue
+      } catch (e) {
+        console.error(e)
 
+        return initialValue
+      }
+    } else {
       return initialValue
     }
   })
 
   const setValue = (value: T) => {
-    try {
-      setStoredValue(value)
-      localStorage.setItem(key, JSON.stringify(value))
-    } catch (e) {
-      console.error(e)
+    if (typeof window !== 'undefined') {
+      try {
+        setStoredValue(value)
+        localStorage.setItem(key, JSON.stringify(value))
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
 
