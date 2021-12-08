@@ -7,6 +7,7 @@ import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import Text from '@components/Text'
+import EventTimer from '@domains/EventTimer'
 
 interface Props {
   activeStep: number
@@ -23,7 +24,7 @@ const post = () => {
       case 0:
         return '스텝 1에서는 ... 하세요'
       case 1:
-        return '스텝 2에서는 ... 하세요'
+        return <EventTimer />
       case 2:
         return '스텝 3에서는 ... 하세요'
       case 3:
