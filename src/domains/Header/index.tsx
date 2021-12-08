@@ -1,24 +1,25 @@
 import Logo from '@components/Logo'
 import MUIAvatar from '@components/MUIAvatar'
 import styled from '@emotion/styled'
-import { useRouter } from 'next/dist/client/router'
+import Link from 'next/link'
 
 const Header = (): JSX.Element => {
-  const router = useRouter()
-
   return (
     <Wrapper>
-      <Logo
-        size={'small'}
-        onClick={() => router.push('/')}
-        style={{ cursor: 'pointer' }}
-      />
-      <MUIAvatar
-        width={'60px'}
-        height={'60px'}
-        onClick={() => router.push('/mypage')}
-        style={{ cursor: 'pointer' }}
-      />
+      <Link href="/">
+        <a>
+          <Logo size={'small'} style={{ cursor: 'pointer' }} />
+        </a>
+      </Link>
+      <Link href="/mypage">
+        <a>
+          <MUIAvatar
+            width={'60px'}
+            height={'60px'}
+            style={{ cursor: 'pointer' }}
+          />
+        </a>
+      </Link>
     </Wrapper>
   )
 }

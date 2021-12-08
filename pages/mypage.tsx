@@ -3,9 +3,15 @@ import Header from '@domains/Header'
 import MUIAvatar from '@components/MUIAvatar'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import MUITabPanel from '@components/MUITab/MUITabPanel'
-import MUITab from '@components/MUITab/MUITab'
+import dynamic from 'next/dynamic'
 import { COLORS } from '@utils/constants/colors'
+
+const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
+  ssr: false,
+})
+const MUITabPanel = dynamic(() => import('@components/MUITab/MUITabPanel'), {
+  ssr: false,
+})
 
 const MyPage = (): JSX.Element => {
   const router = useRouter()
@@ -17,7 +23,7 @@ const MyPage = (): JSX.Element => {
   }
 
   useEffect(() => {
-    setSelectedTab(() => currentTab)
+    setSelectedTab(router.query.tab === 'event' ? 'event' : 'gift')
   }, [router.query.tab])
 
   return (
@@ -30,9 +36,9 @@ const MyPage = (): JSX.Element => {
           <div>santa@email.com</div>
         </div>
       </Profile>
-      {router.isReady && currentTab && currentTab === selectedTab && (
+      {router.isReady && currentTab === selectedTab && (
         <>
-          <MUITab selectedTab={selectedTab} onChange={handleChange} />
+          <MUITab onChange={handleChange} />
           <MUITabPanel selectedTab={selectedTab} tab={'gift'} index={0}>
             <div>gift list</div>
           </MUITabPanel>
