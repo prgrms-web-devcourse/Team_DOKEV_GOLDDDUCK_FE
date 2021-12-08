@@ -28,7 +28,8 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  box-sizing: border-box;
+  position: relative;
+  z-index: 99;
 `
 
 export default Header
