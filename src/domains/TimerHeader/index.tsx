@@ -4,7 +4,7 @@ import Timer from '@components/Timer'
 import { useRouter } from 'next/dist/client/router'
 import { useEffect } from 'react'
 
-const startDate = new Date(2021, 12, 8, 0, 0, 0)
+const startDate = new Date('12/9/2021')
 
 const MOCK_TIMER_DATA = {
   eventStart: startDate,
