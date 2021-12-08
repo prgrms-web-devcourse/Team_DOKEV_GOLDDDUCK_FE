@@ -1,5 +1,3 @@
-import { useRef, useEffect, useState } from 'react'
-
 interface IImage {
   src: string
   style?: React.CSSProperties
@@ -8,22 +6,7 @@ interface IImage {
   mode?: 'fill' | 'contain' | 'cover'
   width?: number | string
   height?: number | string
-  lazy?: boolean
-  threshold?: number
-  placeholder?: string
   onClick?(e: React.MouseEvent<HTMLImageElement>): void
-}
-
-let observer = null
-const LOAD_IMG_EVENT_NAME = 'loadImage'
-
-const onIntersection: IntersectionObserverCallback = (entries, io) => {
-  entries.forEach((entry: IntersectionObserverEntry) => {
-    if (entry.isIntersecting) {
-      io.unobserve(entry.target)
-      entry.target.dispatchEvent(new CustomEvent(LOAD_IMG_EVENT_NAME))
-    }
-  })
 }
 
 const Image = ({
@@ -33,15 +16,9 @@ const Image = ({
   mode = 'cover',
   width = 180,
   height = 240,
-  lazy = false,
-  threshold = 0.2,
-  placeholder = 'https://via.placeholder.com/180x240',
   onClick,
   style,
 }: IImage): JSX.Element => {
-  const [loaded, setLoaded] = useState<boolean>(false)
-  const imgRef = useRef<HTMLImageElement>(null)
-
   const imageStyle: React.CSSProperties = {
     display,
     objectFit: mode,
@@ -49,33 +26,9 @@ const Image = ({
     ...style,
   }
 
-  useEffect(() => {
-    if (!lazy) {
-      setLoaded(true)
-
-      return
-    }
-    const handleLoadImage = () => setLoaded(true)
-    const imgElement = imgRef.current
-    imgElement &&
-      imgElement.addEventListener(LOAD_IMG_EVENT_NAME, handleLoadImage)
-
-    return () => {
-      imgElement &&
-        imgElement.removeEventListener(LOAD_IMG_EVENT_NAME, handleLoadImage)
-    }
-  }, [lazy])
-
-  useEffect(() => {
-    if (!lazy) return
-    observer = new IntersectionObserver(onIntersection, { threshold })
-    imgRef.current && observer.observe(imgRef.current)
-  }, [lazy, threshold])
-
   return (
     <img
-      ref={imgRef}
-      src={loaded ? src : placeholder}
+      src={src}
       alt="ImgError..."
       width={width}
       height={height}

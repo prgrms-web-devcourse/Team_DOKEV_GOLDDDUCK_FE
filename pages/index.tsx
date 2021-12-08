@@ -46,7 +46,7 @@ const main = () => {
             이벤트 등록하기
           </MUIButton>
         </Fade>
-        <VideoBox src={'/video/Christmas_Tree.mp4'} autoPlay muted />
+        <VideoBox src={'/video/main.mp4'} autoPlay muted />
       </MainContainer>
     </>
   )
@@ -61,6 +61,8 @@ const MainContainer = styled.div`
 
 const VideoBox = styled.video`
   width: 100%;
+  height: 100%;
+  object-fit: cover;
   position: absolute;
   bottom: 0;
   z-index: 9;
@@ -82,7 +84,7 @@ const fadeIn = keyframes`
 `
 
 const Fade = styled.div`
-  animation: ${fadeIn} 3s 6.6s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+  animation: ${fadeIn} 3s 7s cubic-bezier(0.215, 0.61, 0.355, 1) both;
 `
 
 export default main
