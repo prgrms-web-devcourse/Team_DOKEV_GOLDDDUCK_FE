@@ -7,6 +7,7 @@ import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import Text from '@components/Text'
+import EventTitle from '@domains/EventTitle'
 
 interface Props {
   activeStep: number
@@ -15,27 +16,9 @@ interface Props {
 const steps = ['이벤트 정보', '타이머 설정', '선물 타입 설정', '선물 등록']
 
 const post = () => {
+  // stepper 로직
   const [activeStep, setActiveStep] = useState(0)
   const [skipped, setSkipped] = useState(new Set<number>())
-
-  const getStepContent = (stepNumber: number) => {
-    switch (stepNumber) {
-      case 0:
-        return '스텝 1에서는 ... 하세요'
-      case 1:
-        return '스텝 2에서는 ... 하세요'
-      case 2:
-        return '스텝 3에서는 ... 하세요'
-      case 3:
-        return '스텝 4에서는 ...하세요'
-      default:
-        return
-    }
-  }
-
-  const isStepOptional = (step: number) => {
-    return step === 1
-  }
 
   const isStepSkipped = (step: number) => {
     return skipped.has(step)
@@ -56,25 +39,44 @@ const post = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
-  //   const handleSkip = () => {
-  //     if (!isStepOptional(activeStep)) {
-  //       // You probably want to guard against something like this,
-  //       // it should never occur unless someone's actively trying to break something.
-  //       throw new Error("You can't skip a step that isn't optional.")
-  //     }
+  //step1 EventTitle 상태 로직
+  const [eventTitle, setEventTitle] = useState('')
+  const [participant, setParticipant] = useState<number>()
+  const [inputState, setInputState] = useState<string>('')
 
-  //     setActiveStep((prevActiveStep) => prevActiveStep + 1)
-  //     setSkipped((prevSkipped) => {
-  //       const newSkipped = new Set(prevSkipped.values())
-  //       newSkipped.add(activeStep)
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.target.name === 'eventTitle'
+      ? setEventTitle(() => e.target.value)
+      : setParticipant(() => Number(e.target.value))
+  }
 
-  //       return newSkipped
-  //     })
-  //   }
+  const handleRaido = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputState(() => e.target.value)
+  }
 
-  //   const handleReset = () => {
-  //     setActiveStep(0)
-  //   }
+  // step별 컴포넌트 로직
+  const getStepContent = (stepNumber: number) => {
+    switch (stepNumber) {
+      case 0:
+        return (
+          <EventTitle
+            eventTitle={eventTitle}
+            participant={participant}
+            inputState={inputState}
+            handleInput={handleInput}
+            handleRaido={handleRaido}
+          />
+        )
+      case 1:
+        return '스텝 2에서는 ... 하세요'
+      case 2:
+        return '스텝 3에서는 ... 하세요'
+      case 3:
+        return '스텝 4에서는 ...하세요'
+      default:
+        return
+    }
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -84,14 +86,6 @@ const post = () => {
           const labelProps: {
             optional?: React.ReactNode
           } = {}
-          //   if (isStepOptional(index)) {
-          //     labelProps.optional = (
-          //       <Typography variant="caption">Optional</Typography>
-          //     )
-          //   }
-          if (isStepSkipped(index)) {
-            stepProps.completed = false
-          }
 
           return (
             <Step key={label} {...stepProps}>
@@ -104,26 +98,23 @@ const post = () => {
           )
         })}
       </Stepper>
-      {/* {activeStep === steps.length ? (
-        <>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
-            <MUIButton onClick={handleReset}>Reset</MUIButton>
-          </Box>
-        </>
-      ) :  */}
-
       <>
         {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
         <div style={{ color: 'white' }}>{getStepContent(activeStep)}</div>
 
-        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            marginTop: '90%',
+            paddingRight: '10px',
+          }}>
           <DisplayStyle activeStep={activeStep}>
             <MUIButton
-              style={{ color: '#ffffff', backgroundColor: '#000000' }}
+              style={{
+                color: '#ffffff',
+                backgroundColor: '#000000',
+              }}
               onClick={handleBack}
               sx={{ mr: 1 }}>
               Back
