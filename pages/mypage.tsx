@@ -1,19 +1,22 @@
-import * as React from 'react'
 import styled from '@emotion/styled'
 import Header from '@domains/Header'
 import MUIAvatar from '@components/MUIAvatar'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import MUITabPanel from './MUITabPanel'
-import MUITab from './MUITab'
+import dynamic from 'next/dynamic'
 import { COLORS } from '@utils/constants/colors'
+
+const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
+  ssr: false,
+})
+const MUITabPanel = dynamic(() => import('@components/MUITab/MUITabPanel'), {
+  ssr: false,
+})
 
 const MyPage = (): JSX.Element => {
   const router = useRouter()
   const currentTab = router.query.tab === 'event' ? 'event' : 'gift'
-  const [selectedTab, setSelectedTab] = useState(
-    router.query.tab === 'event' ? 'event' : 'gift',
-  )
+  const [selectedTab, setSelectedTab] = useState(currentTab)
 
   const handleChange = (e: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue === 0 ? 'gift' : 'event')
@@ -35,7 +38,7 @@ const MyPage = (): JSX.Element => {
       </Profile>
       {router.isReady && currentTab === selectedTab && (
         <>
-          <MUITab selectedTab={selectedTab} onChange={handleChange} />
+          <MUITab onChange={handleChange} />
           <MUITabPanel selectedTab={selectedTab} tab={'gift'} index={0}>
             <div>gift list</div>
           </MUITabPanel>

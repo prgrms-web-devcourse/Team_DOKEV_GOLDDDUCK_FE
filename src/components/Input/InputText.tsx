@@ -3,11 +3,12 @@ import { COLORS } from '@utils/constants/colors'
 import { FONT_SIZES } from '@utils/constants/sizes'
 
 interface IInputText {
-  value: string | number
+  value?: string | number
   id: string
   name: string
   maxlength?: number
   style?: React.CSSProperties
+  placeholder?: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -17,6 +18,7 @@ const InputText = ({
   name,
   onChange,
   style,
+  placeholder,
   maxlength = 15,
 }: IInputText): JSX.Element => {
   return (
@@ -27,6 +29,7 @@ const InputText = ({
       name={name}
       onChange={onChange}
       maxLength={maxlength}
+      placeholder={placeholder}
       style={{ ...style }}
     />
   )
@@ -39,9 +42,13 @@ const InputStyled = styled.input`
   background: none;
   color: ${COLORS.WHITE};
   font-weight: bold;
-  font-size: ${FONT_SIZES.MEDIUM};
+  font-size: ${FONT_SIZES.BASE};
   height: 32px;
   width: 70%;
+  ::placeholder {
+    font-size: ${FONT_SIZES.MICRO};
+    color: ${COLORS.TEXT_GRAY_DARK};
+  }
 `
 
 export default InputText

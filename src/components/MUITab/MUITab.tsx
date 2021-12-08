@@ -4,7 +4,6 @@ import { COLORS } from '@utils/constants/colors'
 import { useRouter } from 'next/router'
 
 interface ITab {
-  selectedTab: string
   onChange: (e: React.SyntheticEvent, newValue: number) => void
 }
 
@@ -15,13 +14,13 @@ const a11yProps = (index: number) => {
   }
 }
 
-const MUITab = ({ selectedTab, onChange }: ITab) => {
+const MUITab = ({ onChange }: ITab) => {
   const router = useRouter()
 
   return (
     <Tabs
       variant="fullWidth"
-      value={selectedTab === 'gift' ? 0 : 1}
+      value={router.query.tab === 'event' ? 1 : 0}
       onChange={onChange}
       textColor="inherit"
       TabIndicatorProps={{
@@ -38,13 +37,13 @@ const MUITab = ({ selectedTab, onChange }: ITab) => {
           width: '50%',
           color: COLORS.WHITE,
         }}
-        onClick={() => router.push(`/mypage?tab=gift`)}
+        onClick={() => router.push('/mypage?tab=gift')}
       />
       <Tab
         label="나의 이벤트"
         {...a11yProps(1)}
         sx={{ width: '50%', color: COLORS.WHITE }}
-        onClick={() => router.push(`/mypage?tab=event`)}
+        onClick={() => router.push('/mypage?tab=event')}
       />
     </Tabs>
   )
