@@ -7,9 +7,6 @@ interface IImage {
   mode?: 'fill' | 'contain' | 'cover'
   width?: number | string
   height?: number | string
-  lazy?: boolean
-  threshold?: number
-  placeholder?: string
 }
 
 export default {
