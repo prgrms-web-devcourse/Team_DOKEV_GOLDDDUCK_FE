@@ -1,12 +1,16 @@
 import { AppProps } from 'next/app'
 import styled from '@emotion/styled'
 import '../styles/globals.css'
+import UserProvider from '@contexts/UserProvider'
+
 function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <RootContainer>
-        <Component {...pageProps}></Component>
-      </RootContainer>
+      <UserProvider>
+        <RootContainer>
+          <Component {...pageProps}></Component>
+        </RootContainer>
+      </UserProvider>
     </>
   )
 }
