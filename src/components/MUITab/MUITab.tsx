@@ -38,13 +38,13 @@ const MUITab = ({ selectedTab, onChange }: ITab) => {
           width: '50%',
           color: COLORS.WHITE,
         }}
-        onClick={() => router.push(`/mypage?tab=gift`)}
+        onClick={() => router.push('/mypage?tab=gift')}
       />
       <Tab
         label="나의 이벤트"
         {...a11yProps(1)}
         sx={{ width: '50%', color: COLORS.WHITE }}
-        onClick={() => router.push(`/mypage?tab=event`)}
+        onClick={() => router.push('/mypage?tab=event')}
       />
     </Tabs>
   )
