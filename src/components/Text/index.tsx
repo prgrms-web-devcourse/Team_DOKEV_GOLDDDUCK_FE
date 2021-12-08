@@ -1,7 +1,6 @@
 import { CSSProperties } from 'react'
 import { FONT_SIZES } from '@utils/constants/sizes'
 import { COLORS } from '@utils/constants/colors'
-import { style } from '@mui/system'
 
 interface Props {
   size?: 'MICRO' | 'SMALL' | 'BASE' | 'MEDIUM' | 'LARGE'

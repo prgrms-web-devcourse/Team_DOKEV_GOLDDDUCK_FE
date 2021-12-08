@@ -1,36 +1,35 @@
+import Logo from '@components/Logo'
+import MUIAvatar from '@components/MUIAvatar'
 import styled from '@emotion/styled'
-import { DEFAULT_MARGIN, FONT_SIZES } from '@utils/constants/sizes'
-import { COLORS } from '@utils/constants/colors'
+import { useRouter } from 'next/dist/client/router'
 
-const Header = () => {
+const Header = (): JSX.Element => {
+  const router = useRouter()
+
   return (
-    <HeaderContainer>
-      <Logo>로고 컴포넌트</Logo>
-      <Avatar>아바타 컴포넌트</Avatar>
-    </HeaderContainer>
+    <Wrapper>
+      <Logo
+        size={'small'}
+        onClick={() => router.push('/')}
+        style={{ cursor: 'pointer' }}
+      />
+      <MUIAvatar
+        width={'60px'}
+        height={'60px'}
+        onClick={() => router.push('/mypage')}
+        style={{ cursor: 'pointer' }}
+      />
+    </Wrapper>
   )
 }
 
-const HeaderContainer = styled.div`
-  width: 100%;
-  background-color: green;
+const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  align-self: center;
-`
-
-const Logo = styled.div`
-  width: 144px;
-  height: 72px;
-  color: white;
-  background-color: grey;
-`
-
-const Avatar = styled.div`
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background-color: grey;
+  align-items: center;
+  padding: 16px;
+  position: relative;
+  z-index: 99;
 `
 
 export default Header

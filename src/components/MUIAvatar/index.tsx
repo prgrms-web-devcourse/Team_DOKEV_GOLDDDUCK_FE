@@ -13,7 +13,7 @@ const MUIAvatar = ({
   onClick,
   width,
   height,
-  src = '"/static/images/avatar/1.jpg"',
+  src = '',
   style,
 }: Props): JSX.Element => {
   return (
