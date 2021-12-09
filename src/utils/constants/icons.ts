@@ -1,5 +1,5 @@
 import { MdArrowBack } from 'react-icons/md'
-import { FiTrash2 } from 'react-icons/fi'
+import { FaRegHandPointDown } from 'react-icons/fa'
 import { BsPlusLg } from 'react-icons/bs'
 import { CgClose } from 'react-icons/cg'
 import { IconType } from 'react-icons/lib'
@@ -8,13 +8,13 @@ interface IIconTypes {
   [iconName: string]: IconType
 }
 
-const $remove = FiTrash2
+const $pointDown = FaRegHandPointDown
 const $arrowBack = MdArrowBack
 const $close = CgClose
 const $plus = BsPlusLg
 
 export const ICON_TYPES: IIconTypes = {
-  remove: $remove,
+  remove: $pointDown,
   arrowBack: $arrowBack,
   close: $close,
   plus: $plus,
