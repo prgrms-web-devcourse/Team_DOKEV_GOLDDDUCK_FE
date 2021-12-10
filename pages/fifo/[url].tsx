@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { COLORS } from '@utils/constants/colors'
 import { FONT_SIZES } from '@utils/constants/sizes'
 
-const startDate = new Date('12/8/2021')
+const startDate = new Date('12/13/2021')
 
 const MOCK_DATA = {
   id: 12345,
@@ -18,7 +18,7 @@ const MOCK_DATA = {
   eventTitle: '이벤트 제목',
   eventStart: startDate,
   eventMaster: '도가가',
-  eventIsOver: true,
+  eventProgressStatus: 'IsOver',
   gifts: [
     { id: 1, giftTitle: '시언한 아이스 아메리카노', quantity: 10 },
     { id: 2, giftTitle: '리아 친필 싸인', quantity: 10 },
@@ -41,7 +41,7 @@ interface IeventData {
   eventTitle: string
   eventStart: Date
   eventMaster: string
-  eventIsOver: boolean
+  eventProgressStatus: string
   gifts: object[]
 }
 
@@ -51,7 +51,30 @@ interface IGift {
   quantity: number
 }
 
-const fifo = () => {
+// 이벤트 종료시 보여줄 JSX를 리턴하는 함수
+const eventIsOver = () => {
+  const EVENT_OVER_MESSAGE = '현재 종료된 \n 이벤트 입니다.'
+
+  return (
+    <>
+      <EventIsOverContainer>
+        <Text
+          color="WHITE"
+          style={{
+            textAlign: 'center',
+            lineHeight: 1.5,
+            whiteSpace: 'pre-wrap',
+            fontSize: '3rem',
+          }}>
+          {EVENT_OVER_MESSAGE}
+        </Text>
+        <Image src="/EventOver.png" width="100%" height="100%" />
+      </EventIsOverContainer>
+    </>
+  )
+}
+
+const fifo = (): JSX.Element => {
   const [isOver, setIsOver] = useState(false)
   const [eventData, setEventData] = useState<IeventData | null>(null)
   const router = useRouter()
@@ -59,11 +82,12 @@ const fifo = () => {
 
   const initEvent = () => {
     //api 로직
-    // if (MOCK_DATA.eventIsOver) {
-    //이벤트가 끝났을때 보여주는 페이지?로 이동
-    //조금이라도 랜더링 되지 않고 바로 페이지로 이동시키고 싶음!
-    //   return router.push('블라블라')
-    // }
+    //이벤트 종료 여부 체크
+    if (MOCK_DATA.eventProgressStatus === 'IsOver') {
+      setIsOver(true)
+    } else {
+      setIsOver(false)
+    }
     setEventData(() => MOCK_DATA)
   }
 
@@ -96,38 +120,50 @@ const fifo = () => {
   return (
     <>
       <Header />
-      <TimerHeader
-        eventStart={MOCK_DATA.eventStart}
-        eventMaster={MOCK_DATA.eventMaster}
-      />
-      <GiftWrapper>
-        {eventData &&
-          eventData.gifts.map(({ id, giftTitle, quantity }: IGift, index) => (
-            <Gift key={id}>
-              <Image
-                src={`/cover/cover${(index % 6) + 1}.png`}
-                width="60px"
-                height="60px"
-                mode="contain"
-              />
-              <GiftTextWrapper>
-                <Text size="MEDIUM" color="WHITE">
-                  {giftTitle}
-                </Text>
-                <Text size="BASE" color="TEXT_GRAY_DARK">
-                  수량 : {quantity}개
-                </Text>
-              </GiftTextWrapper>
-              {quantity ? (
-                <MUIButton onClick={onButtonClick} style={{ ...GetStyle }}>
-                  GET
-                </MUIButton>
-              ) : (
-                <MUIButton style={{ ...SoldOutStyle }}>SOLD OUT</MUIButton>
+      {isOver ? (
+        eventIsOver()
+      ) : (
+        <>
+          <TimerHeader
+            eventStart={MOCK_DATA.eventStart}
+            eventMaster={MOCK_DATA.eventMaster}
+          />
+          <GiftWrapper>
+            {eventData &&
+              eventData.gifts.map(
+                ({ id, giftTitle, quantity }: IGift, index) => (
+                  <Gift key={id}>
+                    <Image
+                      src={`/cover/cover${(index % 6) + 1}.png`}
+                      width="60px"
+                      height="60px"
+                      mode="contain"
+                    />
+                    <GiftTextWrapper>
+                      <Text size="MEDIUM" color="WHITE">
+                        {giftTitle}
+                      </Text>
+                      <Text size="BASE" color="TEXT_GRAY_DARK">
+                        수량 : {quantity}개
+                      </Text>
+                    </GiftTextWrapper>
+                    {quantity ? (
+                      <MUIButton
+                        onClick={onButtonClick}
+                        style={{ ...GetStyle }}>
+                        GET
+                      </MUIButton>
+                    ) : (
+                      <MUIButton style={{ ...SoldOutStyle }}>
+                        SOLD OUT
+                      </MUIButton>
+                    )}
+                  </Gift>
+                ),
               )}
-            </Gift>
-          ))}
-      </GiftWrapper>
+          </GiftWrapper>
+        </>
+      )}
     </>
   )
 }
@@ -188,6 +224,12 @@ const GiftTextWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: 8px;
+`
+
+const EventIsOverContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 export default fifo
