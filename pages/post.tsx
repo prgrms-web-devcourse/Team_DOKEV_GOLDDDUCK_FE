@@ -8,6 +8,7 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import Text from '@components/Text'
 import EventTitle from '@domains/EventTitle'
+import EventPresent from '@domains/EventPresent'
 
 interface Props {
   activeStep: number
@@ -72,7 +73,7 @@ const post = () => {
       case 2:
         return '스텝 3에서는 ... 하세요'
       case 3:
-        return '스텝 4에서는 ...하세요'
+        return <EventPresent></EventPresent>
       default:
         return
     }
