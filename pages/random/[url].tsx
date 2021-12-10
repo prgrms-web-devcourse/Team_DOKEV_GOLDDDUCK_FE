@@ -1,53 +1,73 @@
 import Header from '@domains/Header'
 import styled from '@emotion/styled'
-import { DEFAULT_MARGIN, FONT_SIZES } from '@utils/constants/sizes'
-import { COLORS } from '@utils/constants/colors'
 import TextHeader from '@domains/TimerHeader'
 import { useState } from 'react'
 import { keyframes } from '@emotion/react'
 import Image from '@components/Image'
+import MUIButton from '@components/MUIButton'
+import { COLORS } from '@utils/constants/colors'
 
-const random = () => {
-  const [isAnimate, setIsAnimate] = useState(false)
-  const [isEnded, setIsEnded] = useState(false)
+const random = (): JSX.Element => {
+  const [isVideoLoading, setIsVideoLoading] = useState(false)
+  const [isVideoEnded, setIsVideoEnded] = useState(false)
+
   const handleStartVideo = () => {
-    setIsAnimate(true)
+    setIsVideoLoading(true)
   }
 
   return (
     <>
       <Header />
       <TextHeader />
-      {isEnded && (
-        <Image
-          src="/test.jpeg"
-          width="80%"
-          height="80%"
-          style={{ ...LastImgStyle }}
-        />
+      {isVideoEnded && (
+        <ZoomInDownWrapper>
+          <Image
+            src="/test.jpeg"
+            width="80%"
+            height="80%"
+            mode="contain"
+            style={{ margin: '0 auto' }}
+          />
+          <MUIButton style={{ ...BtnStyle }}>
+            <a href="/test.jpeg" download>
+              저장하기
+            </a>
+          </MUIButton>
+        </ZoomInDownWrapper>
       )}
-      {isAnimate ? (
-        <VideoBox
-          src="/video/Random.mp4"
-          muted
-          autoPlay
-          onEnded={() => setIsEnded(true)}
-        />
+      {isVideoLoading ? (
+        <FadeInWrapper>
+          <VideoBox
+            src="/video/Random.mp4"
+            muted
+            autoPlay
+            onEnded={() => setIsVideoEnded(true)}
+          />
+        </FadeInWrapper>
       ) : (
-        <GiftWrapper>
+        <FadeInScaleWrapper>
           <Image
             src="/GiftRudolf.png"
             width="240px"
             height="260px"
             onClick={handleStartVideo}
+            style={{ margin: '0 auto' }}
           />
-        </GiftWrapper>
+        </FadeInScaleWrapper>
       )}
     </>
   )
 }
 
-const FirstfadeIn = keyframes`
+const BtnStyle: React.CSSProperties = {
+  width: '30%',
+  borderRadius: '50px',
+  margin: '0 auto',
+  marginTop: '16px',
+  backgroundColor: COLORS.RED,
+}
+
+const fadeInScale = keyframes`
   0% {
     transform: scale(0);
     opacity: 0;
@@ -64,43 +84,51 @@ const FirstfadeIn = keyframes`
     }
 `
 
-const LastfadeIn = keyframes`
+const fadeIn = keyframes`
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
-    }
-`
-const FirstDiv = styled.div`
-  width: 240px;
-  height: 240px;
-  background-color: orange;
-  margin: 0 auto;
-  animation: ${FirstfadeIn} 2s linear;
+  }
 `
 
-const FirstImgStyle: React.CSSProperties = {
-  margin: '0 auto',
-  animation: `${LastfadeIn} 2s linear`,
-  padding: '8px',
-}
+const ZoomInDown = keyframes`
+  0% {
+    opacity: 0;
+    transform: scale3d(.1, .1, .1) translate3d(0, -1000px, 0);
+    animation-timing-function: cubic-bezier(0.55, .055, .675, .19)
+  }
+  60% {
+    opacity: 1;
+    transform: scale3d(.475, .475, .475) translate3d(0, 60px, 0);
+    animation-timing-function: cubic-bezier(0.175, .885, .32, 1)
+  }
+`
 
-const LastImgStyle: React.CSSProperties = {
-  margin: '0 auto',
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: ' translate(-50%, -50%)',
-  zIndex: 99,
-  animation: `${LastfadeIn} 2s linear`,
-}
+const FadeInWrapper = styled.div`
+  animation: ${fadeIn} 2s ease-out;
+`
 
-const GiftWrapper = styled.div`
+const FadeInScaleWrapper = styled.div`
   width: 100%;
-  height: 60%;
+  height: 45%;
   position: absolute;
   bottom: 0;
+  animation: ${fadeInScale} 2s ease-out;
+`
+
+const ZoomInDownWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  z-index: 99;
+  animation: ${ZoomInDown} 2s ease-out;
 `
 
 const VideoBox = styled.video`

@@ -1,5 +1,3 @@
-import { keyframes } from '@emotion/react'
-
 interface IImage {
   src: string
   style?: React.CSSProperties
@@ -35,30 +33,9 @@ const Image = ({
       width={width}
       height={height}
       onClick={onClick}
-      style={{ ...imageStyle, ...a }}
+      style={{ ...imageStyle }}
     />
   )
-}
-
-const FirstfadeIn = keyframes`
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-
-  30%, 70% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  100% {
-    transform: scale(3);
-    opacity: 0;
-    }
-`
-
-const a: React.CSSProperties = {
-  animation: `${FirstfadeIn} 2s liner`,
 }
 
 export default Image
