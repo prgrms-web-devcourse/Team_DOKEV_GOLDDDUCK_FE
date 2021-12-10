@@ -1,4 +1,5 @@
-import Timer from '@components/Timer'
+import TimeInfo from './TimeInfo'
+import Cover from './Cover'
 import Text from '@components/Text'
 import Header from '@domains/Header'
 import Icon from '@components/Icon'
@@ -128,142 +129,50 @@ const EventPage = () => {
   const {
     giftChoiceType: type,
     code,
-    startAt: open,
-    endAt: close,
+    startAt: start,
+    endAt: end,
     eventProgressStatus: status,
   } = MOCK
-  const EVENT_LINK = `http://localhost:3000/${type.toLowerCase()}/${code}`
-
-  const handleCopyUrl = () => {
-    navigator.clipboard.writeText(EVENT_LINK)
-  }
-
-  const formattedDate = (date: string): Array<string> => {
-    const castingDate = new Date(date)
-
-    return [
-      `${castingDate.getFullYear()}년 ${castingDate.getMonth()}월 ${castingDate.getDate()}일`,
-      `${castingDate.getHours()}시 ${castingDate.getMinutes()}분 ${castingDate.getSeconds()}초`,
-    ]
-  }
 
   return (
-    <Wrapper>
+    <>
       <Header />
+      <Icon
+        name="arrowBack"
+        size="LARGE"
+        onIconClick={() => router.push('/mypage?tab=event')}
+        style={{
+          position: 'absolute',
+          top: 108,
+          left: DEFAULT_MARGIN,
+        }}
+      />
       <EventContainer>
-        <Icon
-          name="arrowBack"
-          size="LARGE"
-          onIconClick={() => router.push('/mypage?tab=event')}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            marginLeft: 16,
-          }}
+        <Cover
+          mainTemplate={MOCK.mainTemplate}
+          title={MOCK.title}
+          status={status}
+          type={type}
+          code={code}
         />
-        <CoverImage
-          style={{
-            backgroundImage: `url(/cover/cover${MOCK.mainTemplate}.png)`,
-          }}>
-          <Text
-            color="BLACK"
-            size="LARGE"
-            style={{
-              textAlign: 'center',
-              wordBreak: 'keep-all',
-              lineHeight: '1.5',
-            }}>
-            {MOCK.title}
-          </Text>
-          <MUIButton onClick={handleCopyUrl} style={{ ...copyBtnStyle }}>
-            링크 복사
-          </MUIButton>
-          <Text color="TEXT_GRAY_DARK">
-            {`${type === 'FIFO' ? '#선착순' : '#랜덤'} ${
-              status === 'READY'
-                ? '#준비중'
-                : status === 'RUNNING'
-                ? '#진행중'
-                : '#종료됨'
-            }`}
-          </Text>
-          <RemoveButton>
-            <Icon
-              name="remove"
-              size="MEDIUM"
-              style={{ margin: '10px 0 0 10px' }}
-              onIconClick={() => {
-                confirm(
-                  '이벤트를 삭제하시겠습니까?\n삭제한 이벤트는 종료 처리되고 더 이상 확인할 수 없습니다.',
-                ) && alert('삭제되었습니다')
-              }}
-            />
-          </RemoveButton>
-        </CoverImage>
-        <EventTimeSection>
-          <TimeInfo>
-            <Text>오픈</Text>
-            <Text
-              color="TEXT_GRAY_LIGHT"
-              size="MICRO"
-              style={{ marginTop: 16, marginBottom: 4 }}>
-              {formattedDate(open)[0]}
-            </Text>
-            <Text size="MICRO" color="TEXT_GRAY_LIGHT">
-              {formattedDate(open)[1]}
-            </Text>
-          </TimeInfo>
-          <Divider />
-          <TimeInfo>
-            <Text>종료</Text>
-            <Text
-              color="TEXT_GRAY_LIGHT"
-              size="MICRO"
-              style={{ marginTop: 16, marginBottom: 4 }}>
-              {formattedDate(close)[0]}
-            </Text>
-            <Text size="MICRO" color="TEXT_GRAY_LIGHT">
-              {formattedDate(close)[1]}
-            </Text>
-          </TimeInfo>
-        </EventTimeSection>
-        <WinnerSection>
-          <Text>당첨자 확인</Text>
-          <Icon name="pointDown" size="MEDIUM" />
-        </WinnerSection>
+        <TimeInfo start={start} end={end} />
       </EventContainer>
-      <Modal>
-        <MUIButton style={{ ...winnerBtnStyle }}>클릭</MUIButton>
-        <Text color="WHITE">당첨자 목록</Text>
-      </Modal>
-    </Wrapper>
+      <WinnerSection>
+        <Text>당첨자 확인</Text>
+        <Icon name="pointDown" size="MEDIUM" />
+        <Modal title="당첨자 목록" btnStyle={{ ...winnerBtnStyle }}>
+          <MUIButton style={{ ...winnerBtnStyle }}>클릭</MUIButton>
+          <Text>당첨자 확인</Text>
+        </Modal>
+      </WinnerSection>
+    </>
   )
 }
 
-const Wrapper = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: ${COLORS.BLACK};
-  height: 100%;
-`
-
-const copyBtnStyle: React.CSSProperties = {
-  backgroundColor: COLORS.RED,
-  borderRadius: 20,
-  lineHeight: 2,
-}
-
 const winnerBtnStyle: React.CSSProperties = {
-  position: 'relative',
-  bottom: 0,
   backgroundColor: COLORS.GREEN,
   borderRadius: 20,
   lineHeight: 2,
-  margin: `${DEFAULT_MARGIN} 40%`,
 }
 
 const EventContainer = styled.div`
@@ -271,52 +180,10 @@ const EventContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: ${DEFAULT_MARGIN};
-  background-color: inherit;
-`
-const CoverImage = styled.div`
-  position: relative;
+  justify-content: space-between;
   width: 70%;
-  height: 400px;
-  background-repeat: no-repeat;
-  padding: 40px;
-  background-size: cover;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-`
-
-const RemoveButton = styled.div`
-  position: absolute;
-  bottom: -1px;
-  right: -1px;
-  background-color: ${COLORS.BLACK};
-  border-radius: 50px 0 0 0;
-`
-
-const EventTimeSection = styled.section`
-  display: flex;
-  margin: 10% 0;
-  height: 80px;
-  width: 80%;
-`
-
-const TimeInfo = styled.div`
-  color: ${COLORS.WHITE};
-  width: 50%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`
-
-const Divider = styled.div`
-  width: 1px;
-  height: 100%;
-  background-color: ${COLORS.TEXT_GRAY_DARK};
+  height: 60%;
+  margin: ${DEFAULT_MARGIN} auto;
 `
 
 const WinnerSection = styled.section`
@@ -324,9 +191,9 @@ const WinnerSection = styled.section`
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  height: 50px;
-  margin: 10% 0;
+  min-height: 100px;
   background-color: inherit;
+  margin-top: 30px;
 `
 
 export default EventPage
