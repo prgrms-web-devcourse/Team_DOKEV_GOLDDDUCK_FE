@@ -7,7 +7,7 @@ import { COLORS } from '@utils/constants/colors'
 
 const INTRODUCE = '도깨비님 안녕하세요. \n 금뚝에 오신 것을 환영합니다!'
 
-const URL =
+const KAKAO_URL =
   'http://maenguin.iptime.org:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect'
 
 const login = (): JSX.Element => {
@@ -21,7 +21,7 @@ const login = (): JSX.Element => {
         <Text size="LARGE" color="WHITE" style={{ ...textStyle }}>
           {INTRODUCE}
         </Text>
-        <MUIButton href={URL} style={{ ...btnStyle }}>
+        <MUIButton href={KAKAO_URL} style={{ ...btnStyle }}>
           <BtnText>
             <Image
               src="/kakao.png"
