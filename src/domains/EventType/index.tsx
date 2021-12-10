@@ -15,7 +15,9 @@ const EventType = ({ eventTypeState, handleTypeCheck }: Props) => {
     <>
       <EventTypeContainer>
         <TypeDiv>
-          <Image src={eventType1.src} width={378} height={120}></Image>
+          <label htmlFor="random">
+            <Image src={eventType1.src} width={378} height={120}></Image>
+          </label>
           <InputRadio
             id="random"
             value="random"
@@ -32,7 +34,9 @@ const EventType = ({ eventTypeState, handleTypeCheck }: Props) => {
         </TypeDiv>
 
         <TypeDiv>
-          <Image src={eventType2.src} width={378} height={120}></Image>
+          <label htmlFor="fifo">
+            <Image src={eventType2.src} width={378} height={120}></Image>
+          </label>
           <InputRadio
             id="fifo"
             value="fifo"
