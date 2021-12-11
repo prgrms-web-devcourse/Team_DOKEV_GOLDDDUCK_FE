@@ -26,14 +26,6 @@ const random = (): JSX.Element => {
   const [isTimerOver, setIsTimerOver] = useState(false)
   let timer: NodeJS.Timer
 
-  const handleStartVideo = () => {
-    if (isTimerOver) {
-      setIsVideoLoading(true)
-    } else {
-      alert('지금은 선물을 받을 수 없어요!')
-    }
-  }
-
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
     if (newValue === 100) {
       if (isTimerOver) {
@@ -42,12 +34,6 @@ const random = (): JSX.Element => {
         alert('djskdjskd')
       }
     }
-    // else {
-    //   alert('지금은 선물을 받을 수 없어요!')
-    // }
-    // if (newValue === 100) {
-    //   console.log('1232')
-    // }
   }
 
   const checkRemaining = () => {
@@ -71,7 +57,7 @@ const random = (): JSX.Element => {
         eventStart={MOCK_DATA.eventStart}
       />
       {isVideoEnded && (
-        <ZoomInDownWrapper>
+        <FadeInDownWrapper>
           <Image
             src="/test.jpeg"
             width="80%"
@@ -84,7 +70,7 @@ const random = (): JSX.Element => {
               저장하기
             </a>
           </MUIButton>
-        </ZoomInDownWrapper>
+        </FadeInDownWrapper>
       )}
       {isVideoLoading ? (
         <FadeInWrapper>
@@ -98,7 +84,7 @@ const random = (): JSX.Element => {
       ) : (
         <SliderWrapper>
           <CustomSlider
-            // disabled={isTimerOver ? false : true}
+            disabled={isTimerOver ? false : true}
             aria-label="Temperature"
             onChange={handleSliderChange}
             color="secondary"
@@ -112,15 +98,6 @@ const random = (): JSX.Element => {
           <StyledText>밀어서 랜덤 선물받기</StyledText>
         </SliderWrapper>
       )}
-      {/* <FadeInScaleWrapper>
-          <Image
-            src="/GiftRudolf.png"
-            width="240px"
-            height="260px"
-            onClick={handleStartVideo}
-            style={{ margin: '0 auto' }}
-          />
-        </FadeInScaleWrapper> */}
     </>
   )
 }
@@ -133,23 +110,6 @@ const BtnStyle: React.CSSProperties = {
   backgroundColor: COLORS.RED,
 }
 
-const fadeInScale = keyframes`
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-
-  30%, 70% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  100% {
-    transform: scale(3);
-    opacity: 0;
-    }
-`
-
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -160,32 +120,22 @@ const fadeIn = keyframes`
   }
 `
 
-const ZoomInDown = keyframes`
-  0% {
+const fadeInDown = keyframes`
+  from {
     opacity: 0;
-    transform: scale3d(.1, .1, .1) translate3d(0, -1000px, 0);
-    animation-timing-function: cubic-bezier(0.55, .055, .675, .19)
+    transform: translate3d(0, -20%, 0);
   }
-  60% {
+  to {
     opacity: 1;
-    transform: scale3d(.475, .475, .475) translate3d(0, 60px, 0);
-    animation-timing-function: cubic-bezier(0.175, .885, .32, 1)
-  }
+    transform: translate3d(0, 0, 0);
+    }
 `
 
 const FadeInWrapper = styled.div`
   animation: ${fadeIn} 2s ease-out;
 `
 
-const FadeInScaleWrapper = styled.div`
-  width: 100%;
-  height: 45%;
-  position: absolute;
-  bottom: 0;
-  animation: ${fadeInScale} 2s ease-out;
-`
-
-const ZoomInDownWrapper = styled.div`
+const FadeInDownWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -194,17 +144,15 @@ const ZoomInDownWrapper = styled.div`
   position: absolute;
   top: 0;
   z-index: 99;
-  animation: ${ZoomInDown} 2s ease-out;
+  animation: ${fadeInDown} 2s ease-out;
 `
 
 const VideoBox = styled.video`
   width: 100%;
-  height: 70%;
+  height: 100%;
   object-fit: cover;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 0;
 `
 
 const SliderWrapper = styled.div`
