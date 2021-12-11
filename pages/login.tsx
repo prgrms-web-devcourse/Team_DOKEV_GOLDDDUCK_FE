@@ -7,11 +7,10 @@ import { COLORS } from '@utils/constants/colors'
 
 const INTRODUCE = '도깨비님 안녕하세요. \n 금뚝에 오신 것을 환영합니다!'
 
-const login = (): JSX.Element => {
-  const googleLogin = () => {
-    alert('구글 로그인 GET 요청')
-  }
+const KAKAO_URL =
+  'http://maenguin.iptime.org:8080/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect'
 
+const login = (): JSX.Element => {
   return (
     <>
       <LoginContainer>
@@ -22,10 +21,10 @@ const login = (): JSX.Element => {
         <Text size="LARGE" color="WHITE" style={{ ...textStyle }}>
           {INTRODUCE}
         </Text>
-        <MUIButton onClick={googleLogin} style={{ ...btnStyle }}>
+        <MUIButton href={KAKAO_URL} style={{ ...btnStyle }}>
           <BtnText>
             <Image
-              src="/google.png"
+              src="/kakao.png"
               iscircle={true}
               width="30px"
               height="30px"
@@ -34,8 +33,12 @@ const login = (): JSX.Element => {
             <Text
               size="MEDIUM"
               color="WHITE"
-              style={{ width: '100%', fontWeight: 'bold' }}>
-              구글 계정으로 로그인하기
+              style={{
+                width: '100%',
+                fontWeight: 'bold',
+                textAlign: 'center',
+              }}>
+              카카오 계정으로 로그인하기
             </Text>
           </BtnText>
         </MUIButton>
