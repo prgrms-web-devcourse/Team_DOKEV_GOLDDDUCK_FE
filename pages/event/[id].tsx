@@ -16,7 +16,7 @@ const MOCK = {
   endAt: '2021-12-09T10:53:39.274Z',
   eventProgressStatus: 'READY',
   giftChoiceType: 'FIFO',
-  mainTemplate: '사랑',
+  mainTemplate: '3',
   maxParticipantCount: 6,
   gifts: [
     {

@@ -102,6 +102,7 @@ const winnerBtnStyle: React.CSSProperties = {
   backgroundColor: COLORS.GREEN,
   borderRadius: 20,
   lineHeight: 2,
+  cursor: 'pointer',
 }
 
 const WinnerSection = styled.section`
