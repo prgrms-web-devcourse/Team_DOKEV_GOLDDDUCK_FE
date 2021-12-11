@@ -4,14 +4,12 @@ import Timer from '@components/Timer'
 import { useRouter } from 'next/dist/client/router'
 import { useEffect } from 'react'
 
-const startDate = new Date('12/13/2021')
-
-const MOCK_TIMER_DATA = {
-  eventStart: startDate,
-  eventMaster: '도가가',
+interface ITimeHeader {
+  eventStart: Date
+  eventMaster: string
 }
 
-const TimerHeader = (): JSX.Element => {
+const TimerHeader = ({ eventStart, eventMaster }: ITimeHeader): JSX.Element => {
   const router = useRouter()
 
   useEffect(() => {
@@ -30,14 +28,14 @@ const TimerHeader = (): JSX.Element => {
             textDecoration: 'underline',
             fontWeight: 'bold',
           }}>
-          {MOCK_TIMER_DATA.eventMaster}
+          {eventMaster}
         </Text>
         <Text size="LARGE" color="WHITE" style={{ display: 'inline' }}>
           님이 준비한 선물입니다!
         </Text>
       </TextWrapper>
       <TimerWrapper>
-        <Timer size="LARGER" time={MOCK_TIMER_DATA.eventStart} />
+        <Timer size="LARGER" time={eventStart} />
         <Text size="MEDIUM" color="TEXT_GRAY_DARK" style={{ marginTop: '8px' }}>
           선착순이니 서둘러주세요!!
         </Text>

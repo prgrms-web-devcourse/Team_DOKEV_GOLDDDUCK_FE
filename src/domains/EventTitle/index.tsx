@@ -9,18 +9,18 @@ import Grid from '@mui/material/Grid'
 
 interface Props {
   handleInput(e: React.ChangeEvent<HTMLInputElement>): void
-  handleRaido(e: React.ChangeEvent<HTMLInputElement>): void
+  handleCoverImage(e: React.ChangeEvent<HTMLInputElement>): void
   eventTitle: string
   participant: number | undefined
-  inputState: string
+  coverImage: string
 }
 
 const EventTitle: React.FC<Props> = ({
   eventTitle,
   participant,
-  inputState,
+  coverImage,
   handleInput,
-  handleRaido,
+  handleCoverImage,
 }) => {
   return (
     <>
@@ -75,8 +75,8 @@ const EventTitle: React.FC<Props> = ({
                       id={`cover${index + 1}`}
                       value={`cover${index + 1}`}
                       name={'RadioGroup'}
-                      checked={inputState === `cover${index + 1}`}
-                      onChange={handleRaido}
+                      checked={coverImage === `cover${index + 1}`}
+                      onChange={handleCoverImage}
                     />
                   </Div>
                 </Grid>
