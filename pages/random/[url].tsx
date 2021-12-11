@@ -6,8 +6,10 @@ import { keyframes } from '@emotion/react'
 import Image from '@components/Image'
 import MUIButton from '@components/MUIButton'
 import { COLORS } from '@utils/constants/colors'
+import { FONT_SIZES } from '@utils/constants/sizes'
+import Slider from '@mui/material/Slider'
 
-const startDate = new Date('12/13/2021')
+const startDate = new Date('12/9/2021')
 
 const MOCK_DATA = {
   id: 12345,
@@ -30,6 +32,22 @@ const random = (): JSX.Element => {
     } else {
       alert('지금은 선물을 받을 수 없어요!')
     }
+  }
+
+  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+    if (newValue === 100) {
+      if (isTimerOver) {
+        setIsVideoLoading(true)
+      } else {
+        alert('djskdjskd')
+      }
+    }
+    // else {
+    //   alert('지금은 선물을 받을 수 없어요!')
+    // }
+    // if (newValue === 100) {
+    //   console.log('1232')
+    // }
   }
 
   const checkRemaining = () => {
@@ -71,14 +89,30 @@ const random = (): JSX.Element => {
       {isVideoLoading ? (
         <FadeInWrapper>
           <VideoBox
-            src="/video/Random.mp4"
+            src="/video/Stars.mp4"
             muted
             autoPlay
             onEnded={() => setIsVideoEnded(true)}
           />
         </FadeInWrapper>
       ) : (
-        <FadeInScaleWrapper>
+        <SliderWrapper>
+          <CustomSlider
+            // disabled={isTimerOver ? false : true}
+            aria-label="Temperature"
+            onChange={handleSliderChange}
+            color="secondary"
+            sx={{
+              backgroundColor: 'transparent',
+              border: `3px solid ${COLORS.TEXT_GRAY_LIGHT}`,
+              height: '22px',
+              width: '100%',
+            }}
+          />
+          <StyledText>밀어서 랜덤 선물받기</StyledText>
+        </SliderWrapper>
+      )}
+      {/* <FadeInScaleWrapper>
           <Image
             src="/GiftRudolf.png"
             width="240px"
@@ -86,8 +120,7 @@ const random = (): JSX.Element => {
             onClick={handleStartVideo}
             style={{ margin: '0 auto' }}
           />
-        </FadeInScaleWrapper>
-      )}
+        </FadeInScaleWrapper> */}
     </>
   )
 }
@@ -172,6 +205,63 @@ const VideoBox = styled.video`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+`
+
+const SliderWrapper = styled.div`
+  right: 0;
+  width: 60%;
+  margin: 0 auto;
+  position: absolute;
+  top: 70%;
+  left: 0;
+  @media all and (max-width: 425px) {
+    top: 55%;
+  }
+  @media all and (max-width: 320px) {
+    top: 60%;
+  }
+`
+
+const CustomSlider = styled(Slider)(() => ({
+  '& .MuiSlider-rail, & .MuiSlider-track': {
+    backgroundColor: 'transparent',
+    border: 'none',
+  },
+  '& .MuiSlider-thumbColorSecondary.MuiSlider-thumbSizeMedium.MuiSlider-thumb':
+    {
+      backgroundColor: 'transparent',
+      backgroundImage: 'url(/giftrudolf.png)',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      width: '120px',
+      height: '120px',
+      border: 'none',
+      boxShadow: 'none',
+      zIndex: 99,
+    },
+}))
+
+const StyledText = styled.div`
+  position: absolute;
+  font-size: ${FONT_SIZES.LARGE};
+  top: 10%;
+  right: -50px;
+  transform: translate(-50%, 50%);
+  background-image: linear-gradient(90deg, #111, #fff, #111);
+  background-repeat: no-repeat;
+  background-clip: text;
+  background-size: 80% 100%;
+  --webkit-backdrop-clip: text;
+  color: transparent;
+  animation: shine 2s linear infinite;
+  @keyframes shine {
+    0% {
+      background-position: -500% 0;
+    }
+    100% {
+      background-position: 500% 0;
+    }
+  }
 `
 
 export default random
