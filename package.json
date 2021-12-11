@@ -3,9 +3,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "craco build",
-    "start": "craco start",
-    "lint": "craco lint",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
