@@ -169,7 +169,7 @@ const DisplayStyle = styled.div`
   ${({ activeStep }: Props) => {
     return activeStep === 0
       ? css`
-          display: none;
+          visibility: hidden;
         `
       : css`
           display: black;
