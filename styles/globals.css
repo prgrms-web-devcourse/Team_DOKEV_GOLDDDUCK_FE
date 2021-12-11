@@ -144,6 +144,6 @@ table {
   color: #1a3c35;
 }
 
-.MuiSvgIcon-root {
-  color: #ce000b !important;
+.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiStepIcon-root.Mui-completed.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root {
+  color: #ce000b;
 }
