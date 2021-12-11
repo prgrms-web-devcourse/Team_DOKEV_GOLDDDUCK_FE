@@ -1,14 +1,12 @@
-import TimeInfo from './TimeInfo'
-import Cover from './Cover'
-import Text from '@components/Text'
 import Header from '@domains/Header'
 import Icon from '@components/Icon'
-import MUIButton from '@components/MUIButton'
-import Modal from '@components/Modal'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
-import { COLORS } from '@utils/constants/colors'
+import { EVENT_STATUS, EVENT_TEMPLATE, EVENT_TYPE } from 'types/event'
+import TimeInfo from './TimeInfo'
+import Cover from './Cover'
+import WinnerModal from './WinnerModal'
 
 const MOCK = {
   eventId: 0,
@@ -18,7 +16,7 @@ const MOCK = {
   endAt: '2021-12-09T10:53:39.274Z',
   eventProgressStatus: 'READY',
   giftChoiceType: 'FIFO',
-  mainTemplate: '3',
+  mainTemplate: '사랑',
   maxParticipantCount: 6,
   gifts: [
     {
@@ -44,89 +42,10 @@ const MOCK = {
   },
 }
 
-const WINNER_MOCK = {
-  data: [
-    {
-      category: '시원한 아이스아메리카노',
-      users: [
-        {
-          id: 1,
-          name: '파트로',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 2,
-          name: '문타리',
-          email: 'adsf@email.com',
-        },
-      ],
-    },
-    {
-      category: '리아 친필사인',
-      members: [
-        {
-          id: 3,
-          name: '도가가',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 4,
-          name: '윤쏘닉',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 5,
-          name: '조이',
-          email: 'adsf@email.com',
-        },
-      ],
-    },
-    {
-      category: '기팍팍 응원메세지',
-      members: [
-        {
-          id: 3,
-          name: '도가가',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 6,
-          name: '맹귄',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 2,
-          name: '문타리',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 7,
-          name: '로니',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 8,
-          name: '라엘',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 9,
-          name: '리아',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 10,
-          name: '스펜서',
-          email: 'adsf@email.com',
-        },
-      ],
-    },
-  ],
-}
-
-const EventPage = () => {
+const EventPage = (): JSX.Element => {
   const router = useRouter()
   const {
+    mainTemplate: template,
     giftChoiceType: type,
     code,
     startAt: start,
@@ -149,30 +68,17 @@ const EventPage = () => {
       />
       <EventContainer>
         <Cover
-          mainTemplate={MOCK.mainTemplate}
+          mainTemplate={template as EVENT_TEMPLATE}
           title={MOCK.title}
-          status={status}
-          type={type}
+          status={status as EVENT_STATUS}
+          type={type as EVENT_TYPE}
           code={code}
         />
         <TimeInfo start={start} end={end} />
       </EventContainer>
-      <WinnerSection>
-        <Text>당첨자 확인</Text>
-        <Icon name="pointDown" size="MEDIUM" />
-        <Modal title="당첨자 목록" btnStyle={{ ...winnerBtnStyle }}>
-          <MUIButton style={{ ...winnerBtnStyle }}>클릭</MUIButton>
-          <Text>당첨자 확인</Text>
-        </Modal>
-      </WinnerSection>
+      <WinnerModal />
     </>
   )
-}
-
-const winnerBtnStyle: React.CSSProperties = {
-  backgroundColor: COLORS.GREEN,
-  borderRadius: 20,
-  lineHeight: 2,
 }
 
 const EventContainer = styled.div`
@@ -184,16 +90,6 @@ const EventContainer = styled.div`
   width: 70%;
   height: 60%;
   margin: ${DEFAULT_MARGIN} auto;
-`
-
-const WinnerSection = styled.section`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  min-height: 100px;
-  background-color: inherit;
-  margin-top: 30px;
 `
 
 export default EventPage

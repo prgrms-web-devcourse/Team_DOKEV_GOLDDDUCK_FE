@@ -3,12 +3,13 @@ import Icon from '@components/Icon'
 import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
 import { COLORS } from '@utils/constants/colors'
+import { EVENT_STATUS, EVENT_TEMPLATE, EVENT_TYPE } from 'types/event'
 
 interface ICover {
-  mainTemplate: string
+  mainTemplate: EVENT_TEMPLATE
   title: string
-  status: 'READY' | 'RUNNING' | 'CLOSED'
-  type: 'FIFO' | 'RANDOM'
+  status: EVENT_STATUS
+  type: EVENT_TYPE
   code: string
 }
 
