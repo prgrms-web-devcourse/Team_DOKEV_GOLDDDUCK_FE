@@ -1,13 +1,13 @@
 import Header from '@domains/Header'
 import styled from '@emotion/styled'
 import TextHeader from '@domains/TimerHeader'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { keyframes } from '@emotion/react'
 import Image from '@components/Image'
 import MUIButton from '@components/MUIButton'
 import { COLORS } from '@utils/constants/colors'
 
-const startDate = new Date('12/9/2021')
+const startDate = new Date('12/13/2021')
 
 const MOCK_DATA = {
   id: 12345,
@@ -15,20 +15,35 @@ const MOCK_DATA = {
   eventTitle: '이벤트 제목',
   eventStart: startDate,
   eventMaster: '도가가',
-  eventProgressStatus: 'Progress',
+  eventProgressStatus: 'IsOver',
 }
 
 const random = (): JSX.Element => {
   const [isVideoLoading, setIsVideoLoading] = useState(false)
   const [isVideoEnded, setIsVideoEnded] = useState(false)
+  const [isTimerOver, setIsTimerOver] = useState(false)
+  let timer: NodeJS.Timer
 
   const handleStartVideo = () => {
-    if (MOCK_DATA.eventProgressStatus === 'Progress') {
+    if (isTimerOver) {
       setIsVideoLoading(true)
     } else {
       alert('지금은 선물을 받을 수 없어요!')
     }
   }
+
+  const checkRemaining = () => {
+    const now = new Date()
+    const distance = Number(MOCK_DATA.eventStart) - Number(now)
+    if (distance < 0) {
+      clearTimeout(timer)
+      setIsTimerOver(true)
+    }
+  }
+
+  useEffect(() => {
+    timer = setInterval(checkRemaining, 1000)
+  }, [])
 
   return (
     <>
