@@ -7,18 +7,36 @@ import Image from '@components/Image'
 import MUIButton from '@components/MUIButton'
 import { COLORS } from '@utils/constants/colors'
 
+const startDate = new Date('12/9/2021')
+
+const MOCK_DATA = {
+  id: 12345,
+  eventCode: 'vllvlvla',
+  eventTitle: '이벤트 제목',
+  eventStart: startDate,
+  eventMaster: '도가가',
+  eventProgressStatus: 'Progress',
+}
+
 const random = (): JSX.Element => {
   const [isVideoLoading, setIsVideoLoading] = useState(false)
   const [isVideoEnded, setIsVideoEnded] = useState(false)
 
   const handleStartVideo = () => {
-    setIsVideoLoading(true)
+    if (MOCK_DATA.eventProgressStatus === 'Progress') {
+      setIsVideoLoading(true)
+    } else {
+      alert('지금은 선물을 받을 수 없어요!')
+    }
   }
 
   return (
     <>
       <Header />
-      <TextHeader />
+      <TextHeader
+        eventMaster={MOCK_DATA.eventMaster}
+        eventStart={MOCK_DATA.eventStart}
+      />
       {isVideoEnded && (
         <ZoomInDownWrapper>
           <Image
