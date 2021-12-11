@@ -31,6 +31,7 @@ const Timer = ({
 
     if (distance < 0) {
       clearInterval(timer)
+      setRestTime('00:00:00')
 
       return
     }
