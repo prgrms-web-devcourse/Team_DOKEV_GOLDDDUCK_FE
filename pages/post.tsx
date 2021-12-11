@@ -7,6 +7,7 @@ import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import Text from '@components/Text'
+import EventTimer from '@domains/EventTimer'
 import EventTitle from '@domains/EventTitle'
 
 interface Props {
@@ -54,6 +55,18 @@ const post = () => {
     setInputState(() => e.target.value)
   }
 
+  //step2 EventTimer
+  const [startvalue, setStartValue] = useState<Date | null>(new Date())
+  const [endvalue, setEndValue] = useState<Date | null>(new Date())
+
+  const handleStartTimer = (newValue: Date) => {
+    setStartValue(newValue)
+  }
+
+  const handleEndTimer = (newValue: Date) => {
+    setEndValue(newValue)
+  }
+
   // step별 컴포넌트 로직
   const getStepContent = (stepNumber: number) => {
     switch (stepNumber) {
@@ -68,7 +81,14 @@ const post = () => {
           />
         )
       case 1:
-        return '스텝 2에서는 ... 하세요'
+        return (
+          <EventTimer
+            startvalue={startvalue}
+            endvalue={endvalue}
+            handleStartTimer={handleStartTimer}
+            handleEndTimer={handleEndTimer}
+          />
+        )
       case 2:
         return '스텝 3에서는 ... 하세요'
       case 3:
@@ -98,40 +118,40 @@ const post = () => {
           )
         })}
       </Stepper>
-      <>
-        {/* <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography> */}
-        <div style={{ color: 'white' }}>{getStepContent(activeStep)}</div>
 
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            marginTop: '90%',
-            paddingRight: '10px',
-          }}>
-          <DisplayStyle activeStep={activeStep}>
-            <MUIButton
-              style={{
-                color: '#ffffff',
-                backgroundColor: '#000000',
-              }}
-              onClick={handleBack}
-              sx={{ mr: 1 }}>
-              Back
-            </MUIButton>
-          </DisplayStyle>
+      <div style={{ color: 'white' }}>{getStepContent(activeStep)}</div>
 
-          <Box sx={{ flex: '1 1 auto' }} />
+      <StepButtonContainer>
+        <DisplayStyle activeStep={activeStep}>
           <MUIButton
-            style={{ color: '#ffffff', backgroundColor: '#CE000B' }}
-            onClick={handleNext}>
-            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            style={{
+              color: '#ffffff',
+              backgroundColor: '#000000',
+            }}
+            onClick={handleBack}
+            sx={{ mr: 1 }}>
+            Back
           </MUIButton>
-        </Box>
-      </>
+        </DisplayStyle>
+
+        <MUIButton
+          style={{ color: '#ffffff', backgroundColor: '#CE000B' }}
+          onClick={handleNext}>
+          {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+        </MUIButton>
+      </StepButtonContainer>
     </Box>
   )
 }
+
+const StepButtonContainer = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  justify-content: space-between;
+`
 
 const DisplayStyle = styled.div`
   ${({ activeStep }: Props) => {
