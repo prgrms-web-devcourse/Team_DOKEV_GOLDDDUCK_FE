@@ -9,6 +9,7 @@ import { css } from '@emotion/react'
 import Text from '@components/Text'
 import EventTimer from '@domains/EventTimer'
 import EventTitle from '@domains/EventTitle'
+import EventType from '@domains/EventType/index'
 
 interface Props {
   activeStep: number
@@ -43,7 +44,7 @@ const post = () => {
   //step1 EventTitle 상태 로직
   const [eventTitle, setEventTitle] = useState('')
   const [participant, setParticipant] = useState<number>()
-  const [inputState, setInputState] = useState<string>('')
+  const [coverImage, setCoverImage] = useState<string>('')
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.name === 'eventTitle'
@@ -51,8 +52,14 @@ const post = () => {
       : setParticipant(() => Number(e.target.value))
   }
 
-  const handleRaido = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputState(() => e.target.value)
+  const handleCoverImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCoverImage(() => e.target.value)
+  }
+
+  //setp3 EventType 상태 로직
+  const [eventTypeState, setEventTypeState] = useState('')
+  const handleTypeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEventTypeState(() => e.target.value)
   }
 
   //step2 EventTimer
@@ -75,9 +82,9 @@ const post = () => {
           <EventTitle
             eventTitle={eventTitle}
             participant={participant}
-            inputState={inputState}
+            coverImage={coverImage}
             handleInput={handleInput}
-            handleRaido={handleRaido}
+            handleCoverImage={handleCoverImage}
           />
         )
       case 1:
@@ -90,7 +97,12 @@ const post = () => {
           />
         )
       case 2:
-        return '스텝 3에서는 ... 하세요'
+        return (
+          <EventType
+            eventTypeState={eventTypeState}
+            handleTypeCheck={handleTypeCheck}
+          />
+        )
       case 3:
         return '스텝 4에서는 ...하세요'
       default:
