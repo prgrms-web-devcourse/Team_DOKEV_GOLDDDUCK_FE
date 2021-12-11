@@ -111,7 +111,8 @@ const UploadStyled = styled.div`
   display: inline-block;
   width: 80px;
   height: 120px;
-  background-color: ${COLORS.TEXT_GRAY_LIGHT};
+  /* background-color: ${COLORS.TEXT_GRAY_LIGHT}; */
+  border: 1px dashed white;
   cursor: pointer;
   position: relative;
   margin-left: 8px;
@@ -121,8 +122,8 @@ const UploadStyled = styled.div`
 `
 
 const UploadBtn = styled.button`
-  color: ${COLORS.TEXT_BLACK};
-  font-size: ${FONT_SIZES.MEDIUM};
+  color: ${COLORS.WHITE};
+  font-size: ${FONT_SIZES.LARGE};
   border: none;
   background: none;
   position: absolute;
