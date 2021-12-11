@@ -57,6 +57,11 @@ const Upload = ({ id, name, style, onClick }: IUpload): JSX.Element => {
   ): void => {
     e.preventDefault()
     const fileIndex = e.target as HTMLButtonElement
+
+    if (fileList.length === 1 && inputRef.current?.value) {
+      inputRef.current.value = ''
+    }
+
     setFileList(
       fileList.filter((_: File, index) => index !== parseInt(fileIndex.id, 10)),
     )
