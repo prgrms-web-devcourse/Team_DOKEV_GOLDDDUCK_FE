@@ -4,6 +4,7 @@ import Image from '@components/Image'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import Text from '@components/Text'
 import Icon from '@components/Icon'
+import noting from '/public/nothing.png'
 
 const gifts = [
   { id: 1, giftTitle: '시원한 아이스 아메리카노', quantity: 10 },
@@ -61,7 +62,7 @@ const EventPresent = () => {
         </div>
         <GiftWrapper>
           {gifts &&
-            gifts.map(({ id, giftTitle, quantity }: any, index) => (
+            gifts.map(({ id, giftTitle, quantity }, index) => (
               <Gift key={id}>
                 <Image
                   src={`/cover/cover${(index % 6) + 1}.png`}
@@ -84,6 +85,32 @@ const EventPresent = () => {
               </Gift>
             ))}
         </GiftWrapper>
+
+        <div
+          style={{
+            padding: '10px 0 0 12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
+          <Image src={noting.src} width="60px" height="60px" />
+          <div>
+            <Text size="MEDIUM" color="WHITE">
+              꽝!
+            </Text>
+            <Text
+              size="BASE"
+              color="TEXT_GRAY_DARK"
+              style={{ paddingTop: '3px' }}>
+              수량 : 10 개
+            </Text>
+          </div>
+          <div>
+            <Text size="MICRO" style={{ color: '#CE000B' }}>
+              * 등록한 선물이 부족하면 꽝으로 채워집니다.
+            </Text>
+          </div>
+        </div>
       </EventPresentContainer>
     </>
   )
@@ -106,7 +133,7 @@ const GiftWrapper = styled.div`
   /* position: absolute; */
   overflow: auto;
   /* bottom: 0; */
-  height: 60vh;
+  height: 55vh;
   @media all and (max-width: 425px) {
     height: 55vh;
   }
