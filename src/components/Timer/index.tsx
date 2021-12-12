@@ -31,6 +31,7 @@ const Timer = ({
 
     if (distance < 0) {
       clearInterval(timer)
+      setRestTime('00:00:00')
 
       return
     }
@@ -45,7 +46,11 @@ const Timer = ({
     timer = setInterval(showRemaining, 1000)
   }, [showRemaining])
 
-  return <div style={{ fontSize, color: fontColor, ...style }}>{restTime}</div>
+  return (
+    <div style={{ fontSize, color: fontColor, ...style }}>
+      {restTime ? restTime : '00:00:00'}
+    </div>
+  )
 }
 
 export default Timer

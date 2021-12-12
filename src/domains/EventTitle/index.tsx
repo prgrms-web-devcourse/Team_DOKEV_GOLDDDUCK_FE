@@ -59,13 +59,20 @@ const EventTitle: React.FC<Props> = ({
 
         <Div>
           <Box sx={{ flexGrow: 1 }}>
-            <Grid container columnSpacing={2} rowSpacing={6}>
+            <Grid
+              container
+              columnSpacing={4}
+              rowSpacing={1}
+              style={{
+                justifyContent: 'center',
+              }}>
               {Array.from(Array(6)).map((_, index) => (
                 <Grid item sm={4} key={index}>
                   <Image
                     src={`/cover/cover${index + 1}.png`}
-                    width={120}
-                    height={160}
+                    width={100}
+                    height={140}
+                    style={{ borderRadius: '10px' }}
                   />
                   <Div>
                     <label htmlFor={`cover${index + 1}`}>{`cover${
@@ -90,11 +97,11 @@ const EventTitle: React.FC<Props> = ({
 }
 
 const EventTitleContainer = styled.div`
-  margin-top: 10%;
+  padding-top: 5%;
 `
 
 const Div = styled.div`
-  padding-top: 10%;
+  padding-top: 5%;
   width: calc(100% - 32px);
   margin: 0 auto;
   display: flex;
