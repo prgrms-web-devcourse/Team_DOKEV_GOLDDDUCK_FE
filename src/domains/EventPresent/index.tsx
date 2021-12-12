@@ -5,6 +5,9 @@ import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import Text from '@components/Text'
 import Icon from '@components/Icon'
 import noting from '/public/nothing.png'
+import Modal from '@components/Modal'
+import MUIButton from '@components/MUIButton'
+import PresentModal from './PresentModal'
 
 const gifts = [
   { id: 1, giftTitle: '시원한 아이스 아메리카노', quantity: 10 },
@@ -44,17 +47,22 @@ const EventPresent = () => {
               alignItems: 'center',
               paddingTop: '10px',
             }}>
-            <div
-              style={{
-                display: 'flex',
-                border: '1px dashed white',
-                width: '50px',
-                height: '50px',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Icon name="plus" color="WHITE" size="LARGE" style={{}}></Icon>
-            </div>
+            <Modal title="선물 등록" confirm>
+              <div
+                style={{
+                  display: 'flex',
+                  border: '1px dashed white',
+                  width: '50px',
+                  height: '50px',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Icon name="plus" color="WHITE" size="LARGE"></Icon>
+              </div>
+              <PresentModal></PresentModal>
+              <MUIButton style={{ backgroundColor: '#CE000B' }}>완료</MUIButton>
+            </Modal>
+
             <Text size="MEDIUM" color="WHITE" style={{ paddingLeft: '8px' }}>
               선물 추가하기
             </Text>
@@ -117,22 +125,12 @@ const EventPresent = () => {
 }
 
 const EventPresentContainer = styled.div`
-  /* position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0; */
   margin-top: 10%;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
 `
 
 const GiftWrapper = styled.div`
   width: 100%;
-  /* position: absolute; */
   overflow: auto;
-  /* bottom: 0; */
   height: 55vh;
   @media all and (max-width: 425px) {
     height: 55vh;
