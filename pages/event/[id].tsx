@@ -4,9 +4,7 @@ import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import { EVENT_STATUS, EVENT_TEMPLATE, EVENT_TYPE } from 'types/event'
-import TimeInfo from './TimeInfo'
-import Cover from './Cover'
-import WinnerModal from './WinnerModal'
+import { TimeInfo, Cover, WinnerModal } from '@domains/EventDetail'
 
 const MOCK = {
   eventId: 0,
