@@ -12,8 +12,14 @@
     "plugin:prettier/recommended"
   ],
   "parserOptions": {
-    "project": "./tsconfig.json"
+    "project": [
+      "./tsconfig.json",
+      "./tsconfig.extend.json",
+      "./next.config.js",
+      "./craco.config.js"
+    ]
   },
+  "ignorePatterns": ["./next.config.js", "./craco.config.js"],
   "rules": {
     "@typescript-eslint/space-before-function-paren": "off",
     "no-var": "error", // var 변수를 사용하지 않는다.
