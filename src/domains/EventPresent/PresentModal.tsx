@@ -4,7 +4,6 @@ import { InputText } from '@components/Input'
 import Upload from '@components/Upload'
 import Textarea from '@components/Textarea'
 import MUIButton from '@components/MUIButton'
-import Icon from '@components/Icon'
 import Fab from '@mui/material/Fab'
 import AddIcon from '@mui/icons-material/Add'
 import Text from '@components/Text'
@@ -29,7 +28,7 @@ const messageDate: Props[] = [
   },
 ]
 
-const testPagePartro = () => {
+const PresentModal = () => {
   const [presentTitle, setPresentTitle] = useState('')
   const [presentMessageList, setPresentMessageList] =
     useState<Props[]>(messageDate)
@@ -67,9 +66,10 @@ const testPagePartro = () => {
             value={presentTitle}
             onChange={handleInput}
             placeholder="등록할 선물의 이름을 입력하세요."
+            style={{ width: '100%' }}
           />
         </Div>
-        <Div style={{ overflowX: 'hidden' }}>
+        <Div style={{ overflowX: 'scroll' }}>
           <Upload
             id="setPresentImage"
             name="setPresentImage"
@@ -115,6 +115,7 @@ const PresentModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
+
   /* background-color: red; */
 `
 const Div = styled.div`
@@ -132,4 +133,4 @@ const PlusButton = styled(Fab)(() => ({
   '&:hover': { backgroundColor: 'red', filter: 'brightness(0.9)' },
 }))
 
-export default testPagePartro
+export default PresentModal
