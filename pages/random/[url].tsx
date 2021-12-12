@@ -8,6 +8,7 @@ import MUIButton from '@components/MUIButton'
 import { COLORS } from '@utils/constants/colors'
 import { FONT_SIZES } from '@utils/constants/sizes'
 import Slider from '@mui/material/Slider'
+import CardFlip from '@components/CardFlip'
 
 const startDate = new Date('12/9/2021')
 
@@ -58,12 +59,16 @@ const random = (): JSX.Element => {
       />
       {isVideoEnded && (
         <FadeInDownWrapper>
-          <Image
-            src="/test.jpeg"
-            width="80%"
-            height="80%"
-            mode="contain"
-            style={{ margin: '0 auto' }}
+          <CardFlip
+            front={
+              <Image
+                src="/test.jpeg"
+                width="80%"
+                height="80%"
+                mode="contain"
+                style={{ margin: '0 auto', borderRadius: '8px' }}
+              />
+            }
           />
           <MUIButton style={{ ...BtnStyle }}>
             <a href="/test.jpeg" download>
