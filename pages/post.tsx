@@ -105,7 +105,7 @@ const post = () => {
           />
         )
       case 3:
-        return <EventPresent></EventPresent>
+        return <EventPresent />
       default:
         return
     }
