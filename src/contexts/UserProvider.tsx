@@ -16,8 +16,8 @@ const UserContext = createContext<IUserContext>({} as IUserContext)
 export const useUserContext = () => useContext(UserContext)
 
 const UserProvider = ({ children }: Props) => {
-  const [token, setToken] = useLocalStorage<string[]>('Token', [])
-  const [user, setUser] = useLocalStorage<object[]>('User', [])
+  const [token, setToken] = useLocalStorage<string[]>('token', [])
+  const [user, setUser] = useLocalStorage<object[]>('user', [])
 
   const clearToken = useCallback(() => {
     setToken([])
