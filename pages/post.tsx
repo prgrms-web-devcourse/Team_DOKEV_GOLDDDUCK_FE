@@ -9,6 +9,7 @@ import { css } from '@emotion/react'
 import Text from '@components/Text'
 import EventTimer from '@domains/EventTimer'
 import EventTitle from '@domains/EventTitle'
+import EventPresent from '@domains/EventPresent'
 import EventType from '@domains/EventType/index'
 
 interface Props {
@@ -104,7 +105,7 @@ const post = () => {
           />
         )
       case 3:
-        return '스텝 4에서는 ...하세요'
+        return <EventPresent />
       default:
         return
     }
