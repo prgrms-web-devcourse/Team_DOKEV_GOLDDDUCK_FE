@@ -6,16 +6,15 @@ import Text from '@components/Text'
 import Icon from '@components/Icon'
 
 interface Props {
-  id: number
   index: number
   giftTitle: string
   quantity: number
 }
 
-const GiftForm = ({ id, giftTitle, quantity, index }: Props) => {
+const GiftForm = ({ giftTitle, quantity, index }: Props) => {
   return (
     <>
-      <Gift key={id}>
+      <Gift key={index}>
         <Image
           src={`/cover/cover${(index % 6) + 1}.png`}
           width="60px"
