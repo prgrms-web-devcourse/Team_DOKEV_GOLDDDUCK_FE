@@ -69,11 +69,13 @@ const PresentModal = () => {
             style={{ width: '100%' }}
           />
         </Div>
-        <Div style={{ overflowX: 'scroll' }}>
-          <Upload
-            id="setPresentImage"
-            name="setPresentImage"
-            onClick={hadleImageUpload}></Upload>
+        <Div>
+          <UploadWrapper>
+            <Upload
+              id="setPresentImage"
+              name="setPresentImage"
+              onClick={hadleImageUpload}></Upload>
+          </UploadWrapper>
         </Div>
         <Div style={{ position: 'relative' }}>
           <Textarea
@@ -81,7 +83,6 @@ const PresentModal = () => {
             name="presentMessage"
             value={presentMessage}
             onChange={handleInput}
-            // style={{ position: 'relative' }}
           />
           <PlusButton aria-label="add" onClick={onCilckMessage}>
             <AddIcon />
@@ -109,19 +110,21 @@ const PresentModal = () => {
 }
 
 const PresentModalContainer = styled.div`
-  /* margin-top: 10%; */
   height: 100%;
   width: calc(100% - 32px);
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-
-  /* background-color: red; */
+  width: 100%;
 `
 const Div = styled.div`
   margin-top: 8%;
 `
 
+const UploadWrapper = styled.div`
+  white-space: nowrap;
+  overflow-x: scroll;
+`
 const PlusButton = styled(Fab)(() => ({
   position: 'absolute',
   bottom: '5px',
