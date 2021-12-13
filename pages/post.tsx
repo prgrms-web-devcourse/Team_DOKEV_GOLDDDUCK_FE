@@ -57,13 +57,7 @@ const post = () => {
     setCoverImage(() => e.target.value)
   }
 
-  //setp3 EventType 상태 로직
-  const [eventTypeState, setEventTypeState] = useState('')
-  const handleTypeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEventTypeState(() => e.target.value)
-  }
-
-  //step2 EventTimer
+  //step2 EventTimer 상태 로직
   const [startvalue, setStartValue] = useState<Date | null>(new Date())
   const [endvalue, setEndValue] = useState<Date | null>(new Date())
 
@@ -74,6 +68,23 @@ const post = () => {
   const handleEndTimer = (newValue: Date) => {
     setEndValue(newValue)
   }
+
+  //setp3 EventType 상태 로직
+  const [eventTypeState, setEventTypeState] = useState('')
+  const handleTypeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEventTypeState(() => e.target.value)
+  }
+
+  //step4 EventPresent 상태 로직
+  const data = [
+    { id: 1, giftTitle: '시원한 아이스 아메리카노', quantity: 10 },
+    { id: 2, giftTitle: '리아 친필 싸인', quantity: 10 },
+    { id: 3, giftTitle: '파트로 초코초코 파우더', quantity: 0 },
+  ]
+
+  const [gifts, setGifts] = useState(data)
+
+  //step4-1 EventPresentModal 상태 로직
 
   // step별 컴포넌트 로직
   const getStepContent = (stepNumber: number) => {
@@ -105,7 +116,7 @@ const post = () => {
           />
         )
       case 3:
-        return <EventPresent />
+        return <EventPresent gifts={gifts} />
       default:
         return
     }

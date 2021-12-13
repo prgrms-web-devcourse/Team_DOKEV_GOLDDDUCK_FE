@@ -1,69 +1,39 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import { InputText } from '@components/Input'
 import Upload from '@components/Upload'
 import Textarea from '@components/Textarea'
-import MUIButton from '@components/MUIButton'
 import Fab from '@mui/material/Fab'
 import AddIcon from '@mui/icons-material/Add'
 import Text from '@components/Text'
 
 interface Props {
-  id: number
-  text: string
+  category: string
+  content: string
+  contentList: string[]
+  handleInput(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ): void
+  onCilckMessage(): void
+  hadleImageUpload(fileList: File[]): void
 }
 
-const messageDate: Props[] = [
-  {
-    id: 1,
-    text: '안녕하세요!',
-  },
-  {
-    id: 2,
-    text: '프로그래머스 굿즈 이벤트 1',
-  },
-  {
-    id: 3,
-    text: '프로그래머스 굿즈 이벤트 2 당첨자 입니다. 확인을 위해서는 방문해주세요',
-  },
-]
-
-const PresentModal = () => {
-  const [presentTitle, setPresentTitle] = useState('')
-  const [presentMessageList, setPresentMessageList] =
-    useState<Props[]>(messageDate)
-  const [presentMessage, setPresentMessage] = useState('')
-  const [presentImage, setPresentImage] = useState<File[]>()
-
-  const handleInput = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    e.target.name === 'presentTitle'
-      ? setPresentTitle(e.target.value)
-      : setPresentMessage(e.target.value)
-  }
-
-  const onCilckMessage = () => {
-    setPresentMessageList([
-      ...presentMessageList,
-      { id: 4, text: presentMessage },
-    ])
-    setPresentMessage('')
-  }
-
-  const hadleImageUpload = (fileList: File[]) => {
-    console.log(fileList)
-    setPresentImage(fileList)
-  }
-
+const PresentModal = ({
+  category,
+  content,
+  contentList,
+  handleInput,
+  onCilckMessage,
+  hadleImageUpload,
+}: Props) => {
   return (
     <>
       <PresentModalContainer>
         <Div>
           <InputText
-            id="presentTitle"
-            name="presentTitle"
-            value={presentTitle}
+            id="category"
+            name="category"
+            value={category}
             onChange={handleInput}
             placeholder="등록할 선물의 이름을 입력하세요."
             style={{ width: '100%' }}
@@ -81,7 +51,7 @@ const PresentModal = () => {
           <Textarea
             id="presentMessage"
             name="presentMessage"
-            value={presentMessage}
+            value={content}
             onChange={handleInput}
           />
           <PlusButton aria-label="add" onClick={onCilckMessage}>
@@ -89,7 +59,7 @@ const PresentModal = () => {
           </PlusButton>
         </Div>
         <Div>
-          {presentMessageList.map(({ text }) => (
+          {contentList.map((text) => (
             <Text
               size="SMALL"
               style={{

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import Image from '@components/Image'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
@@ -10,22 +10,45 @@ import MUIButton from '@components/MUIButton'
 import PresentModal from './PresentModal'
 import GiftForm from './GiftForm'
 
-const gifts = [
-  { id: 1, giftTitle: '시원한 아이스 아메리카노', quantity: 10 },
-  { id: 2, giftTitle: '리아 친필 싸인', quantity: 10 },
-  { id: 3, giftTitle: '파트로 초코초코 파우더', quantity: 0 },
-  { id: 4, giftTitle: '가가 맥주 세트', quantity: 0 },
-  { id: 5, giftTitle: '문타리 사과', quantity: 10 },
-  { id: 6, giftTitle: '스펜서 친필 싸인', quantity: 10 },
-  { id: 7, giftTitle: '파트로 딸기딸기 파우더', quantity: 5 },
-  { id: 8, giftTitle: '가가 소 세트', quantity: 3 },
-  { id: 9, giftTitle: '시언한 아이스 아메리카노', quantity: 10 },
-  { id: 10, giftTitle: '리아 친필 싸인', quantity: 10 },
-  { id: 11, giftTitle: '파트로 나나바나나 파우더', quantity: 5 },
-  { id: 12, giftTitle: '가가 양주 세트', quantity: 3 },
-]
+interface Gift {
+  id: number
+  giftTitle: string
+  quantity: number
+}
 
-const EventPresent = () => {
+interface Props {
+  gifts: Gift[]
+}
+
+const EventPresent = ({ gifts }: Props) => {
+  const [category, setCategory] = useState('')
+  const [content, setContent] = useState('')
+  const [contentList, setContentList] = useState<string[]>([])
+  const [image, setImage] = useState<File[] | null>()
+
+  const handleInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    e.target.name === 'category'
+      ? setCategory(e.target.value)
+      : setContent(e.target.value)
+  }
+
+  const onCilckMessage = () => {
+    setContentList([...contentList, content])
+    setContent('')
+  }
+
+  const hadleImageUpload = (fileList: File[]) => {
+    setImage(fileList)
+  }
+
+  const onSubmit = () => {
+    console.log(category)
+    console.log(contentList)
+    console.log(image)
+  }
+
   return (
     <>
       <EventPresentContainer>
@@ -60,8 +83,18 @@ const EventPresent = () => {
                 }}>
                 <Icon name="plus" color="WHITE" size="LARGE"></Icon>
               </div>
-              <PresentModal></PresentModal>
-              <MUIButton style={{ backgroundColor: '#CE000B' }}>완료</MUIButton>
+              <PresentModal
+                category={category}
+                content={content}
+                contentList={contentList}
+                handleInput={handleInput}
+                onCilckMessage={onCilckMessage}
+                hadleImageUpload={hadleImageUpload}></PresentModal>
+              <MUIButton
+                style={{ backgroundColor: '#CE000B' }}
+                onClick={onSubmit}>
+                완료
+              </MUIButton>
             </Modal>
 
             <Text size="MEDIUM" color="WHITE" style={{ paddingLeft: '8px' }}>
@@ -75,7 +108,6 @@ const EventPresent = () => {
             gifts.map(({ id, giftTitle, quantity }, index) => (
               <GiftForm
                 key={id}
-                id={id}
                 index={index}
                 giftTitle={giftTitle}
                 quantity={quantity}></GiftForm>
@@ -133,4 +165,16 @@ const GiftWrapper = styled.div`
     display: none; /* Chrome, Safari, Opera*/
   }
 `
+// const gifts = [
+//   {
+//     category: '아메리카노',
+//     giftItems: [
+//       {
+//         content: ['아메리카노~', '아메리카노2'],
+//         image: ['금나와라 뚝딱', '의자', '명함'],
+//       },
+//     ],
+//   },
+// ]
+
 export default EventPresent
