@@ -5,7 +5,7 @@ interface Props {
   onClick?(): void
   width?: string
   height?: string
-  src?: string
+  src?: string | null
   style?: CSSProperties
 }
 
@@ -20,7 +20,7 @@ const MUIAvatar = ({
     <>
       <Avatar
         onClick={onClick}
-        src={src}
+        src={src ? src : ''}
         sx={{ width, height }}
         style={{ ...style }}
       />
