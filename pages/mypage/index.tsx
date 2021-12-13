@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { COLORS } from '@utils/constants/colors'
+import GiftList from '@domains/GiftList.tsx'
 
 const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
   ssr: false,
@@ -40,7 +41,9 @@ const MyPage = (): JSX.Element => {
         <>
           <MUITab onChange={handleChange} />
           <MUITabPanel selectedTab={selectedTab} tab={'gift'} index={0}>
-            <div>gift list</div>
+            <div>
+              <GiftList onClick={(id) => alert(id)} />
+            </div>
           </MUITabPanel>
           <MUITabPanel selectedTab={selectedTab} tab={'event'} index={1}>
             <div>event list</div>
