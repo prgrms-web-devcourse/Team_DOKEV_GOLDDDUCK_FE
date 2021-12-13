@@ -8,6 +8,7 @@ import noting from '/public/nothing.png'
 import Modal from '@components/Modal'
 import MUIButton from '@components/MUIButton'
 import PresentModal from './PresentModal'
+import GiftForm from './GiftForm'
 
 const gifts = [
   { id: 1, giftTitle: '시원한 아이스 아메리카노', quantity: 10 },
@@ -68,29 +69,16 @@ const EventPresent = () => {
             </Text>
           </div>
         </div>
+
         <GiftWrapper>
           {gifts &&
             gifts.map(({ id, giftTitle, quantity }, index) => (
-              <Gift key={id}>
-                <Image
-                  src={`/cover/cover${(index % 6) + 1}.png`}
-                  width="60px"
-                  height="60px"
-                  mode="contain"
-                />
-                <GiftTextWrapper>
-                  <Text size="MEDIUM" color="WHITE">
-                    {giftTitle}
-                  </Text>
-                  <Text
-                    size="BASE"
-                    color="TEXT_GRAY_DARK"
-                    style={{ paddingTop: '3px' }}>
-                    수량 : {quantity}개
-                  </Text>
-                </GiftTextWrapper>
-                <Icon name="close" color="TEXT_GRAY_DARK" size="LARGE"></Icon>
-              </Gift>
+              <GiftForm
+                key={id}
+                id={id}
+                index={index}
+                giftTitle={giftTitle}
+                quantity={quantity}></GiftForm>
             ))}
         </GiftWrapper>
 
@@ -127,7 +115,6 @@ const EventPresent = () => {
 const EventPresentContainer = styled.div`
   margin-top: 10%;
 `
-
 const GiftWrapper = styled.div`
   width: 100%;
   overflow: auto;
@@ -146,23 +133,4 @@ const GiftWrapper = styled.div`
     display: none; /* Chrome, Safari, Opera*/
   }
 `
-
-const Gift = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  margin-top: ${DEFAULT_MARGIN};
-  &:first-of-type {
-    margin: 0;
-  }
-`
-
-const GiftTextWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 8px;
-`
-
 export default EventPresent
