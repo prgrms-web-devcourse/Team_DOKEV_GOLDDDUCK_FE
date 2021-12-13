@@ -1,30 +1,67 @@
 import Checkbox from '@components/Checkbox'
-import { useCallback, useState } from 'react'
+import CheckboxList from '@domains/CheckboxList'
+import axios from 'axios'
+import { useCallback, useEffect, useState } from 'react'
 import { GIFT_FILTER } from 'types/gift'
-import FilterChips from './FilterChips'
 
-interface IGiftList {
-  onClick: (e: string) => void
-}
+// interface IGiftList {
+//   onClick: React.MouseEventHandler<HTMLInputElement>
+// }
 
-const GiftList = ({ onClick }: IGiftList): JSX.Element => {
-  const [filter, setFilter] = useState('ALL')
+const END_POINT = 'http://maenguin.iptime.org:8080'
 
-  console.error(filter)
-  const handleClick = useCallback(
-    (id: string) => {
-      setFilter(id.toUpperCase())
-      onClick?.(id)
-    },
-    [onClick],
+const GiftList = (): JSX.Element => {
+  const [filter, setFilter] = useState<GIFT_FILTER>('ALL')
+  const [selectedChip, setSelectedChip] = useState(
+    filter === 'USED' ? 2 : filter === 'UN_USED' ? 1 : 0,
   )
 
+  // const handleClick = useCallback(
+  //   (e: React.MouseEvent<HTMLInputElement>) => {
+  //     const element = e.target as HTMLElement
+  //     setFilter(element.id.toUpperCase() as GIFT_FILTER)
+  //     onClick?.(e)
+  //   },
+  //   [onClick],
+  // )
+
+  const handleFilterClick = useCallback(
+    (e: React.MouseEvent<HTMLInputElement>): void => {
+      const element = e.target as HTMLElement
+      setFilter(element.id.toUpperCase() as GIFT_FILTER)
+      try {
+        const TEST_DATA = axios
+          .get(
+            `${END_POINT}${`/api/v1/members/1/gifts?used=${
+              element.id === 'used' ? true : 'un_used' ? false : null
+            }&page=0&size=4`}`,
+            {
+              headers: {
+                'X-GOLDDDUCK-AUTH':
+                  'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaXNzIjoiZG9rZXYiLCJleHAiOjE2Mzk1ODkxNDgsImlhdCI6MTYzOTQxNjM0OCwidXNlcklkIjo2LCJ1c2VybmFtZSI6IuuPhOqwgOyYgSJ9.zTnvofVUculDdRdOH5jQ6iPfUWUIxq9XmdpSgHP5w44Amp4tbIuGoqsjsi9u7OPFrN6vBUh_1QIvnDpCpc83mw',
+              },
+            },
+          )
+          .then((res) => res.data)
+        console.log(TEST_DATA)
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    [],
+  )
+
+  useEffect(() => {
+    filter &&
+      setSelectedChip(filter === 'USED' ? 2 : filter === 'UN_USED' ? 1 : 0)
+  }, [filter])
+
   return (
-    <FilterChips filter={filter as GIFT_FILTER} onClick={handleClick}>
-      <Checkbox onClick={handleClick} name="전체" id="all" />
-      <Checkbox onClick={handleClick} name="미사용" id="un_used" />
-      <Checkbox onClick={handleClick} name="사용완료" id="used" />
-    </FilterChips>
+    <CheckboxList onClick={handleFilterClick} selectedIndex={selectedChip}>
+      <Checkbox onClick={handleFilterClick} name="전체" id="all" />
+      <Checkbox onClick={handleFilterClick} name="미사용" id="un_used" />
+      <Checkbox onClick={handleFilterClick} name="사용완료" id="used" />
+    </CheckboxList>
   )
 }
 
