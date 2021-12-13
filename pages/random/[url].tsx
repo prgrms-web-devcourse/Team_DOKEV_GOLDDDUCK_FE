@@ -4,11 +4,10 @@ import TextHeader from '@domains/TimerHeader'
 import { useEffect, useState } from 'react'
 import { keyframes } from '@emotion/react'
 import Image from '@components/Image'
-import MUIButton from '@components/MUIButton'
 import { COLORS } from '@utils/constants/colors'
 import { FONT_SIZES } from '@utils/constants/sizes'
 import Slider from '@mui/material/Slider'
-import CardFlip from '@components/CardFlip'
+import CardFlip from '@domains/CardFlip'
 
 const startDate = new Date('12/9/2021')
 
@@ -63,18 +62,13 @@ const random = (): JSX.Element => {
             front={
               <Image
                 src="/test.jpeg"
-                width="80%"
-                height="80%"
+                width="100%"
+                height="420px"
                 mode="contain"
                 style={{ margin: '0 auto', borderRadius: '8px' }}
               />
             }
           />
-          <MUIButton style={{ ...BtnStyle }}>
-            <a href="/test.jpeg" download>
-              저장하기
-            </a>
-          </MUIButton>
         </FadeInDownWrapper>
       )}
       {isVideoLoading ? (
@@ -105,14 +99,6 @@ const random = (): JSX.Element => {
       )}
     </>
   )
-}
-
-const BtnStyle: React.CSSProperties = {
-  width: '30%',
-  borderRadius: '50px',
-  margin: '0 auto',
-  marginTop: '16px',
-  backgroundColor: COLORS.RED,
 }
 
 const fadeIn = keyframes`
