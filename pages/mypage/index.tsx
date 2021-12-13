@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic'
 import { COLORS } from '@utils/constants/colors'
 import GiftList from '@domains/GiftList.tsx'
 import axios from 'axios'
-import { GIFT_FILTER } from 'types/gift'
+import { IGiftList } from 'types/gift'
 
 const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
   ssr: false,
@@ -32,43 +32,20 @@ const MyPage = (): JSX.Element => {
   )
 
   try {
-    const TEST_DATA1 = axios
+    axios
       .get(`${END_POINT}${`/api/v1/members/1/gifts?used=&page=0&size=4`}`, {
         headers: {
           'X-GOLDDDUCK-AUTH':
             'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaXNzIjoiZG9rZXYiLCJleHAiOjE2Mzk1ODkxNDgsImlhdCI6MTYzOTQxNjM0OCwidXNlcklkIjo2LCJ1c2VybmFtZSI6IuuPhOqwgOyYgSJ9.zTnvofVUculDdRdOH5jQ6iPfUWUIxq9XmdpSgHP5w44Amp4tbIuGoqsjsi9u7OPFrN6vBUh_1QIvnDpCpc83mw',
         },
       })
-      .then((res) => res.data)
-    console.log(TEST_DATA1)
+      .then((res) => res.data.data)
+      .then(({ pagination, giftItemList }: IGiftList) => {
+        console.log('gift', pagination, giftItemList)
+      })
   } catch (e) {
     console.error(e)
   }
-
-  // const handleFilterClick = useCallback(
-  //   (e: React.MouseEvent<HTMLInputElement>): void => {
-  //     const element = e.target as HTMLElement
-  //     try {
-  //       const TEST_DATA = axios
-  //         .get(
-  //           `${END_POINT}${URL(
-  //             element.id === 'used' ? true : 'un_used' ? false : null,
-  //           )}`,
-  //           {
-  //             headers: {
-  //               'X-GOLDDDUCK-AUTH':
-  //                 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwiaXNzIjoiZG9rZXYiLCJleHAiOjE2Mzk1ODkxNDgsImlhdCI6MTYzOTQxNjM0OCwidXNlcklkIjo2LCJ1c2VybmFtZSI6IuuPhOqwgOyYgSJ9.zTnvofVUculDdRdOH5jQ6iPfUWUIxq9XmdpSgHP5w44Amp4tbIuGoqsjsi9u7OPFrN6vBUh_1QIvnDpCpc83mw',
-  //             },
-  //           },
-  //         )
-  //         .then((res) => res.data)
-  //       console.log(TEST_DATA)
-  //     } catch (e) {
-  //       console.error(e)
-  //     }
-  //   },
-  //   [],
-  // )
 
   useEffect(() => {
     setSelectedTab(router.query.tab === 'event' ? 'event' : 'gift')

@@ -2,11 +2,7 @@ import Checkbox from '@components/Checkbox'
 import CheckboxList from '@domains/CheckboxList'
 import axios from 'axios'
 import { useCallback, useEffect, useState } from 'react'
-import { GIFT_FILTER } from 'types/gift'
-
-// interface IGiftList {
-//   onClick: React.MouseEventHandler<HTMLInputElement>
-// }
+import { GIFT_FILTER, IGiftList } from 'types/gift'
 
 const END_POINT = 'http://maenguin.iptime.org:8080'
 
@@ -30,7 +26,7 @@ const GiftList = (): JSX.Element => {
       const element = e.target as HTMLElement
       setFilter(element.id.toUpperCase() as GIFT_FILTER)
       try {
-        const TEST_DATA = axios
+        axios
           .get(
             `${END_POINT}${`/api/v1/members/1/gifts?used=${
               element.id === 'used' ? true : 'un_used' ? false : null
@@ -42,8 +38,10 @@ const GiftList = (): JSX.Element => {
               },
             },
           )
-          .then((res) => res.data)
-        console.log(TEST_DATA)
+          .then((res) => res.data.data)
+          .then(({ pagination, giftItemList }: IGiftList) => {
+            console.log(pagination, giftItemList)
+          })
       } catch (e) {
         console.error(e)
       }
