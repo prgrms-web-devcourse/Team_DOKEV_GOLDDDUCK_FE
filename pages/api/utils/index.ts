@@ -1,3 +1,4 @@
+import { useUserContext } from '@contexts/UserProvider'
 import axios, { AxiosRequestConfig } from 'axios'
 // import { getItem } from '@SessionStorage'
 
@@ -7,16 +8,16 @@ const axiosAuthApi = (
   url: string,
   options?: AxiosRequestConfig<any> | undefined,
 ) => {
-  //   const token = getItem('userInformation')
-  const token = 'aa'
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('token')
+    const instance = axios.create({
+      baseURL: url,
+      headers: { 'X-GOLDDDUCK-AUTH': `Bearer ${token}` },
+      ...options,
+    })
 
-  const instance = axios.create({
-    baseURL: url,
-    headers: { 'X-GOLDDDUCK-AUTH': `Bearer ${token}` },
-    ...options,
-  })
-
-  return instance
+    return instance
+  }
 }
 
 export const authInstance = axiosAuthApi(BASE_URL)
