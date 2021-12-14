@@ -9,6 +9,7 @@ interface IModal {
   title?: string
   confirm?: boolean
   btnStyle?: React.CSSProperties
+  handleStateClear?(): void
 }
 
 interface IProps {
@@ -20,6 +21,7 @@ const Modal: React.FC<IModal> = ({
   title = '',
   confirm = false,
   btnStyle,
+  handleStateClear,
 }) => {
   const childrenCount = React.Children.count(children)
   if (childrenCount < 2) {
@@ -34,6 +36,7 @@ const Modal: React.FC<IModal> = ({
 
   const handleClose = () => {
     setOpen(false)
+    handleStateClear?.()
   }
 
   return (
