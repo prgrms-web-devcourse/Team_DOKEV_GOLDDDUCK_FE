@@ -41,9 +41,7 @@ const MyPage = (): JSX.Element => {
         <>
           <MUITab onChange={handleChange} />
           <MUITabPanel selectedTab={selectedTab} tab={'gift'} index={0}>
-            <div>
-              <GiftList onClick={(id) => alert(id)} />
-            </div>
+            <div>gift list</div>
           </MUITabPanel>
           <MUITabPanel selectedTab={selectedTab} tab={'event'} index={1}>
             <div>event list</div>
