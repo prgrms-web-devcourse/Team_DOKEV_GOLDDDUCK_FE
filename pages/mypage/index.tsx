@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { COLORS } from '@utils/constants/colors'
-import GiftList from '@domains/GiftList.tsx'
 
 const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
   ssr: false,
