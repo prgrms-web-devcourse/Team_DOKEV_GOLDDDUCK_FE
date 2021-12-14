@@ -6,49 +6,102 @@ import MUIButton from '@components/MUIButton'
 import { useRouter } from 'next/dist/client/router'
 import TimerHeader from '@domains/TimerHeader'
 import Text from '@components/Text'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { COLORS } from '@utils/constants/colors'
 import { FONT_SIZES } from '@utils/constants/sizes'
+import { getUesrInfo, getEvent } from '../api/user'
+import { useUserContext } from '@contexts/UserProvider'
+import useInterval from '@hooks/useInterval'
 
 const startDate = new Date('12/13/2021')
 
 const MOCK_DATA = {
-  id: 12345,
-  eventCode: 'vllvlvla',
-  eventTitle: '이벤트 제목',
-  eventStart: startDate,
-  eventMaster: '도가가',
-  eventProgressStatus: 'IsOver',
-  gifts: [
-    { id: 1, giftTitle: '시언한 아이스 아메리카노', quantity: 10 },
-    { id: 2, giftTitle: '리아 친필 싸인', quantity: 10 },
-    { id: 3, giftTitle: '파트로 초코초코 파우더', quantity: 0 },
-    { id: 4, giftTitle: '가가 맥주 세트', quantity: 0 },
-    { id: 5, giftTitle: '문타리 사과', quantity: 10 },
-    { id: 6, giftTitle: '스펜서 친필 싸인', quantity: 10 },
-    { id: 7, giftTitle: '파트로 딸기딸기 파우더', quantity: 5 },
-    { id: 8, giftTitle: '가가 소 세트', quantity: 3 },
-    { id: 9, giftTitle: '시언한 아이스 아메리카노', quantity: 10 },
-    { id: 10, giftTitle: '리아 친필 싸인', quantity: 10 },
-    { id: 11, giftTitle: '파트로 나나바나나 파우더', quantity: 5 },
-    { id: 12, giftTitle: '가가 양주 세트', quantity: 3 },
-  ],
+  success: true,
+  data: {
+    eventId: 3,
+    title: '테스트 선착순 이벤트!',
+    giftChoiceType: 'FIFO',
+    startAt: '2021-12-14T22:59:02.998853',
+    endAt: '2021-12-18T15:02:02.998853',
+    code: '1ffbec88-1356-404f-a933-d5fdb65de93a',
+    eventProgressStatus: 'RUNNING',
+    mainTemplate: 'template1',
+    maxParticipantCount: 5,
+    member: {
+      id: 2,
+      name: 'dokev_admin',
+      email: null,
+      socialId: 'k2',
+      profileImage: 'http://dokev/image.jpg',
+    },
+    gifts: [
+      {
+        id: 3,
+        category: '치킨',
+        itemCount: 3,
+        giftItems: [
+          {
+            id: 7,
+            giftType: 'TEXT',
+            content:
+              '선물코드를 등록하여 선물을 받아보세요. (마르코 타운) ∙ 선물코드 : 3TLVAY2538 ∙ 선물명 : 카페아메리카노 ICED ∙ 코드등록 유효기간 : 2021.11.02 ∙ 코드등록 방법 : 카카오톡 > 선물하기 > 선물함 > 선물코드 등록 ∙ 등록 URL : http://kko.to/Aikttag4o',
+            used: false,
+          },
+          {
+            id: 8,
+            giftType: 'TEXT',
+            content: 'http://kko.to/Aikttag4o',
+            used: false,
+          },
+          {
+            id: 9,
+            giftType: 'IMAGE',
+            content:
+              'https://dokev-gold-dduck.s3.ap-northeast-2.amazonaws.com/giftItemTest.jfif',
+            used: false,
+          },
+        ],
+      },
+    ],
+  },
+  error: null,
+  serverDateTime: '2021-12-14 16:45:26',
+}
+
+interface IMember {
+  id: number
+  name: string
+  email: string | null
+  socialId: string | null
+  profileImage: string | null
+}
+
+interface IgiftItem {
+  id: number
+  giftType: string
+  content: string
+  used: boolean
+}
+
+interface Igifts {
+  id: number
+  category: string
+  itemCount: number
+  giftItems: IgiftItem[]
 }
 
 interface IeventData {
-  id: number
-  eventCode: string
-  eventTitle: string
-  eventStart: Date
-  eventMaster: string
+  eventId: number
+  title: string
+  giftChoiceType: string
+  startAt: string
+  endAt: string
+  code: string
   eventProgressStatus: string
-  gifts: object[]
-}
-
-interface IGift {
-  id: number
-  giftTitle: string
-  quantity: number
+  mainTemplate: string
+  maxParticipantCount: number
+  member: IMember
+  gifts: Igifts[]
 }
 
 // 이벤트 종료시 보여줄 JSX를 리턴하는 함수
@@ -75,24 +128,15 @@ const eventIsOver = () => {
 }
 
 const fifo = (): JSX.Element => {
-  const [isOver, setIsOver] = useState(false)
+  const [eventStart, setEventStart] = useState(false)
   const [eventData, setEventData] = useState<IeventData | null>(null)
+  const [eventOver, setEventOver] = useState(false)
+  const [distance, setDistance] = useState(0)
   const router = useRouter()
-  let timer: NodeJS.Timer
-
-  const initEvent = () => {
-    //api 로직
-    //이벤트 종료 여부 체크
-    if (MOCK_DATA.eventProgressStatus === 'IsOver') {
-      setIsOver(true)
-    } else {
-      setIsOver(false)
-    }
-    setEventData(() => MOCK_DATA)
-  }
+  const { updateUser } = useUserContext()
 
   const onButtonClick = () => {
-    if (isOver) {
+    if (eventStart) {
       // if '선물을 받은 사람인지 아닌지 체크!'
       // 선물 받기 전에 수량 체크 한번 더 해야함.
       // 수량 체크 해서 이상없으면 받고, 있으면 못받음! + 데이터 한번 더 받아야함.
@@ -103,35 +147,71 @@ const fifo = (): JSX.Element => {
     }
   }
 
+  const clear = useInterval(() => {
+    checkRemaining()
+  }, 1000)
+
   const checkRemaining = () => {
-    const now = new Date()
-    const distance = Number(MOCK_DATA.eventStart) - Number(now)
-    if (distance < 0) {
-      clearTimeout(timer)
-      setIsOver(true)
+    if (eventData?.startAt) {
+      const now = new Date()
+      const eventStartAt = new Date(eventData?.startAt)
+      const distance = Number(eventStartAt) - Number(now)
+      setDistance(distance)
     }
   }
 
   useEffect(() => {
-    initEvent()
-    timer = setInterval(checkRemaining, 1000)
+    if (distance < 0) {
+      clear()
+      setEventStart(true)
+    }
+  }, [distance])
+
+  // 사용자 정보 API
+  const getUserData = useCallback(async () => {
+    const res = await getUesrInfo()
+    res ? updateUser(res) : router.replace('/login')
+  }, [])
+
+  // 단일 이벤트 조회 API
+  const getEventData = useCallback(async () => {
+    //api 로직
+    //이벤트 종료 여부 체크
+    const res = await getEvent()
+    if (res) {
+      res.eventProgressStatus === 'CLOSED' && setEventOver(true)
+      setEventData(res)
+    }
+    // console.log(MOCK_DATA.data)
+    // setEventData(MOCK_DATA.data)
+  }, [])
+
+  useEffect(() => {
+    getUserData()
+    getEventData()
   }, [])
 
   return (
     <>
       <Header />
-      {isOver ? (
+      {eventOver ? (
         eventIsOver()
       ) : (
         <>
-          <TimerHeader
-            eventStart={MOCK_DATA.eventStart}
-            eventMaster={MOCK_DATA.eventMaster}
-          />
+          {eventData && (
+            <TimerHeader
+              eventStart={new Date(eventData.startAt)}
+              eventMaster={eventData.member.name}
+            />
+          )}
+          {/* <TimerHeader
+            eventStart={new Date(eventData?.startAt)}
+            eventMaster={'가가'}
+          /> */}
           <GiftWrapper>
             {eventData &&
               eventData.gifts.map(
-                ({ id, giftTitle, quantity }: IGift, index) => (
+                ({ id, category, itemCount }: Igifts, index) => (
                   <Gift key={id}>
                     <Image
                       src={`/cover/cover${(index % 6) + 1}.png`}
@@ -141,13 +221,13 @@ const fifo = (): JSX.Element => {
                     />
                     <GiftTextWrapper>
                       <Text size="MEDIUM" color="WHITE">
-                        {giftTitle}
+                        {category}
                       </Text>
                       <Text size="BASE" color="TEXT_GRAY_DARK">
-                        수량 : {quantity}개
+                        수량 : {itemCount}개
                       </Text>
                     </GiftTextWrapper>
-                    {quantity ? (
+                    {itemCount ? (
                       <MUIButton
                         onClick={onButtonClick}
                         style={{ ...GetStyle }}>
@@ -192,7 +272,7 @@ const GiftWrapper = styled.div`
   position: absolute;
   overflow: auto;
   bottom: 0;
-  height: 60vh;
+  height: 45vh;
   @media all and (max-width: 425px) {
     height: 55vh;
   }
