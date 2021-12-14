@@ -7,10 +7,17 @@ import Fab from '@mui/material/Fab'
 import AddIcon from '@mui/icons-material/Add'
 import Text from '@components/Text'
 
+interface GiftItem {
+  content?: string
+  image?: File
+  giftType: 'TEXT' | 'IMAGE'
+}
+
 interface Props {
   category: string
   content: string
-  contentList: string[]
+  useRefCheck: boolean
+  contentList: GiftItem[]
   handleInput(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ): void
@@ -22,6 +29,7 @@ const PresentModal = ({
   category,
   content,
   contentList,
+  useRefCheck,
   handleInput,
   onCilckMessage,
   hadleImageUpload,
@@ -44,7 +52,9 @@ const PresentModal = ({
             <Upload
               id="setPresentImage"
               name="setPresentImage"
-              onClick={hadleImageUpload}></Upload>
+              onClick={hadleImageUpload}
+              useRefCheck={useRefCheck}
+            />
           </UploadWrapper>
         </Div>
         <Div style={{ position: 'relative' }}>
@@ -59,8 +69,9 @@ const PresentModal = ({
           </PlusButton>
         </Div>
         <Div>
-          {contentList.map((text) => (
+          {contentList.map(({ content }, index) => (
             <Text
+              key={index}
               size="SMALL"
               style={{
                 borderTop: '1px solid #757575',
@@ -70,7 +81,7 @@ const PresentModal = ({
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
               }}>
-              {text}
+              {content}
             </Text>
           ))}
         </Div>
