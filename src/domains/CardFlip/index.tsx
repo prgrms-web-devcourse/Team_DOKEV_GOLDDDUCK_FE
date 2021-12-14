@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Image from '@components/Image'
 import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
+import { keyframes } from '@emotion/react'
 
 interface ICardFlip {
   front: any
@@ -45,11 +46,13 @@ const CardFlip = ({ front }: ICardFlip): JSX.Element => {
           style={{ margin: '0 auto', borderRadius: '8px' }}
         />
       </div>
-      <MUIButton style={{ ...BtnStyle, display: flip ? 'none' : 'block' }}>
-        <a href="/test.jpeg" download>
-          저장하기
-        </a>
-      </MUIButton>
+      <FadeInWrapper style={{ display: flip ? 'none' : 'block' }}>
+        <MUIButton style={{ ...BtnStyle }}>
+          <a href="/test.jpeg" download>
+            저장하기
+          </a>
+        </MUIButton>
+      </FadeInWrapper>
     </CardContainer>
   )
 }
@@ -60,6 +63,19 @@ const CardContainer = styled.div`
   width: 80%;
   height: 60%;
   margin: 0 auto;
+`
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`
+const FadeInWrapper = styled.div`
+  animation: ${fadeIn} 3s ease-out;
 `
 
 const BtnStyle: React.CSSProperties = {
