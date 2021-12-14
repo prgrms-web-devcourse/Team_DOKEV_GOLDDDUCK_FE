@@ -1,18 +1,18 @@
 import axios, { AxiosRequestConfig } from 'axios'
-// import { getItem } from '@SessionStorage'
 
 const BASE_URL = 'http://maenguin.iptime.org:8080/'
 
 const axiosAuthApi = (
   url: string,
-  options?: AxiosRequestConfig<any> | undefined,
+  options?: AxiosRequestConfig<object> | undefined,
 ) => {
-  //   const token = getItem('userInformation')
-  const token = 'aa'
+  const token =
+    typeof window !== 'undefined' ? localStorage.getItem('token') : ''
+  const userToken = token ? token.replace(/\"/gi, '') : ''
 
   const instance = axios.create({
     baseURL: url,
-    headers: { 'X-GOLDDDUCK-AUTH': `Bearer ${token}` },
+    headers: { 'X-GOLDDDUCK-AUTH': `Bearer ${userToken}` },
     ...options,
   })
 
