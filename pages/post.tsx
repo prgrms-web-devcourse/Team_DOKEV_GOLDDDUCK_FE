@@ -36,6 +36,19 @@ const post = () => {
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
     setSkipped(newSkipped)
+
+    if (activeStep === 4) {
+      const data = {
+        eventTitle,
+        participant,
+        coverImage,
+        eventTypeState,
+        gifts,
+        startvalue,
+        endvalue,
+      }
+      console.log(data)
+    }
   }
 
   const handleBack = () => {
@@ -44,7 +57,7 @@ const post = () => {
 
   //step1 EventTitle 상태 로직
   const [eventTitle, setEventTitle] = useState('')
-  const [participant, setParticipant] = useState<number>()
+  const [participant, setParticipant] = useState<number | undefined>()
   const [coverImage, setCoverImage] = useState<string>('')
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,15 +89,22 @@ const post = () => {
   }
 
   //step4 EventPresent 상태 로직
-  const data = [
-    { id: 1, giftTitle: '시원한 아이스 아메리카노', quantity: 10 },
-    { id: 2, giftTitle: '리아 친필 싸인', quantity: 10 },
-    { id: 3, giftTitle: '파트로 초코초코 파우더', quantity: 0 },
-  ]
+  interface Gift {
+    category: string
+    giftItems: GiftItem[]
+  }
 
-  const [gifts, setGifts] = useState(data)
+  interface GiftItem {
+    content?: string
+    image?: File
+    giftType: 'TEXT' | 'IMAGE'
+  }
 
-  //step4-1 EventPresentModal 상태 로직
+  const [gifts, setGifts] = useState<Gift[]>([])
+
+  const AddGiftItem = ({ category, giftItems }: Gift) => {
+    setGifts((gift) => [...gift, { category, giftItems }])
+  }
 
   // step별 컴포넌트 로직
   const getStepContent = (stepNumber: number) => {
@@ -116,7 +136,7 @@ const post = () => {
           />
         )
       case 3:
-        return <EventPresent gifts={gifts} />
+        return <EventPresent gifts={gifts} AddGiftItem={AddGiftItem} />
       default:
         return
     }
