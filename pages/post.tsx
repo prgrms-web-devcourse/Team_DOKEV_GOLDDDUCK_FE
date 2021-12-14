@@ -90,6 +90,7 @@ const post = () => {
 
   //step4 EventPresent 상태 로직
   interface Gift {
+    id: string
     category: string
     giftItems: GiftItem[]
   }
@@ -102,8 +103,13 @@ const post = () => {
 
   const [gifts, setGifts] = useState<Gift[]>([])
 
-  const AddGiftItem = ({ category, giftItems }: Gift) => {
-    setGifts((gift) => [...gift, { category, giftItems }])
+  const AddGiftItem = ({ id, category, giftItems }: Gift) => {
+    setGifts((gifts) => [...gifts, { id, category, giftItems }])
+  }
+
+  const delteGiftItem = (id: string) => {
+    const filterData = gifts.filter((gift) => gift.id !== id)
+    setGifts(filterData)
   }
 
   // step별 컴포넌트 로직
@@ -136,7 +142,13 @@ const post = () => {
           />
         )
       case 3:
-        return <EventPresent gifts={gifts} AddGiftItem={AddGiftItem} />
+        return (
+          <EventPresent
+            gifts={gifts}
+            AddGiftItem={AddGiftItem}
+            delteGiftItem={delteGiftItem}
+          />
+        )
       default:
         return
     }
