@@ -13,11 +13,18 @@ import Image from '@components/Image'
 interface IUpload {
   id: string
   name: string
+  useRefCheck: boolean
   onClick?: (string: File[]) => void
   style?: CSSProperties
 }
 
-const Upload = ({ id, name, style, onClick }: IUpload): JSX.Element => {
+const Upload = ({
+  id,
+  name,
+  style,
+  onClick,
+  useRefCheck,
+}: IUpload): JSX.Element => {
   const [fileList, setFileList] = useState<File[]>([])
   const [urlList, setUrlList] = useState<string[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
@@ -26,6 +33,13 @@ const Upload = ({ id, name, style, onClick }: IUpload): JSX.Element => {
   const handleChooseFile = useCallback(() => {
     inputRef.current?.click()
   }, [])
+
+  //상위에서 이벤트 발생 시 FileList 초기화
+  //이벤트 발생 하면 useRefCheck 상태 변화
+  useEffect(() => {
+    setFileList([])
+    setUrlList([])
+  }, [useRefCheck])
 
   /**
    * 선택한 파일로 상태를 업데이트.
