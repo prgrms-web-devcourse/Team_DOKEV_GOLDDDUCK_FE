@@ -26,6 +26,8 @@ const Checkbox = ({
     [defaultChecked],
   )
 
+  console.log(defaultChecked, id)
+
   return (
     <Label key={id}>
       <CheckboxInput
