@@ -7,11 +7,11 @@ import Icon from '@components/Icon'
 
 interface Props {
   index: number
-  giftTitle: string
-  quantity: number
+  length: number
+  category: string
 }
 
-const GiftForm = ({ giftTitle, quantity, index }: Props) => {
+const GiftForm = ({ index, category, length }: Props) => {
   return (
     <>
       <Gift key={index}>
@@ -23,13 +23,13 @@ const GiftForm = ({ giftTitle, quantity, index }: Props) => {
         />
         <GiftTextWrapper>
           <Text size="MEDIUM" color="WHITE">
-            {giftTitle}
+            {category}
           </Text>
           <Text
             size="BASE"
             color="TEXT_GRAY_DARK"
             style={{ paddingTop: '3px' }}>
-            수량 : {quantity}개
+            {`수량 : ${length}개`}
           </Text>
         </GiftTextWrapper>
         <Icon name="close" color="TEXT_GRAY_DARK" size="LARGE"></Icon>
