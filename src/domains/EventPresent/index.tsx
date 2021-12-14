@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import styled from '@emotion/styled'
 import Image from '@components/Image'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
@@ -13,9 +14,11 @@ import GiftForm from './GiftForm'
 interface Props {
   gifts: Gift[]
   AddGiftItem(e: Gift): void
+  delteGiftItem(e: string): void
 }
 
 interface Gift {
+  id: string
   category: string
   giftItems: GiftItem[]
 }
@@ -26,7 +29,7 @@ interface GiftItem {
   giftType: 'TEXT' | 'IMAGE'
 }
 
-const EventPresent = ({ gifts, AddGiftItem }: Props) => {
+const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
   const [category, setCategory] = useState('')
   const [content, setContent] = useState('')
   const [contentList, setContentList] = useState<GiftItem[]>([])
@@ -57,7 +60,11 @@ const EventPresent = ({ gifts, AddGiftItem }: Props) => {
   }
 
   const AddGift = () => {
-    const giftItems = { category, giftItems: [...image, ...contentList] }
+    const giftItems = {
+      id: uuidv4(),
+      category,
+      giftItems: [...image, ...contentList],
+    }
     AddGiftItem(giftItems)
   }
 
@@ -133,13 +140,15 @@ const EventPresent = ({ gifts, AddGiftItem }: Props) => {
 
         <GiftWrapper>
           {gifts &&
-            gifts.map(({ category, giftItems }, index) => {
+            gifts.map(({ id, category, giftItems }, index) => {
               return (
                 <GiftForm
-                  key={index}
+                  key={id}
+                  id={id}
                   index={index}
                   category={category}
-                  length={giftItems.length}></GiftForm>
+                  length={giftItems.length}
+                  delteGiftItem={delteGiftItem}></GiftForm>
               )
             })}
         </GiftWrapper>
