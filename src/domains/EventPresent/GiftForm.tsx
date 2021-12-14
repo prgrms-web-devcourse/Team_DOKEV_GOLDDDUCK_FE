@@ -6,15 +6,17 @@ import Text from '@components/Text'
 import Icon from '@components/Icon'
 
 interface Props {
+  id: string
   index: number
   length: number
   category: string
+  delteGiftItem(e: string): void
 }
 
-const GiftForm = ({ index, category, length }: Props) => {
+const GiftForm = ({ id, index, category, length, delteGiftItem }: Props) => {
   return (
     <>
-      <Gift key={index}>
+      <Gift key={id}>
         <Image
           src={`/cover/cover${(index % 6) + 1}.png`}
           width="60px"
@@ -32,7 +34,11 @@ const GiftForm = ({ index, category, length }: Props) => {
             {`수량 : ${length}개`}
           </Text>
         </GiftTextWrapper>
-        <Icon name="close" color="TEXT_GRAY_DARK" size="LARGE"></Icon>
+        <Icon
+          name="close"
+          color="TEXT_GRAY_DARK"
+          size="LARGE"
+          onIconClick={() => delteGiftItem(id)}></Icon>
       </Gift>
     </>
   )
