@@ -5,11 +5,11 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { COLORS } from '@utils/constants/colors'
-import GiftList from '@domains/GiftList.tsx'
-import { IFilteredGiftItem, IGiftList, IPagination } from 'types/gift'
 import { getFilteredGiftList } from './api/gift'
 import { filteredGiftList } from './api/services/gift'
-import Spinner from '@components/Spinner'
+import { IFilteredGiftItem, IPagination } from 'types/gift'
+import GiftList from '@domains/GiftList.tsx'
+// import Spinner from '@components/Spinner'
 
 const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
   ssr: false,
@@ -25,7 +25,6 @@ const MyPage = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState(currentTab)
   const [isLoading, setIsLoading] = useState(false)
   const [response, setResponse] = useState<[IPagination, IFilteredGiftItem[]]>()
-
   const giftList = response?.[1]
 
   const fetchList = useCallback(async (filter) => {
@@ -72,14 +71,10 @@ const MyPage = (): JSX.Element => {
         <>
           <MUITab onChange={handleTabChange} />
           <MUITabPanel selectedTab={selectedTab} tab={'gift'} index={0}>
-            {!isLoading ? (
-              <GiftList
-                filteredGifts={giftList || []}
-                onClick={handleFilterClick}
-              />
-            ) : (
-              <Spinner />
-            )}
+            <GiftList
+              filteredGifts={giftList || []}
+              onClick={handleFilterClick}
+            />
           </MUITabPanel>
           <MUITabPanel selectedTab={selectedTab} tab={'event'} index={1}>
             <div>event list</div>

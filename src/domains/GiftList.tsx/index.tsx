@@ -15,11 +15,11 @@ interface IProps {
 }
 
 const GiftList = ({ filteredGifts, onClick }: IProps): JSX.Element => {
+  const route = useRouter()
   const [filter, setFilter] = useState<GIFT_FILTER>('ALL')
   const [selectedChip, setSelectedChip] = useState(
     filter === 'USED' ? 2 : filter === 'UN_USED' ? 1 : 0,
   )
-  // const [filteredGiftList, setFilteredGiftList] = useState(initialState)
 
   const handleFilterClick = useCallback(
     (e: React.MouseEvent<HTMLInputElement>): void => {
@@ -35,8 +35,9 @@ const GiftList = ({ filteredGifts, onClick }: IProps): JSX.Element => {
   }, [filter])
 
   const handleMoveToDetail = (e: React.MouseEvent<HTMLDivElement>): void => {
+    e.stopPropagation()
     const element = e.target as HTMLElement
-    useRouter().push(`/gift/${element.id}`)
+    route.push(`/gift/${element.offsetParent?.getAttribute('id')}`)
   }
 
   return (
@@ -49,7 +50,7 @@ const GiftList = ({ filteredGifts, onClick }: IProps): JSX.Element => {
       <ListWrapper>
         {filteredGifts?.length ? (
           filteredGifts.map(
-            ({ _id, giftType, src, message, used, template }) => {
+            ({ _id, giftType, category, src, message, used, template }) => {
               return (
                 <ItemWrapper key={_id} id={_id} onClick={handleMoveToDetail}>
                   <Image
@@ -77,10 +78,22 @@ const GiftList = ({ filteredGifts, onClick }: IProps): JSX.Element => {
                         style={{
                           ...itemTextStyle,
                         }}>
-                        {message}
+                        {_id + message}
                       </Text>
                     </div>
                   )}
+                  <Text
+                    size="SMALL"
+                    color="WHITE"
+                    style={{ margin: '8px 0 0 4px' }}>
+                    {category}
+                  </Text>
+                  <Text
+                    size="MICRO"
+                    color="TEXT_GRAY_LIGHT"
+                    style={{ margin: '4px 16px 16px 4px' }}>
+                    from.문타리
+                  </Text>
                 </ItemWrapper>
               )
             },
@@ -97,15 +110,14 @@ const ListWrapper = styled.section`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: ${DEFAULT_MARGIN};
   margin: ${DEFAULT_MARGIN} 0;
 `
 
 const ItemWrapper = styled.div`
   position: relative;
   width: calc(50% - 8px);
-  height: 240px;
   border-radius: 8;
+  cursor: pointer;
 `
 
 const markImageStyle: React.CSSProperties = {
@@ -118,13 +130,13 @@ const markImageStyle: React.CSSProperties = {
 
 const imageItemStyle: React.CSSProperties = {
   width: '100%',
-  height: '100%',
+  height: '240px',
   objectFit: 'cover',
   borderRadius: 8,
 }
 
 const textItemStyle: React.CSSProperties = {
-  height: '100%',
+  height: '240px',
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   wordBreak: 'keep-all',

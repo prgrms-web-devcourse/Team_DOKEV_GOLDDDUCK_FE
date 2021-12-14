@@ -12,6 +12,7 @@ export interface IGiftItem {
 export interface IFilteredGiftItem {
   _id: string
   giftType: GIFT_TYPE
+  category: string
   used: boolean
   src: string
   message: string
