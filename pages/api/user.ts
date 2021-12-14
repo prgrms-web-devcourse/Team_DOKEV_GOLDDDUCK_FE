@@ -1,4 +1,3 @@
-import router from 'next/router'
 import { authInstance } from './utils'
 
 export const getUesrInfo = async () => {
@@ -10,7 +9,6 @@ export const getUesrInfo = async () => {
     console.log(error)
 
     return false
-    // router.replace('/login')
   }
 }
 

@@ -4,7 +4,7 @@ const BASE_URL = 'http://maenguin.iptime.org:8080/'
 
 const axiosAuthApi = (
   url: string,
-  options?: AxiosRequestConfig<any> | undefined,
+  options?: AxiosRequestConfig<object> | undefined,
 ) => {
   const token =
     typeof window !== 'undefined' ? localStorage.getItem('token') : ''

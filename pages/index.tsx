@@ -7,40 +7,23 @@ import { FONT_SIZES } from '@utils/constants/sizes'
 import { useRouter } from 'next/router'
 import { useUserContext } from '@contexts/UserProvider'
 import { useCallback, useEffect } from 'react'
-import axios from 'axios'
 import { getUesrInfo } from '../pages/api/user'
-import { route } from 'next/dist/server/router'
 
 const INTRODUCE =
   '소중한 사람들에게 \n 색다르게 선물을 전달해보세요. \n\n 금뚝이가 도와드릴게요!'
 
-const API_END_POINT = 'http://maenguin.iptime.org:8080'
-
 export const main = () => {
-  const { token, updateUser } = useUserContext()
+  const { updateUser } = useUserContext()
   const router = useRouter()
 
-  // api get User
-  // const getUserInfo = useCallback(async (token: string | string[]) => {
-  //   try {
-  //     const userInfo = await axios({
-  //       method: 'GET',
-  //       url: `${API_END_POINT}/api/v1/members/me`,
-  //       headers: { 'X-GOLDDDUCK-AUTH': `Bearer ${token}` },
-  //     }).then(({ data }) => data.data)
-  //     updateUser(userInfo)
-  //   } catch (e) {
-  //     console.error(e)
-  //     router.replace('/login')
-  //   }
-  // }, [])
+  // 사용자 정보 API
+  const getUserData = useCallback(async () => {
+    const res = await getUesrInfo()
+    res ? updateUser(res) : router.replace('/login')
+  }, [])
 
   useEffect(() => {
-    // getUserInfo(token)
-    ;(async () => {
-      const res = await getUesrInfo()
-      res ? updateUser(res) : router.replace('/login')
-    })()
+    getUserData()
   }, [])
 
   const moveToPost = () => {
