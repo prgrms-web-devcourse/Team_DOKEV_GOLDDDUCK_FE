@@ -3,7 +3,7 @@ import { IFilteredGiftItem, IGiftList, IPagination } from 'types/gift'
 export const filteredGiftList = ({
   pagination,
   giftItemList,
-}: IGiftList): [IPagination, Array<IFilteredGiftItem>] | undefined => {
+}: IGiftList): [IPagination, IFilteredGiftItem[]] | undefined => {
   return [
     pagination,
     giftItemList?.map(
