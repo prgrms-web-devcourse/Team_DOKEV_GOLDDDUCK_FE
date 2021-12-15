@@ -10,6 +10,7 @@ import { useState } from 'react'
 import Switch from '@mui/material/Switch'
 import { COLORS } from '@utils/constants/colors'
 import { useRouter } from 'next/router'
+import GiftItem from '@domains/GiftItem'
 
 const CustomSwitch = styled(Switch)(() => ({
   '& .MuiSwitch-switchBase': {},
@@ -83,11 +84,11 @@ const GiftDetailPage = () => {
               {'from.문타리'}
             </Text>
           </Wrapper>
-          <Image
-            src={giftImage.src}
-            width={'100%'}
-            height={'100%'}
-            style={{ marginBottom: DEFAULT_MARGIN }}
+          <GiftItem
+            type="TEXT"
+            imageSrc={giftImage.src}
+            template={'template2'}
+            message={`react 서버는 이를 다시 브라우저를 통해 통신한다`}
           />
         </GiftInfo>
       </GiftContainerTop>
@@ -96,7 +97,6 @@ const GiftDetailPage = () => {
           <MUIButton
             style={{
               width: '100%',
-              borderRadius: 20,
               backgroundColor: 'RED',
             }}>
             <Text color={'WHITE'} size={'BASE'}>
