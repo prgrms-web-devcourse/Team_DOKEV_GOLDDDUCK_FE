@@ -29,7 +29,7 @@ const Cover = ({
   return (
     <Wrapper
       style={{
-        backgroundImage: `url(/cover/cover${mainTemplate}.png)`,
+        backgroundImage: `url(/templates/template${mainTemplate}.png)`,
       }}>
       <Text
         color="BLACK"

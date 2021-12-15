@@ -134,7 +134,7 @@ const fifo = (): JSX.Element => {
                 ({ id, giftTitle, quantity }: IGift, index) => (
                   <Gift key={id}>
                     <Image
-                      src={`/cover/cover${(index % 6) + 1}.png`}
+                      src={`/templates/template${(index % 6) + 1}.png`}
                       width="60px"
                       height="60px"
                       mode="contain"
