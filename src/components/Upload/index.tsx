@@ -13,11 +13,18 @@ import Image from '@components/Image'
 interface IUpload {
   id: string
   name: string
+  useRefCheck: boolean
   onClick?: (string: File[]) => void
   style?: CSSProperties
 }
 
-const Upload = ({ id, name, style, onClick }: IUpload): JSX.Element => {
+const Upload = ({
+  id,
+  name,
+  style,
+  onClick,
+  useRefCheck,
+}: IUpload): JSX.Element => {
   const [fileList, setFileList] = useState<File[]>([])
   const [urlList, setUrlList] = useState<string[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
@@ -26,6 +33,13 @@ const Upload = ({ id, name, style, onClick }: IUpload): JSX.Element => {
   const handleChooseFile = useCallback(() => {
     inputRef.current?.click()
   }, [])
+
+  //상위에서 이벤트 발생 시 FileList 초기화
+  //이벤트 발생 하면 useRefCheck 상태 변화
+  useEffect(() => {
+    setFileList([])
+    setUrlList([])
+  }, [useRefCheck])
 
   /**
    * 선택한 파일로 상태를 업데이트.
@@ -57,6 +71,11 @@ const Upload = ({ id, name, style, onClick }: IUpload): JSX.Element => {
   ): void => {
     e.preventDefault()
     const fileIndex = e.target as HTMLButtonElement
+
+    if (fileList.length === 1 && inputRef.current?.value) {
+      inputRef.current.value = ''
+    }
+
     setFileList(
       fileList.filter((_: File, index) => index !== parseInt(fileIndex.id, 10)),
     )
@@ -106,7 +125,8 @@ const UploadStyled = styled.div`
   display: inline-block;
   width: 80px;
   height: 120px;
-  background-color: ${COLORS.TEXT_GRAY_LIGHT};
+  /* background-color: ${COLORS.TEXT_GRAY_LIGHT}; */
+  border: 1px dashed white;
   cursor: pointer;
   position: relative;
   margin-left: 8px;
@@ -116,8 +136,8 @@ const UploadStyled = styled.div`
 `
 
 const UploadBtn = styled.button`
-  color: ${COLORS.TEXT_BLACK};
-  font-size: ${FONT_SIZES.MEDIUM};
+  color: ${COLORS.WHITE};
+  font-size: ${FONT_SIZES.LARGE};
   border: none;
   background: none;
   position: absolute;
