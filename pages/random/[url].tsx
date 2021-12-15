@@ -9,7 +9,7 @@ import { FONT_SIZES } from '@utils/constants/sizes'
 import Slider from '@mui/material/Slider'
 import CardFlip from '@domains/CardFlip'
 
-const startDate = new Date('12/9/2021')
+const startDate = new Date('12/16/2021')
 
 const MOCK_DATA = {
   id: 12345,
@@ -27,12 +27,8 @@ const random = (): JSX.Element => {
   let timer: NodeJS.Timer
 
   const handleSliderChange = (event: Event, newValue: number | number[]) => {
-    if (newValue === 100) {
-      if (isTimerOver) {
-        setIsVideoLoading(true)
-      } else {
-        alert('djskdjskd')
-      }
+    if (newValue === 100 && isTimerOver) {
+      setIsVideoLoading(true)
     }
   }
 
