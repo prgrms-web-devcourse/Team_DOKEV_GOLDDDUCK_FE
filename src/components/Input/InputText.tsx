@@ -41,7 +41,6 @@ const InputStyled = styled.input`
   border: 1px solid ${COLORS.TEXT_GRAY_LIGHT};
   background: none;
   color: ${COLORS.WHITE};
-  font-weight: bold;
   font-size: ${FONT_SIZES.BASE};
   height: 32px;
   width: 70%;
