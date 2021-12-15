@@ -8,13 +8,19 @@ import { useCallback, useEffect, useState } from 'react'
 import { GIFT_FILTER, IFilteredGiftItem } from 'types/gift'
 import { useRouter } from 'next/router'
 import used_mark from '/src/assets/used_mark.png'
+import Spinner from '@components/Spinner'
 
 interface IProps {
   filteredGifts: IFilteredGiftItem[]
   onClick: React.MouseEventHandler<HTMLElement>
+  isLoading: boolean
 }
 
-const GiftList = ({ filteredGifts, onClick }: IProps): JSX.Element => {
+const GiftList = ({
+  filteredGifts,
+  onClick,
+  isLoading,
+}: IProps): JSX.Element => {
   const route = useRouter()
   const [filter, setFilter] = useState<GIFT_FILTER>('ALL')
   const [selectedChip, setSelectedChip] = useState(
@@ -47,61 +53,68 @@ const GiftList = ({ filteredGifts, onClick }: IProps): JSX.Element => {
         <Checkbox onClick={handleFilterClick} name="미사용" id="un_used" />
         <Checkbox onClick={handleFilterClick} name="사용완료" id="used" />
       </CheckboxList>
-      <ListWrapper>
-        {filteredGifts?.length ? (
-          filteredGifts.map(
-            ({ _id, giftType, category, src, message, used, template }) => {
-              return (
-                <ItemWrapper key={_id} id={_id} onClick={handleMoveToDetail}>
-                  <Image
-                    src={used_mark.src}
-                    style={{
-                      display: used ? 'block' : 'none',
-                      ...markImageStyle,
-                    }}
-                  />
-                  {giftType === 'IMAGE' ? (
+
+      {!isLoading ? (
+        <ListWrapper>
+          {filteredGifts?.length ? (
+            filteredGifts.map(
+              ({ _id, giftType, category, src, message, used, template }) => {
+                return (
+                  <ItemWrapper key={_id} id={_id} onClick={handleMoveToDetail}>
                     <Image
-                      src={src}
-                      style={{ opacity: used ? 0.2 : 1, ...imageItemStyle }}
-                    />
-                  ) : (
-                    <div
+                      src={used_mark.src}
                       style={{
-                        backgroundImage: `url(/templates/${template}.png)`,
-                        opacity: used ? 0.2 : 1,
-                        ...textItemStyle,
-                      }}>
-                      <Text
-                        size="BASE"
-                        color="BLACK"
+                        display: used ? 'block' : 'none',
+                        ...markImageStyle,
+                      }}
+                    />
+                    {giftType === 'IMAGE' ? (
+                      <Image
+                        src={src}
+                        style={{ opacity: used ? 0.2 : 1, ...imageItemStyle }}
+                      />
+                    ) : (
+                      <div
                         style={{
-                          ...itemTextStyle,
+                          backgroundImage: `url(/templates/${template}.png)`,
+                          opacity: used ? 0.2 : 1,
+                          ...textItemStyle,
                         }}>
-                        {_id + message}
-                      </Text>
-                    </div>
-                  )}
-                  <Text
-                    size="SMALL"
-                    color="WHITE"
-                    style={{ margin: '8px 0 0 4px' }}>
-                    {category}
-                  </Text>
-                  <Text
-                    size="MICRO"
-                    color="TEXT_GRAY_LIGHT"
-                    style={{ margin: '4px 16px 16px 4px' }}>
-                    from.문타리
-                  </Text>
-                </ItemWrapper>
-              )
-            },
-          )
-        ) : (
-          <Text>텅</Text>
-        )}
-      </ListWrapper>
+                        <Text
+                          size="BASE"
+                          color="BLACK"
+                          style={{
+                            ...itemTextStyle,
+                          }}>
+                          {_id + message}
+                        </Text>
+                      </div>
+                    )}
+                    <Text
+                      size="SMALL"
+                      color="WHITE"
+                      style={{ margin: '8px 0 0 4px' }}>
+                      {category}
+                    </Text>
+                    <Text
+                      size="MICRO"
+                      color="TEXT_GRAY_LIGHT"
+                      style={{ margin: '4px 16px 16px 4px' }}>
+                      from.문타리
+                    </Text>
+                  </ItemWrapper>
+                )
+              },
+            )
+          ) : (
+            <Text></Text>
+          )}
+        </ListWrapper>
+      ) : (
+        <div style={{ display: 'flex', alignItems: '', textAlign: 'center' }}>
+          <Spinner />
+        </div>
+      )}
     </>
   )
 }

@@ -29,7 +29,8 @@ const MyPage = (): JSX.Element => {
 
   const fetchList = useCallback(async (filter) => {
     setIsLoading(true)
-    const data = await getFilteredGiftList(filter)
+    const isUsed = filter === 'used' ? true : filter === 'un_used' ? false : ''
+    const data = await getFilteredGiftList(isUsed)
     data && setResponse(filteredGiftList(data))
     setIsLoading(false)
   }, [])
@@ -74,6 +75,7 @@ const MyPage = (): JSX.Element => {
             <GiftList
               filteredGifts={giftList || []}
               onClick={handleFilterClick}
+              isLoading={isLoading}
             />
           </MUITabPanel>
           <MUITabPanel selectedTab={selectedTab} tab={'event'} index={1}>
