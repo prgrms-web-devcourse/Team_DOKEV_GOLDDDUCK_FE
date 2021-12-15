@@ -53,11 +53,6 @@ const EventList = ({
     )
   }, [filter])
 
-  const handleMoveToDetail = (e: React.MouseEvent<HTMLDivElement>): void => {
-    const element = e.target as HTMLElement
-    route.push(`/event/${element?.id}`)
-  }
-
   return (
     <>
       <CheckboxList onClick={handleFilterClick} selectedIndex={selectedChip}>
@@ -74,8 +69,7 @@ const EventList = ({
               return (
                 <ItemWrapper
                   key={_id}
-                  id={code}
-                  onClick={handleMoveToDetail}
+                  onClick={() => code && route.push(`/event/${code}`)}
                   style={{
                     backgroundImage: `url(/templates/${template}.png)`,
                   }}>
