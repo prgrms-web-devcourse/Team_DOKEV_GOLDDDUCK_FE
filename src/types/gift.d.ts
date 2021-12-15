@@ -29,5 +29,5 @@ export interface IPagination {
 
 export interface IGiftList {
   pagination: IPagination
-  giftItemList: Array<IGiftItem>
+  giftItemList: IGiftItem[]
 }
