@@ -55,7 +55,6 @@ const EventList = ({
 
   const handleMoveToDetail = (e: React.MouseEvent<HTMLDivElement>): void => {
     const element = e.target as HTMLElement
-    console.log(element.dataset)
     route.push(`/event/${element?.id}`)
   }
 

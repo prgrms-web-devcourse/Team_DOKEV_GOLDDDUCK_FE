@@ -31,19 +31,27 @@ const MyPage = (): JSX.Element => {
   const [eventRes, setEventRes] =
     useState<[IPagination, IFilteredEventItem[]]>()
 
+  // 필터에 따른 받은 선물 목록 조회
   const fetchGiftList = useCallback(async (filter) => {
     setIsLoading(true)
+
     const isUsed = filter === 'used' ? true : filter === 'un_used' ? false : ''
     const data = await getFilteredGiftList(isUsed)
+
     data && setGiftRes(filteredGiftList(data))
+
     setIsLoading(false)
   }, [])
 
+  //필터에 따른 나의 이벤트 목록 조회
   const fetchEventList = useCallback(async (filter) => {
     setIsLoading(true)
+
     const status = filter === 'all' ? '' : filter.toUpperCase()
     const data = await getFilteredEventList(status)
+
     data && setEventRes(filteredEventList(data))
+
     setIsLoading(false)
   }, [])
 
@@ -54,7 +62,7 @@ const MyPage = (): JSX.Element => {
 
   const handleTabChange = useCallback(
     (e: React.SyntheticEvent, newValue: number) => {
-      setSelectedTab(newValue === 0 ? 'gift' : 'event')
+      setSelectedTab(() => (newValue === 0 ? 'gift' : 'event'))
     },
     [],
   )
@@ -66,11 +74,11 @@ const MyPage = (): JSX.Element => {
   const handleFilterClick = useCallback(
     (e: React.MouseEvent<HTMLInputElement>): void => {
       const element = e.target as HTMLElement
-      selectedTab === 'gift'
-        ? fetchGiftList(element.id)
-        : fetchEventList(element.id)
+      selectedTab === 'event'
+        ? fetchEventList(element?.id)
+        : fetchGiftList(element?.id)
     },
-    [],
+    [selectedTab],
   )
 
   return (
