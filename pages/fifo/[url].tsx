@@ -14,61 +14,6 @@ import { getEvent, postGiftReceipt } from '../api/event'
 import { useUserContext } from '@contexts/UserProvider'
 import useInterval from '@hooks/useInterval'
 
-const startDate = new Date('12/13/2021')
-
-const MOCK_DATA = {
-  success: true,
-  data: {
-    eventId: 3,
-    title: '테스트 선착순 이벤트!',
-    giftChoiceType: 'FIFO',
-    startAt: '2021-12-14T21:48:43.261786',
-    endAt: '2021-12-14T21:57:43.261786',
-    code: '4feb41f6-150c-46be-a048-223cdfd4c51b',
-    eventProgressStatus: 'RUNNING',
-    mainTemplate: 'template1',
-    maxParticipantCount: 5,
-    member: {
-      id: 2,
-      name: 'dokev_admin',
-      email: null,
-      socialId: 'k2',
-      profileImage: 'http://dokev/image.jpg',
-    },
-    gifts: [
-      {
-        id: 3,
-        category: '치킨',
-        itemCount: 3,
-        giftItems: [
-          {
-            id: 7,
-            giftType: 'TEXT',
-            content:
-              '선물코드를 등록하여 선물을 받아보세요. (마르코 타운) ∙ 선물코드 : 3TLVAY2538 ∙ 선물명 : 카페아메리카노 ICED ∙ 코드등록 유효기간 : 2021.11.02 ∙ 코드등록 방법 : 카카오톡 > 선물하기 > 선물함 > 선물코드 등록 ∙ 등록 URL : http://kko.to/Aikttag4o',
-            used: false,
-          },
-          {
-            id: 8,
-            giftType: 'TEXT',
-            content: 'http://kko.to/Aikttag4o',
-            used: false,
-          },
-          {
-            id: 9,
-            giftType: 'IMAGE',
-            content:
-              'https://dokev-gold-dduck.s3.ap-northeast-2.amazonaws.com/giftItemTest.jfif',
-            used: false,
-          },
-        ],
-      },
-    ],
-  },
-  error: null,
-  serverDateTime: '2021-12-14 23:44:55',
-}
-
 interface IMember {
   id: number
   name: string
@@ -144,17 +89,14 @@ const fifo = (): JSX.Element => {
         const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
         const memberId = eventData.member.id
         const res = await postGiftReceipt({ eventId, giftId, memberId })
-        console.log('post', res)
-        if (res.isArray()) {
-          const errorCode = res[0]
+        if (Array.isArray(res)) {
+          //res = ['E002', '이미 참여한 이벤트입니다.']
           const errorMessage = res[1]
-          console.log(res, `codr: ${errorCode} meg : ${errorMessage}`)
           alert(errorMessage)
         } else {
-          console.log('서버에 해당 선물 당첨자 저장된 상태!')
-          console.log(res.id)
-          alert('선물 겟')
-          // router.push('/gift/${}')
+          // 선물 수령 완료 이후 /gift/res.id로 이동
+          alert('선물 겟!')
+          // router.push('/gift/${res.id}')
         }
       } else {
         alert('지금은 선물을 받을 수 없어요!')
@@ -196,12 +138,9 @@ const fifo = (): JSX.Element => {
   const getEventData = useCallback(async () => {
     const res = await getEvent()
     if (res) {
-      console.log(res)
       res.eventProgressStatus === 'CLOSED' && setEventOver(true)
       setEventData(res)
     }
-    // console.log(MOCK_DATA.data)
-    // setEventData(MOCK_DATA.data)
   }, [])
 
   // 컴포넌트 마운트 시 로그인 체크 & 단일 이벤트 정보 가져오기
