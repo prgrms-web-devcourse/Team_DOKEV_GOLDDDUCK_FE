@@ -2,9 +2,14 @@ import styled from '@emotion/styled'
 import Header from '@domains/Header'
 import MUIAvatar from '@components/MUIAvatar'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { COLORS } from '@utils/constants/colors'
+import { getFilteredGiftList } from './api/gift'
+import { filteredGiftList } from './api/services/gift'
+import { IFilteredGiftItem, IPagination } from 'types/gift'
+import GiftList from '@domains/GiftList.tsx'
+// import Spinner from '@components/Spinner'
 
 const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
   ssr: false,
@@ -13,18 +18,45 @@ const MUITabPanel = dynamic(() => import('@components/MUITab/MUITabPanel'), {
   ssr: false,
 })
 
+/* TEST_DATA */
 const MyPage = (): JSX.Element => {
   const router = useRouter()
   const currentTab = router.query.tab === 'event' ? 'event' : 'gift'
   const [selectedTab, setSelectedTab] = useState(currentTab)
+  const [isLoading, setIsLoading] = useState(false)
+  const [response, setResponse] = useState<[IPagination, IFilteredGiftItem[]]>()
+  const giftList = response?.[1]
 
-  const handleChange = (e: React.SyntheticEvent, newValue: number) => {
-    setSelectedTab(newValue === 0 ? 'gift' : 'event')
-  }
+  const fetchList = useCallback(async (filter) => {
+    setIsLoading(true)
+    const isUsed = filter === 'used' ? true : filter === 'un_used' ? false : ''
+    const data = await getFilteredGiftList(isUsed)
+    data && setResponse(filteredGiftList(data))
+    setIsLoading(false)
+  }, [])
+
+  useEffect(() => {
+    fetchList('all')
+  }, [])
+
+  const handleTabChange = useCallback(
+    (e: React.SyntheticEvent, newValue: number) => {
+      setSelectedTab(newValue === 0 ? 'gift' : 'event')
+    },
+    [],
+  )
 
   useEffect(() => {
     setSelectedTab(router.query.tab === 'event' ? 'event' : 'gift')
   }, [router.query.tab])
+
+  const handleFilterClick = useCallback(
+    (e: React.MouseEvent<HTMLInputElement>): void => {
+      const element = e.target as HTMLElement
+      fetchList(element.id)
+    },
+    [],
+  )
 
   return (
     <>
@@ -38,9 +70,13 @@ const MyPage = (): JSX.Element => {
       </Profile>
       {router.isReady && currentTab === selectedTab && (
         <>
-          <MUITab onChange={handleChange} />
+          <MUITab onChange={handleTabChange} />
           <MUITabPanel selectedTab={selectedTab} tab={'gift'} index={0}>
-            <div>gift list</div>
+            <GiftList
+              filteredGifts={giftList || []}
+              onClick={handleFilterClick}
+              isLoading={isLoading}
+            />
           </MUITabPanel>
           <MUITabPanel selectedTab={selectedTab} tab={'event'} index={1}>
             <div>event list</div>

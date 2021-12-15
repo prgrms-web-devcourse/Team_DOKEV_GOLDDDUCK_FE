@@ -24,5 +24,6 @@ const TabPanel = ({ children, tab, selectedTab, ...other }: TabPanelProps) => {
 
 const StyledPanel = styled.div`
   color: ${COLORS.WHITE};
+  background-color: inherit;
 `
 export default TabPanel
