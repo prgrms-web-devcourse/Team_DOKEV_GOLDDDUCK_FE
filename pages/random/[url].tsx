@@ -4,10 +4,12 @@ import TextHeader from '@domains/TimerHeader'
 import { useEffect, useState } from 'react'
 import { keyframes } from '@emotion/react'
 import Image from '@components/Image'
-import MUIButton from '@components/MUIButton'
 import { COLORS } from '@utils/constants/colors'
+import { FONT_SIZES } from '@utils/constants/sizes'
+import Slider from '@mui/material/Slider'
+import CardFlip from '@domains/CardFlip'
 
-const startDate = new Date('12/13/2021')
+const startDate = new Date('12/16/2021')
 
 const MOCK_DATA = {
   id: 12345,
@@ -24,11 +26,9 @@ const random = (): JSX.Element => {
   const [isTimerOver, setIsTimerOver] = useState(false)
   let timer: NodeJS.Timer
 
-  const handleStartVideo = () => {
-    if (isTimerOver) {
+  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+    if (newValue === 100 && isTimerOver) {
       setIsVideoLoading(true)
-    } else {
-      alert('지금은 선물을 받을 수 없어요!')
     }
   }
 
@@ -53,69 +53,49 @@ const random = (): JSX.Element => {
         eventStart={MOCK_DATA.eventStart}
       />
       {isVideoEnded && (
-        <ZoomInDownWrapper>
-          <Image
-            src="/test.jpeg"
-            width="80%"
-            height="80%"
-            mode="contain"
-            style={{ margin: '0 auto' }}
+        <FadeInDownWrapper>
+          <CardFlip
+            front={
+              <Image
+                src="/test.jpeg"
+                width="100%"
+                height="420px"
+                mode="contain"
+                style={{ margin: '0 auto', borderRadius: '8px' }}
+              />
+            }
           />
-          <MUIButton style={{ ...BtnStyle }}>
-            <a href="/test.jpeg" download>
-              저장하기
-            </a>
-          </MUIButton>
-        </ZoomInDownWrapper>
+        </FadeInDownWrapper>
       )}
       {isVideoLoading ? (
         <FadeInWrapper>
           <VideoBox
-            src="/video/Random.mp4"
+            src="/video/Stars.mp4"
             muted
             autoPlay
             onEnded={() => setIsVideoEnded(true)}
           />
         </FadeInWrapper>
       ) : (
-        <FadeInScaleWrapper>
-          <Image
-            src="/GiftRudolf.png"
-            width="240px"
-            height="260px"
-            onClick={handleStartVideo}
-            style={{ margin: '0 auto' }}
+        <SliderWrapper>
+          <CustomSlider
+            disabled={isTimerOver ? false : true}
+            aria-label="Temperature"
+            onChange={handleSliderChange}
+            color="secondary"
+            sx={{
+              backgroundColor: 'transparent',
+              border: `3px solid ${COLORS.TEXT_GRAY_LIGHT}`,
+              height: '22px',
+              width: '100%',
+            }}
           />
-        </FadeInScaleWrapper>
+          <StyledText>밀어서 랜덤 선물받기</StyledText>
+        </SliderWrapper>
       )}
     </>
   )
 }
-
-const BtnStyle: React.CSSProperties = {
-  width: '30%',
-  borderRadius: '50px',
-  margin: '0 auto',
-  marginTop: '16px',
-  backgroundColor: COLORS.RED,
-}
-
-const fadeInScale = keyframes`
-  0% {
-    transform: scale(0);
-    opacity: 0;
-  }
-
-  30%, 70% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  100% {
-    transform: scale(3);
-    opacity: 0;
-    }
-`
 
 const fadeIn = keyframes`
   from {
@@ -127,32 +107,22 @@ const fadeIn = keyframes`
   }
 `
 
-const ZoomInDown = keyframes`
-  0% {
+const fadeInDown = keyframes`
+  from {
     opacity: 0;
-    transform: scale3d(.1, .1, .1) translate3d(0, -1000px, 0);
-    animation-timing-function: cubic-bezier(0.55, .055, .675, .19)
+    transform: translate3d(0, -20%, 0);
   }
-  60% {
+  to {
     opacity: 1;
-    transform: scale3d(.475, .475, .475) translate3d(0, 60px, 0);
-    animation-timing-function: cubic-bezier(0.175, .885, .32, 1)
-  }
+    transform: translate3d(0, 0, 0);
+    }
 `
 
 const FadeInWrapper = styled.div`
   animation: ${fadeIn} 2s ease-out;
 `
 
-const FadeInScaleWrapper = styled.div`
-  width: 100%;
-  height: 45%;
-  position: absolute;
-  bottom: 0;
-  animation: ${fadeInScale} 2s ease-out;
-`
-
-const ZoomInDownWrapper = styled.div`
+const FadeInDownWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -161,17 +131,72 @@ const ZoomInDownWrapper = styled.div`
   position: absolute;
   top: 0;
   z-index: 99;
-  animation: ${ZoomInDown} 2s ease-out;
+  animation: ${fadeInDown} 2s ease-out;
 `
 
 const VideoBox = styled.video`
   width: 100%;
-  height: 70%;
+  height: 100%;
   object-fit: cover;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  bottom: 0;
+`
+
+const SliderWrapper = styled.div`
+  right: 0;
+  width: 60%;
+  margin: 0 auto;
+  position: absolute;
+  top: 70%;
+  left: 0;
+  @media all and (max-width: 425px) {
+    top: 55%;
+  }
+  @media all and (max-width: 320px) {
+    top: 60%;
+  }
+`
+
+const CustomSlider = styled(Slider)(() => ({
+  '& .MuiSlider-rail, & .MuiSlider-track': {
+    backgroundColor: 'transparent',
+    border: 'none',
+  },
+  '& .MuiSlider-thumbColorSecondary.MuiSlider-thumbSizeMedium.MuiSlider-thumb':
+    {
+      backgroundColor: 'transparent',
+      backgroundImage: 'url(/giftrudolf.png)',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      width: '120px',
+      height: '120px',
+      border: 'none',
+      boxShadow: 'none',
+      zIndex: 99,
+    },
+}))
+
+const StyledText = styled.div`
+  position: absolute;
+  font-size: ${FONT_SIZES.LARGE};
+  top: 10%;
+  right: -50px;
+  transform: translate(-50%, 50%);
+  background-image: linear-gradient(90deg, #111, #fff, #111);
+  background-repeat: no-repeat;
+  background-clip: text;
+  background-size: 80% 100%;
+  --webkit-backdrop-clip: text;
+  color: transparent;
+  animation: shine 2s linear infinite;
+  @keyframes shine {
+    0% {
+      background-position: -500% 0;
+    }
+    100% {
+      background-position: 500% 0;
+    }
+  }
 `
 
 export default random
