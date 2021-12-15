@@ -26,7 +26,7 @@ export const getUesrInfo = async () => {
 // 얘는 그냥 넣어줘도 됨
 // export const likeComment = async (postId: any) => {
 //   try {
-//     const { data } = await authInstance.post('likes/create', data: {a, b, c})
+//     const { data } = await authInstance.post('likes/create', postId)
 
 //     return data._id
 //   } catch (error) {
