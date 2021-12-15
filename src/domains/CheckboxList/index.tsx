@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 interface ICheckboxList {
   children: React.ReactNode
   selectedIndex: number
-  onClick: (e: string) => void
+  onClick: React.MouseEventHandler<HTMLInputElement>
   style?: React.CSSProperties
 }
 
@@ -27,10 +27,10 @@ const CheckboxList = ({
         id: checkBox.props.id,
         name: checkBox.props.name,
         defaultChecked: index === currentIdx,
-        onClick: (id: string): void => {
+        onClick: (e: React.MouseEvent<HTMLInputElement>): void => {
           if (index !== currentIdx) {
             setCurrentIdx(index)
-            onClick && onClick(id)
+            onClick?.(e)
           }
         },
       })
