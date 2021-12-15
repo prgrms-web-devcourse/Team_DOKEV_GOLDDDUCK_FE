@@ -2,11 +2,12 @@ import Checkbox from '@components/Checkbox'
 import CheckboxList from '@domains/CheckboxList'
 import Text from '@components/Text'
 import styled from '@emotion/styled'
-import { DEFAULT_MARGIN } from '@utils/constants/sizes'
+import { DEFAULT_MARGIN, FONT_SIZES } from '@utils/constants/sizes'
 import { useCallback, useEffect, useState } from 'react'
 import { EVENT_FILTER, IFilteredEventItem } from 'types/event'
 import { useRouter } from 'next/router'
 import Spinner from '@components/Spinner'
+import { COLORS } from '@utils/constants/colors'
 
 interface IProps {
   filteredEvents: IFilteredEventItem[]
@@ -53,9 +54,9 @@ const EventList = ({
   }, [filter])
 
   const handleMoveToDetail = (e: React.MouseEvent<HTMLDivElement>): void => {
-    e.stopPropagation()
     const element = e.target as HTMLElement
-    route.push(`/event/${element.offsetParent?.getAttribute('id')}`)
+    console.log(element.dataset)
+    route.push(`/event/${element?.id}`)
   }
 
   return (
@@ -79,16 +80,7 @@ const EventList = ({
                   style={{
                     backgroundImage: `url(/templates/${template}.png)`,
                   }}>
-                  <Text
-                    color="BLACK"
-                    size="LARGE"
-                    style={{
-                      textAlign: 'center',
-                      wordBreak: 'keep-all',
-                      lineHeight: '1.5',
-                    }}>
-                    {title}
-                  </Text>
+                  {title}
                 </ItemWrapper>
               )
             })
@@ -113,10 +105,22 @@ const ListWrapper = styled.section`
 `
 
 const ItemWrapper = styled.div`
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: calc(50% - 8px);
-  border-radius: 8;
+  height: 240px;
+  line-height: 1.5;
+  padding: ${DEFAULT_MARGIN};
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 8px;
   cursor: pointer;
+  margin-bottom: ${DEFAULT_MARGIN};
+  text-align: center;
+  word-break: keep-all;
+  color: ${COLORS.BLACK};
+  font-size: ${FONT_SIZES.BASE};
 `
 
 export default EventList
