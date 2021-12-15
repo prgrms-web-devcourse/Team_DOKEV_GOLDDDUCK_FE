@@ -9,7 +9,8 @@ import Text from '@components/Text'
 import { useCallback, useEffect, useState } from 'react'
 import { COLORS } from '@utils/constants/colors'
 import { FONT_SIZES } from '@utils/constants/sizes'
-import { getUesrInfo, getEvent } from '../api/user'
+import { getUesrInfo } from '../api/user'
+import { getEvent, postGiftReceipt } from '../api/event'
 import { useUserContext } from '@contexts/UserProvider'
 import useInterval from '@hooks/useInterval'
 
@@ -21,9 +22,9 @@ const MOCK_DATA = {
     eventId: 3,
     title: '테스트 선착순 이벤트!',
     giftChoiceType: 'FIFO',
-    startAt: '2021-12-14T22:59:02.998853',
-    endAt: '2021-12-18T15:02:02.998853',
-    code: '1ffbec88-1356-404f-a933-d5fdb65de93a',
+    startAt: '2021-12-14T21:48:43.261786',
+    endAt: '2021-12-14T21:57:43.261786',
+    code: '4feb41f6-150c-46be-a048-223cdfd4c51b',
     eventProgressStatus: 'RUNNING',
     mainTemplate: 'template1',
     maxParticipantCount: 5,
@@ -65,7 +66,7 @@ const MOCK_DATA = {
     ],
   },
   error: null,
-  serverDateTime: '2021-12-14 16:45:26',
+  serverDateTime: '2021-12-14 23:44:55',
 }
 
 interface IMember {
@@ -135,22 +136,39 @@ const fifo = (): JSX.Element => {
   const router = useRouter()
   const { updateUser } = useUserContext()
 
-  const onButtonClick = () => {
-    if (eventStart) {
-      // if '선물을 받은 사람인지 아닌지 체크!'
-      // 선물 받기 전에 수량 체크 한번 더 해야함.
-      // 수량 체크 해서 이상없으면 받고, 있으면 못받음! + 데이터 한번 더 받아야함.
-      console.log('서버에 해당 선물 당첨자 저장')
-      alert('선물 겟')
-    } else {
-      alert('지금은 선물을 받을 수 없어요!')
-    }
-  }
+  // 선물 수령 API
+  const handleGiftReceipt = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (eventStart && eventData) {
+        const eventId = eventData.eventId
+        const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
+        const memberId = eventData.member.id
+        const res = await postGiftReceipt({ eventId, giftId, memberId })
+        console.log('post', res)
+        if (res.isArray()) {
+          const errorCode = res[0]
+          const errorMessage = res[1]
+          console.log(res, `codr: ${errorCode} meg : ${errorMessage}`)
+          alert(errorMessage)
+        } else {
+          console.log('서버에 해당 선물 당첨자 저장된 상태!')
+          console.log(res.id)
+          alert('선물 겟')
+          // router.push('/gift/${}')
+        }
+      } else {
+        alert('지금은 선물을 받을 수 없어요!')
+      }
+    },
+    [eventStart],
+  )
 
+  // setInterval Clear 함수
   const clear = useInterval(() => {
     checkRemaining()
   }, 1000)
 
+  // 남아있는 시간 체크 함수 (현재 시간 - 이벤트 시작 시간)
   const checkRemaining = () => {
     if (eventData?.startAt) {
       const now = new Date()
@@ -160,6 +178,7 @@ const fifo = (): JSX.Element => {
     }
   }
 
+  // 남아있는 시간이 0 미만이 될 경우, setInterval 클리어 함수 실행 및 상태 변경
   useEffect(() => {
     if (distance < 0) {
       clear()
@@ -175,10 +194,9 @@ const fifo = (): JSX.Element => {
 
   // 단일 이벤트 조회 API
   const getEventData = useCallback(async () => {
-    //api 로직
-    //이벤트 종료 여부 체크
     const res = await getEvent()
     if (res) {
+      console.log(res)
       res.eventProgressStatus === 'CLOSED' && setEventOver(true)
       setEventData(res)
     }
@@ -186,6 +204,7 @@ const fifo = (): JSX.Element => {
     // setEventData(MOCK_DATA.data)
   }, [])
 
+  // 컴포넌트 마운트 시 로그인 체크 & 단일 이벤트 정보 가져오기
   useEffect(() => {
     getUserData()
     getEventData()
@@ -204,10 +223,6 @@ const fifo = (): JSX.Element => {
               eventMaster={eventData.member.name}
             />
           )}
-          {/* <TimerHeader
-            eventStart={new Date(eventData?.startAt)}
-            eventMaster={'가가'}
-          /> */}
           <GiftWrapper>
             {eventData &&
               eventData.gifts.map(
@@ -229,7 +244,8 @@ const fifo = (): JSX.Element => {
                     </GiftTextWrapper>
                     {itemCount ? (
                       <MUIButton
-                        onClick={onButtonClick}
+                        id={String(id)}
+                        onClick={handleGiftReceipt}
                         style={{ ...GetStyle }}>
                         GET
                       </MUIButton>

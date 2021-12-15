@@ -9,6 +9,7 @@ interface Props {
   sx?: SxProps
   disabled?: boolean
   style?: CSSProperties
+  id?: string
 }
 
 const MUIButton: React.FC<Props> = ({
@@ -18,11 +19,13 @@ const MUIButton: React.FC<Props> = ({
   disabled = false,
   sx,
   href,
+  id,
   style,
 }) => {
   return (
     <>
       <Button
+        id={id}
         variant={variant}
         sx={sx}
         disabled={disabled}
