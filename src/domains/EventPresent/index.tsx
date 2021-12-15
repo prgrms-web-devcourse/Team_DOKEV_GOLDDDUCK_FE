@@ -18,7 +18,7 @@ interface Props {
 }
 
 interface Gift {
-  id: string
+  giftCheckId: string
   category: string
   giftItems: GiftItem[]
 }
@@ -61,7 +61,7 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
 
   const AddGift = () => {
     const giftItems = {
-      id: uuidv4(),
+      giftCheckId: uuidv4(),
       category,
       giftItems: [...image, ...contentList],
     }
@@ -140,11 +140,11 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
 
         <GiftWrapper>
           {gifts &&
-            gifts.map(({ id, category, giftItems }, index) => {
+            gifts.map(({ giftCheckId, category, giftItems }, index) => {
               return (
                 <GiftForm
-                  key={id}
-                  id={id}
+                  key={giftCheckId}
+                  giftCheckId={giftCheckId}
                   index={index}
                   category={category}
                   length={giftItems.length}

@@ -8,15 +8,15 @@ import Stack from '@mui/material/Stack'
 import Text from '@components/Text'
 
 interface Props {
-  startvalue: Date | null
-  endvalue: Date | null
+  startAt: Date | null
+  endAt: Date | null
   handleStartTimer(e: Date | null): void
   handleEndTimer(e: Date | null): void
 }
 
 const EventTimer = ({
-  startvalue,
-  endvalue,
+  startAt,
+  endAt,
   handleStartTimer,
   handleEndTimer,
 }: Props) => {
@@ -27,9 +27,9 @@ const EventTimer = ({
           <div>
             <Text style={{ paddingBottom: '5px' }}>이벤트 시작 시간</Text>
             <DateTimePicker
-              className="startvalue"
+              className="startAt"
               renderInput={(params) => <TextField {...params} />}
-              value={startvalue}
+              value={startAt}
               onChange={(newValue) => {
                 handleStartTimer(newValue)
               }}
@@ -42,11 +42,11 @@ const EventTimer = ({
             <DateTimePicker
               className="endvalue"
               renderInput={(params) => <TextField {...params} />}
-              value={endvalue}
+              value={endAt}
               onChange={(newValue) => {
                 handleEndTimer(newValue)
               }}
-              minDateTime={startvalue}
+              minDateTime={startAt}
             />
           </div>
         </CustomStack>

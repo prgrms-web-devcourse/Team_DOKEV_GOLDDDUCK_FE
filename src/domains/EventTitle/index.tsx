@@ -10,15 +10,15 @@ import Grid from '@mui/material/Grid'
 interface Props {
   handleInput(e: React.ChangeEvent<HTMLInputElement>): void
   handleCoverImage(e: React.ChangeEvent<HTMLInputElement>): void
-  eventTitle: string
-  participant: number | undefined
-  coverImage: string
+  title: string
+  maxParticipantCount: number | undefined
+  mainTemplate: string
 }
 
 const EventTitle: React.FC<Props> = ({
-  eventTitle,
-  participant,
-  coverImage,
+  title,
+  maxParticipantCount,
+  mainTemplate,
   handleInput,
   handleCoverImage,
 }) => {
@@ -28,9 +28,9 @@ const EventTitle: React.FC<Props> = ({
         <Div>
           <TextLabel title={'제목'} />
           <InputText
-            id="eventTitle"
-            name="eventTitle"
-            value={eventTitle}
+            id="title"
+            name="title"
+            value={title}
             onChange={handleInput}
             placeholder="이벤트의 제목을 입력해주세요. 15자 내외"
           />
@@ -39,9 +39,9 @@ const EventTitle: React.FC<Props> = ({
         <Div>
           <TextLabel title={'참여인원수'} />
           <InputText
-            id="participant"
-            name="participant"
-            value={participant}
+            id="maxParticipantCount"
+            name="maxParticipantCount"
+            value={maxParticipantCount}
             onChange={handleInput}
             placeholder="참여할 수 있는 최대 인원수 입력"
           />
@@ -69,20 +69,20 @@ const EventTitle: React.FC<Props> = ({
               {Array.from(Array(6)).map((_, index) => (
                 <Grid item sm={4} key={index}>
                   <Image
-                    src={`/cover/cover${index + 1}.png`}
+                    src={`/templates/template${index + 1}.png`}
                     width={100}
                     height={140}
                     style={{ borderRadius: '10px' }}
                   />
                   <Div>
-                    <label htmlFor={`cover${index + 1}`}>{`cover${
+                    <label htmlFor={`template${index + 1}`}>{`template${
                       index + 1
                     }`}</label>
                     <InputRadio
-                      id={`cover${index + 1}`}
-                      value={`cover${index + 1}`}
+                      id={`template${index + 1}`}
+                      value={`template${index + 1}`}
                       name={'RadioGroup'}
-                      checked={coverImage === `cover${index + 1}`}
+                      checked={mainTemplate === `template${index + 1}`}
                       onChange={handleCoverImage}
                     />
                   </Div>

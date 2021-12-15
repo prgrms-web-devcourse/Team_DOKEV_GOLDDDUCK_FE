@@ -7,10 +7,10 @@ import { InputRadio } from '@components/Input'
 
 interface Props {
   handleTypeCheck(e: React.ChangeEvent<HTMLInputElement>): void
-  eventTypeState: string
+  giftChoiceType: string
 }
 
-const EventType = ({ eventTypeState, handleTypeCheck }: Props) => {
+const EventType = ({ giftChoiceType, handleTypeCheck }: Props) => {
   return (
     <>
       <EventTypeContainer>
@@ -22,7 +22,7 @@ const EventType = ({ eventTypeState, handleTypeCheck }: Props) => {
             id="random"
             value="random"
             name="random"
-            checked={eventTypeState === 'random'}
+            checked={giftChoiceType === 'random'}
             onChange={handleTypeCheck}
             style={{
               display: 'block',
@@ -41,7 +41,7 @@ const EventType = ({ eventTypeState, handleTypeCheck }: Props) => {
             id="fifo"
             value="fifo"
             name="fifo"
-            checked={eventTypeState === 'fifo'}
+            checked={giftChoiceType === 'fifo'}
             onChange={handleTypeCheck}
             style={{
               display: 'block',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
@@ -11,17 +11,43 @@ import EventTimer from '@domains/EventTimer'
 import EventTitle from '@domains/EventTitle'
 import EventPresent from '@domains/EventPresent'
 import EventType from '@domains/EventType/index'
+import { useRouter } from 'next/router'
+import { useUserContext } from '@contexts/UserProvider'
+import { getUesrInfo } from '../pages/api/user'
+import { addEventApi } from '../pages/api/post'
 
 interface Props {
   activeStep: number
 }
 
-const steps = ['이벤트 정보', '타이머 설정', '선물 타입 설정', '선물 등록']
+const steps = ['이벤트 정보', '선물 타입 설정', '선물 등록', '타이머 설정']
 
 const post = () => {
+  // 사용자 정보 로직
+  const { updateUser } = useUserContext()
+  const router = useRouter()
+  const [memberId, setMemberId] = useState(4)
+
+  // 사용자 정보 API
+  const getUserData = useCallback(async () => {
+    const res = await getUesrInfo()
+    console.log(res)
+    setMemberId(res.id)
+    res ? updateUser(res) : router.replace('/login')
+  }, [])
+
+  useEffect(() => {
+    getUserData()
+  }, [])
+
   // stepper 로직
   const [activeStep, setActiveStep] = useState(0)
   const [skipped, setSkipped] = useState(new Set<number>())
+
+  //
+  const isStepOptional = (step: number) => {
+    return step === 1
+  }
 
   const isStepSkipped = (step: number) => {
     return skipped.has(step)
@@ -38,16 +64,28 @@ const post = () => {
     setSkipped(newSkipped)
 
     if (activeStep === 4) {
+      const formData = new FormData()
+      formData.append('title', title)
+      formData.append('maxParticipantCount', maxParticipantCount as any)
+      formData.append('mainTemplate', mainTemplate)
+      formData.append('giftChoiceType', giftChoiceType)
+      formData.append('gifts', gifts as any)
+      formData.append('startAt', startAt as any)
+      formData.append('endAt', endAt as any)
+      formData.append('memberId', memberId as any)
+
       const data = {
-        eventTitle,
-        participant,
-        coverImage,
-        eventTypeState,
+        title,
+        maxParticipantCount,
+        mainTemplate,
+        giftChoiceType,
         gifts,
-        startvalue,
-        endvalue,
+        startAt,
+        endAt,
+        memberId,
       }
       console.log(data)
+      addEventApi(formData)
     }
   }
 
@@ -56,41 +94,31 @@ const post = () => {
   }
 
   //step1 EventTitle 상태 로직
-  const [eventTitle, setEventTitle] = useState('')
-  const [participant, setParticipant] = useState<number | undefined>()
-  const [coverImage, setCoverImage] = useState<string>('')
+  const [title, setTitle] = useState('')
+  const [maxParticipantCount, setMaxParticipantCount] = useState<
+    number | undefined
+  >()
+  const [mainTemplate, setMainTemplate] = useState<string>('')
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.target.name === 'eventTitle'
-      ? setEventTitle(() => e.target.value)
-      : setParticipant(() => Number(e.target.value))
+    e.target.name === 'title'
+      ? setTitle(() => e.target.value)
+      : setMaxParticipantCount(() => Number(e.target.value))
   }
 
   const handleCoverImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCoverImage(() => e.target.value)
+    setMainTemplate(() => e.target.value)
   }
 
-  //step2 EventTimer 상태 로직
-  const [startvalue, setStartValue] = useState<Date | null>(new Date())
-  const [endvalue, setEndValue] = useState<Date | null>(new Date())
-
-  const handleStartTimer = (newValue: Date) => {
-    setStartValue(newValue)
-  }
-
-  const handleEndTimer = (newValue: Date) => {
-    setEndValue(newValue)
-  }
-
-  //setp3 EventType 상태 로직
-  const [eventTypeState, setEventTypeState] = useState('')
+  //setp2 EventType 상태 로직
+  const [giftChoiceType, setGiftChoiceType] = useState('')
   const handleTypeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEventTypeState(() => e.target.value)
+    setGiftChoiceType(() => e.target.value)
   }
 
-  //step4 EventPresent 상태 로직
+  //step3 EventPresent 상태 로직
   interface Gift {
-    id: string
+    giftCheckId: string
     category: string
     giftItems: GiftItem[]
   }
@@ -103,13 +131,25 @@ const post = () => {
 
   const [gifts, setGifts] = useState<Gift[]>([])
 
-  const AddGiftItem = ({ id, category, giftItems }: Gift) => {
-    setGifts((gifts) => [...gifts, { id, category, giftItems }])
+  const AddGiftItem = ({ giftCheckId, category, giftItems }: Gift) => {
+    setGifts((gifts) => [...gifts, { giftCheckId, category, giftItems }])
   }
 
-  const delteGiftItem = (id: string) => {
-    const filterData = gifts.filter((gift) => gift.id !== id)
+  const delteGiftItem = (giftCheckId: string) => {
+    const filterData = gifts.filter((gift) => gift.giftCheckId !== giftCheckId)
     setGifts(filterData)
+  }
+
+  //step4 EventTimer 상태 로직
+  const [startAt, setStartAt] = useState<Date | null>(new Date())
+  const [endAt, setEndAt] = useState<Date | null>(new Date())
+
+  const handleStartTimer = (newValue: Date) => {
+    setStartAt(newValue)
+  }
+
+  const handleEndTimer = (newValue: Date) => {
+    setEndAt(newValue)
   }
 
   // step별 컴포넌트 로직
@@ -118,35 +158,35 @@ const post = () => {
       case 0:
         return (
           <EventTitle
-            eventTitle={eventTitle}
-            participant={participant}
-            coverImage={coverImage}
+            title={title}
+            maxParticipantCount={maxParticipantCount}
+            mainTemplate={mainTemplate}
             handleInput={handleInput}
             handleCoverImage={handleCoverImage}
           />
         )
       case 1:
         return (
-          <EventTimer
-            startvalue={startvalue}
-            endvalue={endvalue}
-            handleStartTimer={handleStartTimer}
-            handleEndTimer={handleEndTimer}
+          <EventPresent
+            gifts={gifts}
+            AddGiftItem={AddGiftItem}
+            delteGiftItem={delteGiftItem}
           />
         )
       case 2:
         return (
           <EventType
-            eventTypeState={eventTypeState}
+            giftChoiceType={giftChoiceType}
             handleTypeCheck={handleTypeCheck}
           />
         )
       case 3:
         return (
-          <EventPresent
-            gifts={gifts}
-            AddGiftItem={AddGiftItem}
-            delteGiftItem={delteGiftItem}
+          <EventTimer
+            startAt={startAt}
+            endAt={endAt}
+            handleStartTimer={handleStartTimer}
+            handleEndTimer={handleEndTimer}
           />
         )
       default:
@@ -174,28 +214,33 @@ const post = () => {
           )
         })}
       </Stepper>
+      {activeStep === steps.length ? (
+        <>안녕</>
+      ) : (
+        <>
+          <div style={{ color: 'white' }}>{getStepContent(activeStep)}</div>
 
-      <div style={{ color: 'white' }}>{getStepContent(activeStep)}</div>
+          <StepButtonContainer>
+            <DisplayStyle activeStep={activeStep}>
+              <MUIButton
+                style={{
+                  color: '#ffffff',
+                  backgroundColor: '#000000',
+                }}
+                onClick={handleBack}
+                sx={{ mr: 1 }}>
+                Back
+              </MUIButton>
+            </DisplayStyle>
 
-      <StepButtonContainer>
-        <DisplayStyle activeStep={activeStep}>
-          <MUIButton
-            style={{
-              color: '#ffffff',
-              backgroundColor: '#000000',
-            }}
-            onClick={handleBack}
-            sx={{ mr: 1 }}>
-            Back
-          </MUIButton>
-        </DisplayStyle>
-
-        <MUIButton
-          style={{ color: '#ffffff', backgroundColor: '#CE000B' }}
-          onClick={handleNext}>
-          {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-        </MUIButton>
-      </StepButtonContainer>
+            <MUIButton
+              style={{ color: '#ffffff', backgroundColor: '#CE000B' }}
+              onClick={handleNext}>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </MUIButton>
+          </StepButtonContainer>
+        </>
+      )}
     </Box>
   )
 }
