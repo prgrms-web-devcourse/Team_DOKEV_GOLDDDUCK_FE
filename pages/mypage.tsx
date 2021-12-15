@@ -9,10 +9,11 @@ import { getFilteredGiftList } from './api/gift'
 import { filteredGiftList } from './api/services/gift'
 import { IFilteredGiftItem, IPagination } from 'types/gift'
 import GiftList from '@domains/GiftList.tsx'
-import { IFilteredEventItem } from 'types/event'
+
 import { filteredEventList } from './api/services/event'
 import EventList from '@domains/EventList'
 import { getFilteredEventList } from './api/event'
+import { IFilteredEventItem } from 'types/event'
 
 const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
   ssr: false,
