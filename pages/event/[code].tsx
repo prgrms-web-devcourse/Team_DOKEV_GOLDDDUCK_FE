@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import { useCallback, useEffect, useState } from 'react'
-import { getEventDetail } from '../api/event'
+import { deleteEvent, getEventDetail } from '../api/event'
 import { eventDetail } from '../api/services/event'
 import {
   EVENT_FILTER,
@@ -14,7 +14,6 @@ import {
 } from 'types/event'
 import { getUesrInfo } from '../api/user'
 import { useUserContext } from '@contexts/UserProvider'
-import Text from '@components/Text'
 import dynamic from 'next/dynamic'
 const TimeInfo = dynamic(() => import('@domains/EventDetail/TimeInfo'), {
   ssr: false,
@@ -29,27 +28,28 @@ const WinnerModal = dynamic(() => import('@domains/EventDetail/WinnerModal'), {
 const EventPage = (): JSX.Element => {
   const router = useRouter()
   const { updateUser } = useUserContext()
-  const { user } = useUserContext()
+  const { id: userId } = useUserContext().user
   const [isLoading, setIsLoading] = useState(false)
   const [event, setEvent] = useState<IFilteredEventItem | undefined>()
 
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
     setIsLoading(true)
-    const res = await getUesrInfo()
-    if (res) {
-      updateUser(res)
+    const data = await getUesrInfo()
+    if (data) {
+      updateUser(data)
 
       setIsLoading(false)
     } else {
       router.replace('/login')
     }
-  }, [])
+  }, [userId])
 
   useEffect(() => {
     fetchUser()
-  }, [])
+  }, [event])
 
+  // 이벤트 데이터 조회
   const fetchEventDetail = useCallback(async (code) => {
     setIsLoading(true)
 
@@ -59,10 +59,16 @@ const EventPage = (): JSX.Element => {
   }, [])
 
   useEffect(() => {
-    router.isReady && fetchEventDetail(router.query?.code)
-  }, [router.query.code])
+    userId && router.isReady && fetchEventDetail(router.query?.code)
+  }, [userId, router.query.code])
 
-  return !isLoading && user?.id ? (
+  // 이벤트 삭제
+  const handleClickRemove = useCallback((): void => {
+    userId && event?._id && deleteEvent(userId.toString(), event._id)
+    router.isReady && router.push('/mypage?tab=event')
+  }, [userId, event, router?.query.code])
+
+  return !isLoading && userId ? (
     <>
       <Header />
       <Icon
@@ -83,6 +89,7 @@ const EventPage = (): JSX.Element => {
           eventType={event?.eventType as EVENT_TYPE}
           code={event?.code as string}
           id={event?._id as string}
+          onRemoveEvent={handleClickRemove}
         />
         <TimeInfo start={event?.start as string} end={event?.end as string} />
       </EventContainer>

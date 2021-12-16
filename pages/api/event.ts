@@ -10,7 +10,7 @@ export const getFilteredEventList = async (filter: string | '') => {
       return data.data
     }
   } catch (error) {
-    console.error(error)
+    console.error(error.message)
   }
 }
 
@@ -22,6 +22,14 @@ export const getEventDetail = async (code: string) => {
       return data.data
     }
   } catch (error) {
-    console.error(error)
+    console.error(error.message)
+  }
+}
+
+export const deleteEvent = async (userId: string, eventId: string) => {
+  try {
+    await authInstance.delete(`api/v1/members/${userId}/events/${eventId}`)
+  } catch (error) {
+    console.error(error.message)
   }
 }
