@@ -9,7 +9,6 @@ import { getFilteredGiftList } from './api/gift'
 import { filteredGiftList } from './api/services/gift'
 import { IFilteredGiftItem, IPagination } from 'types/gift'
 import GiftList from '@domains/GiftList.tsx'
-
 import { filteredEventList } from './api/services/event'
 import EventList from '@domains/EventList'
 import { getFilteredEventList } from './api/event'

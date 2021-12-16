@@ -15,6 +15,7 @@ const INTRODUCE =
 export const main = () => {
   const { updateUser } = useUserContext()
   const router = useRouter()
+  const { id } = useUserContext().user
 
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
@@ -26,11 +27,7 @@ export const main = () => {
     getUserData()
   }, [])
 
-  const moveToPost = () => {
-    router.push('/post')
-  }
-
-  return (
+  return id ? (
     <>
       <Header />
       <MainContainer>
@@ -48,7 +45,7 @@ export const main = () => {
         </Fade>
         <Fade style={{ position: 'absolute', bottom: '55%', zIndex: 99 }}>
           <MUIButton
-            onClick={moveToPost}
+            onClick={() => router.push('/post')}
             style={{
               color: 'white',
               height: '40px',
@@ -63,6 +60,8 @@ export const main = () => {
         <VideoBox src={'/video/main.mp4'} autoPlay muted />
       </MainContainer>
     </>
+  ) : (
+    <></>
   )
 }
 
