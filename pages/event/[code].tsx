@@ -36,27 +36,27 @@ const EventPage = (): JSX.Element => {
 
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
-    setIsLoading(true)
     const data = await getUesrInfo()
     if (data) {
       updateUser(data)
-      console.log('me', data)
-      setIsLoading(false)
     } else {
       router.replace('/login')
     }
-  }, [userId])
+  }, [router])
 
   useEffect(() => {
     fetchUser()
-  }, [event])
+  }, [])
+
 
   // 이벤트 데이터 조회
   const fetchEventDetail = useCallback(async (code) => {
-    setIsLoading(true)
     if (userId) {
+      setIsLoading(true)
+
       const data = await getEventDetail(code)
       data && setEvent(eventDetail(data))
+
       setIsLoading(false)
     }
   }, [userId])
@@ -67,16 +67,17 @@ const EventPage = (): JSX.Element => {
 
   // 이벤트 삭제
   const handleClickRemove = useCallback(async () => {
-    await deleteEvent(userId, event?._id as string)
-  }, [userId, event, router?.query.code])
+    userId && event?._id && await deleteEvent(userId, event._id)
+  }, [userId, event])
 
   // 당첨자 목록 조회
   const fetchEventWinners = useCallback(async () => {
-    setIsLoading(true)
-
     if (userId && event?._id) {
+      setIsLoading(true)
+
       const data = await getEventWinners(userId, event?._id)
       data && setWinners(eventWinnerList(data))
+
       setIsLoading(false) 
     }
   }, [userId, event])
@@ -106,7 +107,7 @@ const EventPage = (): JSX.Element => {
         />
         <TimeInfo start={event?.start as string} end={event?.end as string} />
       </EventContainer>
-      <WinnerModal winners={winners || []} onClick={fetchEventWinners}/>
+      <WinnerModal winners={winners || []} isClosed={event?.status === 'CLOSED' ? true : false} onClick={fetchEventWinners}/>
     </>
   ) : (
     <></>
