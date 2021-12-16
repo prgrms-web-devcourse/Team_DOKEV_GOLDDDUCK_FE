@@ -3,7 +3,16 @@ import Icon from '@components/Icon'
 import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
 import { COLORS } from '@utils/constants/colors'
-import { IFilteredEventItem } from 'types/event'
+import { EVENT_FILTER, EVENT_TEMPLATE, EVENT_TYPE } from 'types/event'
+import { useCallback } from 'react'
+interface ICover {
+  template: EVENT_TEMPLATE
+  title: string
+  status: EVENT_FILTER
+  eventType: EVENT_TYPE
+  code: string
+  id: string
+}
 
 const Cover = ({
   template,
@@ -11,17 +20,23 @@ const Cover = ({
   status,
   eventType,
   code,
-}: IFilteredEventItem): JSX.Element => {
-  const EVENT_LINK = `http://localhost:3000/${eventType.toLowerCase()}/${code}`
+  id,
+}: ICover): JSX.Element => {
+  const EVENT_LINK = `http://localhost:3000/${eventType?.toLowerCase()}/${code}`
+  const TEMPLATE_IMAGE = template && `/templates/${template}.png`
 
-  const handleCopyUrl = () => {
+  const handleCopyUrl = useCallback(() => {
     navigator.clipboard.writeText(EVENT_LINK)
+  }, [EVENT_LINK])
+
+  const handleClickRemove = (): void => {
+    console.log(id)
   }
 
   return (
     <Wrapper
       style={{
-        backgroundImage: `url(/cover/cover${template}.png)`,
+        backgroundImage: `url(${TEMPLATE_IMAGE})`,
       }}>
       <Text
         color="BLACK"
@@ -50,11 +65,7 @@ const Cover = ({
           name="remove"
           size="LARGE"
           style={{ margin: '16px 0 0 16px' }}
-          onIconClick={() => {
-            confirm(
-              '이벤트를 삭제하시겠습니까?\n삭제한 이벤트는 종료 처리되고 더 이상 확인할 수 없습니다.',
-            ) && alert('삭제되었습니다')
-          }}
+          onIconClick={handleClickRemove}
         />
       </RemoveButton>
     </Wrapper>

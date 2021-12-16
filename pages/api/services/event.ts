@@ -1,4 +1,9 @@
-import { IFilteredEventItem, IEventList, IPagination } from 'types/event'
+import {
+  IFilteredEventItem,
+  IEventList,
+  IPagination,
+  IEventItem,
+} from 'types/event'
 
 export const filteredEventList = ({
   pagination,
@@ -30,4 +35,26 @@ export const filteredEventList = ({
       },
     ),
   ]
+}
+
+export const eventDetail = ({
+  code,
+  endAt,
+  eventId,
+  eventProgressStatus,
+  giftChoiceType,
+  mainTemplate,
+  startAt,
+  title,
+}: IEventItem): IFilteredEventItem | undefined => {
+  return {
+    code,
+    _id: eventId.toString(),
+    start: startAt,
+    end: endAt,
+    status: eventProgressStatus,
+    eventType: giftChoiceType,
+    template: mainTemplate,
+    title,
+  }
 }

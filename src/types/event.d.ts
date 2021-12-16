@@ -5,7 +5,6 @@ export declare type EVENT_TEMPLATE =
   | 'template4'
   | 'template5'
   | 'template6'
-export declare type EVENT_STATUS = 'READY' | 'RUNNING' | 'CLOSED'
 export declare type EVENT_TYPE = 'FIFO' | 'RANDOM'
 export declare type EVENT_FILTER = 'ALL' | 'READY' | 'RUNNING' | 'CLOSED'
 export interface IEventList {
@@ -17,20 +16,19 @@ export interface IEventItem {
   createdAt: string
   endAt: string
   eventId: number
-  eventProgressStatus: EVENT_STATUS
+  eventProgressStatus: EVENT_FILTER
   giftChoiceType: EVENT_TYPE
   mainTemplate: EVENT_TEMPLATE
   maxParticipantCount: number
   startAt: string
   title: string
 }
-
 export interface IFilteredEventItem {
   code: string
   _id: string
   start: string
   end: string
-  status: EVENT_STATUS
+  status: EVENT_FILTER
   eventType: EVENT_TYPE
   template: EVENT_TEMPLATE
   title: string

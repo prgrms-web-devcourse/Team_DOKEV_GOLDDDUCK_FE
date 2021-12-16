@@ -4,11 +4,11 @@ export const getUesrInfo = async () => {
   try {
     const { data } = await authInstance.get('api/v1/members/me')
 
-    return data.data
+    if (data.success) {
+      return data.data
+    }
   } catch (error) {
     console.log(error)
-
-    return false
   }
 }
 
