@@ -26,19 +26,19 @@ const post = () => {
   // 사용자 정보 로직
   const { updateUser } = useUserContext()
   const router = useRouter()
-  const [memberId, setMemberId] = useState(4)
+  const [memberId, setMemberId] = useState(1)
 
-  // 사용자 정보 API
-  const getUserData = useCallback(async () => {
-    const res = await getUesrInfo()
-    console.log(res)
-    setMemberId(res.id)
-    res ? updateUser(res) : router.replace('/login')
-  }, [])
+  // // 사용자 정보 API
+  // const getUserData = useCallback(async () => {
+  //   const res = await getUesrInfo()
+  //   console.log(res)
+  //   setMemberId(res.id)
+  //   res ? updateUser(res) : router.replace('/login')
+  // }, [])
 
-  useEffect(() => {
-    getUserData()
-  }, [])
+  // useEffect(() => {
+  //   getUserData()
+  // }, [])
 
   // stepper 로직
   const [activeStep, setActiveStep] = useState(0)
@@ -66,25 +66,26 @@ const post = () => {
     if (activeStep === 4) {
       const formData = new FormData()
       formData.append('title', title)
-      formData.append('maxParticipantCount', maxParticipantCount as any)
+      formData.append('maxParticipantCount', String(maxParticipantCount))
       formData.append('mainTemplate', mainTemplate)
       formData.append('giftChoiceType', giftChoiceType)
-      formData.append('gifts', gifts as any)
-      formData.append('startAt', startAt as any)
-      formData.append('endAt', endAt as any)
-      formData.append('memberId', memberId as any)
+      formData.append('startAt', String(startAt.toISOString()))
+      formData.append('endAt', String(endAt.toISOString()))
+      formData.append('memberId', String(memberId))
 
-      const data = {
-        title,
-        maxParticipantCount,
-        mainTemplate,
-        giftChoiceType,
-        gifts,
-        startAt,
-        endAt,
-        memberId,
-      }
-      console.log(data)
+      gifts.map((gift, i) => {
+        formData.append(`gifts[${i}].category`, gift.category)
+        formData.append(`gifts[${i}].giftCheckId`, gift.giftCheckId)
+        gift.giftItems.map((item, j) => {
+          if (item.giftType === 'TEXT' && item.content) {
+            formData.append(`gifts[${i}].giftItems[${j}].giftType`, 'TEXT')
+            formData.append(`gifts[${i}].giftItems[${j}].content`, item.content)
+          } else if (item.giftType === 'IMAGE' && item.image) {
+            formData.append(`gifts[${i}].giftItems[${j}].giftType`, 'IMAGE')
+            formData.append(`gifts[${i}].giftItems[${j}].image`, item.image)
+          }
+        })
+      })
       addEventApi(formData)
     }
   }
@@ -141,8 +142,8 @@ const post = () => {
   }
 
   //step4 EventTimer 상태 로직
-  const [startAt, setStartAt] = useState<Date | null>(new Date())
-  const [endAt, setEndAt] = useState<Date | null>(new Date())
+  const [startAt, setStartAt] = useState<Date>(new Date())
+  const [endAt, setEndAt] = useState<Date>(new Date())
 
   const handleStartTimer = (newValue: Date) => {
     setStartAt(newValue)
@@ -167,17 +168,17 @@ const post = () => {
         )
       case 1:
         return (
-          <EventPresent
-            gifts={gifts}
-            AddGiftItem={AddGiftItem}
-            delteGiftItem={delteGiftItem}
+          <EventType
+            giftChoiceType={giftChoiceType}
+            handleTypeCheck={handleTypeCheck}
           />
         )
       case 2:
         return (
-          <EventType
-            giftChoiceType={giftChoiceType}
-            handleTypeCheck={handleTypeCheck}
+          <EventPresent
+            gifts={gifts}
+            AddGiftItem={AddGiftItem}
+            delteGiftItem={delteGiftItem}
           />
         )
       case 3:
@@ -196,7 +197,10 @@ const post = () => {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Stepper activeStep={activeStep} alternativeLabel>
+      <Stepper
+        activeStep={activeStep}
+        alternativeLabel
+        sx={{ paddingTop: '15px' }}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {}
           const labelProps: {
@@ -214,33 +218,33 @@ const post = () => {
           )
         })}
       </Stepper>
-      {activeStep === steps.length ? (
+      {/* {activeStep === steps.length ? (
         <>안녕</>
-      ) : (
-        <>
-          <div style={{ color: 'white' }}>{getStepContent(activeStep)}</div>
+      ) : ( */}
+      <>
+        <div style={{ color: 'white' }}>{getStepContent(activeStep)}</div>
 
-          <StepButtonContainer>
-            <DisplayStyle activeStep={activeStep}>
-              <MUIButton
-                style={{
-                  color: '#ffffff',
-                  backgroundColor: '#000000',
-                }}
-                onClick={handleBack}
-                sx={{ mr: 1 }}>
-                Back
-              </MUIButton>
-            </DisplayStyle>
-
+        <StepButtonContainer>
+          <DisplayStyle activeStep={activeStep}>
             <MUIButton
-              style={{ color: '#ffffff', backgroundColor: '#CE000B' }}
-              onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+              style={{
+                color: '#ffffff',
+                backgroundColor: '#000000',
+              }}
+              onClick={handleBack}
+              sx={{ mr: 1 }}>
+              Back
             </MUIButton>
-          </StepButtonContainer>
-        </>
-      )}
+          </DisplayStyle>
+
+          <MUIButton
+            style={{ color: '#ffffff', backgroundColor: '#CE000B' }}
+            onClick={handleNext}>
+            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+          </MUIButton>
+        </StepButtonContainer>
+      </>
+      {/* )} */}
     </Box>
   )
 }
