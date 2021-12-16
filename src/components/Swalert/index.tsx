@@ -4,7 +4,8 @@ import { COLORS } from '@utils/constants/colors'
 
 const Swalert = (onRemove: any) => {
   return Swal.fire({
-    imageUrl: String(ImgPath),
+    imageUrl: ImgPath.src,
+    width: 320,
     imageWidth: 200,
     imageHeight: 200,
     showCancelButton: true,

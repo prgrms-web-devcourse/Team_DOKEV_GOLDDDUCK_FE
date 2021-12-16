@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import { COLORS } from '@utils/constants/colors'
 import { EVENT_FILTER, EVENT_TEMPLATE, EVENT_TYPE } from 'types/event'
 import { useCallback } from 'react'
+import Swalert from '@components/Swalert'
 interface ICover {
   template: EVENT_TEMPLATE
   title: string
@@ -12,6 +13,7 @@ interface ICover {
   eventType: EVENT_TYPE
   code: string
   id: string
+  onRemoveEvent: React.MouseEventHandler<SVGElement>
 }
 
 const Cover = ({
@@ -21,6 +23,7 @@ const Cover = ({
   eventType,
   code,
   id,
+  onRemoveEvent,
 }: ICover): JSX.Element => {
   const EVENT_LINK = `http://localhost:3000/${eventType?.toLowerCase()}/${code}`
   const TEMPLATE_IMAGE = template && `/templates/${template}.png`
@@ -28,10 +31,6 @@ const Cover = ({
   const handleCopyUrl = useCallback(() => {
     navigator.clipboard.writeText(EVENT_LINK)
   }, [EVENT_LINK])
-
-  const handleClickRemove = (): void => {
-    console.log(id)
-  }
 
   return (
     <Wrapper
@@ -65,7 +64,7 @@ const Cover = ({
           name="remove"
           size="LARGE"
           style={{ margin: '16px 0 0 16px' }}
-          onIconClick={handleClickRemove}
+          onIconClick={() => Swalert(onRemoveEvent)}
         />
       </RemoveButton>
     </Wrapper>
