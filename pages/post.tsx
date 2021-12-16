@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import Box from '@mui/material/Box'
 import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
@@ -23,75 +22,67 @@ interface Props {
 const steps = ['이벤트 정보', '선물 타입 설정', '선물 등록', '타이머 설정']
 
 const post = () => {
+  const router = useRouter()
+
   // 사용자 정보 로직
   const { updateUser } = useUserContext()
-  const router = useRouter()
-  const [memberId, setMemberId] = useState(1)
+  const [memberId, setMemberId] = useState(0)
 
-  // // 사용자 정보 API
-  // const getUserData = useCallback(async () => {
-  //   const res = await getUesrInfo()
-  //   console.log(res)
-  //   setMemberId(res.id)
-  //   res ? updateUser(res) : router.replace('/login')
-  // }, [])
+  // 사용자 정보 API
+  const getUserData = useCallback(async () => {
+    const res = await getUesrInfo()
+    console.log(res)
+    setMemberId(res.id)
+    res ? updateUser(res) : router.replace('/login')
+  }, [])
 
-  // useEffect(() => {
-  //   getUserData()
-  // }, [])
+  useEffect(() => {
+    getUserData()
+  }, [])
 
   // stepper 로직
   const [activeStep, setActiveStep] = useState(0)
-  const [skipped, setSkipped] = useState(new Set<number>())
+  const [apiState, setApiState] = useState('')
 
-  //
-  const isStepOptional = (step: number) => {
-    return step === 1
-  }
+  // useEffect(() => {
+  //   if (activeStep === 3) {
+  //     setEventApi()
+  //   }
+  // }, [activeStep])
 
-  const isStepSkipped = (step: number) => {
-    return skipped.has(step)
-  }
+  // api 호출 로직 모든 데이터 formData 형식
+  const setEventApi = async () => {
+    const offset = new Date().getTimezoneOffset() * 60000
 
-  const handleNext = () => {
-    let newSkipped = skipped
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values())
-      newSkipped.delete(activeStep)
-    }
+    const startValue = new Date(Number(startAt) - Number(offset))
+    const start = startValue.toISOString()
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1)
-    setSkipped(newSkipped)
+    const endValue = new Date(Number(endAt) - Number(offset))
+    const end = endValue.toISOString()
 
-    if (activeStep === 4) {
-      const formData = new FormData()
-      formData.append('title', title)
-      formData.append('maxParticipantCount', String(maxParticipantCount))
-      formData.append('mainTemplate', mainTemplate)
-      formData.append('giftChoiceType', giftChoiceType)
-      formData.append('startAt', String(startAt.toISOString()))
-      formData.append('endAt', String(endAt.toISOString()))
-      formData.append('memberId', String(memberId))
+    const formData = new FormData()
+    formData.append('title', title)
+    formData.append('maxParticipantCount', String(maxParticipantCount))
+    formData.append('mainTemplate', mainTemplate)
+    formData.append('giftChoiceType', giftChoiceType)
+    formData.append('startAt', String(start))
+    formData.append('endAt', String(end))
+    formData.append('memberId', String(memberId))
 
-      gifts.map((gift, i) => {
-        formData.append(`gifts[${i}].category`, gift.category)
-        formData.append(`gifts[${i}].giftCheckId`, gift.giftCheckId)
-        gift.giftItems.map((item, j) => {
-          if (item.giftType === 'TEXT' && item.content) {
-            formData.append(`gifts[${i}].giftItems[${j}].giftType`, 'TEXT')
-            formData.append(`gifts[${i}].giftItems[${j}].content`, item.content)
-          } else if (item.giftType === 'IMAGE' && item.image) {
-            formData.append(`gifts[${i}].giftItems[${j}].giftType`, 'IMAGE')
-            formData.append(`gifts[${i}].giftItems[${j}].image`, item.image)
-          }
-        })
+    gifts.map((gift, i) => {
+      formData.append(`gifts[${i}].category`, gift.category)
+      formData.append(`gifts[${i}].giftCheckId`, gift.giftCheckId)
+      gift.giftItems.map((item, j) => {
+        if (item.giftType === 'TEXT' && item.content) {
+          formData.append(`gifts[${i}].giftItems[${j}].giftType`, 'TEXT')
+          formData.append(`gifts[${i}].giftItems[${j}].content`, item.content)
+        } else if (item.giftType === 'IMAGE' && item.image) {
+          formData.append(`gifts[${i}].giftItems[${j}].giftType`, 'IMAGE')
+          formData.append(`gifts[${i}].giftItems[${j}].image`, item.image)
+        }
       })
-      addEventApi(formData)
-    }
-  }
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1)
+    })
+    await addEventApi(formData).then((res) => setApiState(res))
   }
 
   //step1 EventTitle 상태 로직
@@ -196,7 +187,7 @@ const post = () => {
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <div style={{ width: '100%', height: 'calc(100% - 150px)' }}>
       <Stepper
         activeStep={activeStep}
         alternativeLabel
@@ -218,34 +209,40 @@ const post = () => {
           )
         })}
       </Stepper>
-      {/* {activeStep === steps.length ? (
-        <>안녕</>
-      ) : ( */}
-      <>
-        <div style={{ color: 'white' }}>{getStepContent(activeStep)}</div>
+      {activeStep === steps.length ? (
+        <div style={{ color: 'red' }}>안녕</div>
+      ) : (
+        <>
+          <div style={{ color: 'white', height: '100%' }}>
+            {getStepContent(activeStep)}
+          </div>
 
-        <StepButtonContainer>
-          <DisplayStyle activeStep={activeStep}>
+          <StepButtonContainer>
+            <DisplayStyle activeStep={activeStep}>
+              <MUIButton
+                style={{
+                  color: '#ffffff',
+                  backgroundColor: '#000000',
+                }}
+                onClick={() =>
+                  setActiveStep((prevActiveStep) => prevActiveStep - 1)
+                }
+                sx={{ mr: 1 }}>
+                Back
+              </MUIButton>
+            </DisplayStyle>
+
             <MUIButton
-              style={{
-                color: '#ffffff',
-                backgroundColor: '#000000',
-              }}
-              onClick={handleBack}
-              sx={{ mr: 1 }}>
-              Back
+              style={{ color: '#ffffff', backgroundColor: '#CE000B' }}
+              onClick={() =>
+                setActiveStep((prevActiveStep) => prevActiveStep + 1)
+              }>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </MUIButton>
-          </DisplayStyle>
-
-          <MUIButton
-            style={{ color: '#ffffff', backgroundColor: '#CE000B' }}
-            onClick={handleNext}>
-            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-          </MUIButton>
-        </StepButtonContainer>
-      </>
-      {/* )} */}
-    </Box>
+          </StepButtonContainer>
+        </>
+      )}
+    </div>
   )
 }
 
