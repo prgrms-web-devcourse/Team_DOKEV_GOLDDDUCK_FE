@@ -79,7 +79,7 @@ const fifo = (): JSX.Element => {
   const [eventOver, setEventOver] = useState(false)
   const [distance, setDistance] = useState(0)
   const router = useRouter()
-  const { updateUser } = useUserContext()
+  const { user, updateUser } = useUserContext()
 
   // 선물 수령 API
   const handleGiftReceipt = useCallback(
@@ -92,7 +92,7 @@ const fifo = (): JSX.Element => {
       if (eventStart && eventData) {
         const eventId = eventData.eventId
         const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
-        const memberId = eventData.member.id
+        const memberId = user.id
         const res = await postGiftReceipt({ eventId, giftId, memberId })
         if (Array.isArray(res)) {
           //res = ['E002', '이미 참여한 이벤트입니다.']
