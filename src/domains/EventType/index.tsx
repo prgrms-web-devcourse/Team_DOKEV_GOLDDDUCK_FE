@@ -15,14 +15,14 @@ const EventType = ({ giftChoiceType, handleTypeCheck }: Props) => {
     <>
       <EventTypeContainer>
         <TypeDiv>
-          <label htmlFor="random">
+          <label htmlFor="RANDOM">
             <Image src={eventType1.src} width={378} height={120}></Image>
           </label>
           <InputRadio
-            id="random"
-            value="random"
-            name="random"
-            checked={giftChoiceType === 'random'}
+            id="RANDOM"
+            value="RANDOM"
+            name="RANDOM"
+            checked={giftChoiceType === 'RANDOM'}
             onChange={handleTypeCheck}
             style={{
               display: 'block',
@@ -34,14 +34,14 @@ const EventType = ({ giftChoiceType, handleTypeCheck }: Props) => {
         </TypeDiv>
 
         <TypeDiv>
-          <label htmlFor="fifo">
+          <label htmlFor="FIFO">
             <Image src={eventType2.src} width={378} height={120}></Image>
           </label>
           <InputRadio
-            id="fifo"
-            value="fifo"
-            name="fifo"
-            checked={giftChoiceType === 'fifo'}
+            id="FIFO"
+            value="FIFO"
+            name="FIFO"
+            checked={giftChoiceType === 'FIFO'}
             onChange={handleTypeCheck}
             style={{
               display: 'block',
