@@ -40,12 +40,6 @@ const GiftList = ({
     setSelectedChip(filter === 'USED' ? 2 : filter === 'UN_USED' ? 1 : 0)
   }, [filter])
 
-  const handleMoveToDetail = (e: React.MouseEvent<HTMLDivElement>): void => {
-    e.stopPropagation()
-    const element = e.target as HTMLElement
-    route.push(`/gift/${element?.id}`)
-  }
-
   return (
     <>
       <CheckboxList onClick={handleFilterClick} selectedIndex={selectedChip}>
@@ -60,7 +54,10 @@ const GiftList = ({
             filteredGifts.map(
               ({ _id, giftType, category, src, message, used, template }) => {
                 return (
-                  <ItemWrapper key={_id} id={_id} onClick={handleMoveToDetail}>
+                  <ItemWrapper
+                    key={_id}
+                    id={_id}
+                    onClick={() => route.push(`/gift/${_id}`)}>
                     <Image
                       src={used_mark.src}
                       style={{

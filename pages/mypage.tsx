@@ -13,6 +13,10 @@ import { filteredEventList } from './api/services/event'
 import EventList from '@domains/EventList'
 import { getFilteredEventList } from './api/event'
 import { IFilteredEventItem } from 'types/event'
+import { useUserContext } from '@contexts/UserProvider'
+import { getUesrInfo } from './api/user'
+import Text from '@components/Text'
+import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 
 const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
   ssr: false,
@@ -23,6 +27,7 @@ const MUITabPanel = dynamic(() => import('@components/MUITab/MUITabPanel'), {
 
 const MyPage = (): JSX.Element => {
   const router = useRouter()
+  const { user, updateUser } = useUserContext()
   const currentTab = router.query.tab === 'event' ? 'event' : 'gift'
   const [selectedTab, setSelectedTab] = useState(currentTab)
   const [isLoading, setIsLoading] = useState(false)
@@ -30,45 +35,70 @@ const MyPage = (): JSX.Element => {
   const [eventRes, setEventRes] =
     useState<[IPagination, IFilteredEventItem[]]>()
 
-  // 필터에 따른 받은 선물 목록 조회
-  const fetchGiftList = useCallback(async (filter) => {
-    setIsLoading(true)
-
-    const isUsed = filter === 'used' ? true : filter === 'un_used' ? false : ''
-    const data = await getFilteredGiftList(isUsed)
-
-    data && setGiftRes(filteredGiftList(data))
-
-    setIsLoading(false)
-  }, [])
-
-  //필터에 따른 나의 이벤트 목록 조회
-  const fetchEventList = useCallback(async (filter) => {
-    setIsLoading(true)
-
-    const status = filter === 'all' ? '' : filter.toUpperCase()
-    const data = await getFilteredEventList(status)
-
-    data && setEventRes(filteredEventList(data))
-
-    setIsLoading(false)
-  }, [])
+  // 로그인 여부 확인
+  const fetchUser = useCallback(async () => {
+    const data = await getUesrInfo()
+    if (data) {
+      updateUser(data)
+    } else {
+      router.replace('/login')
+    }
+  }, [router])
 
   useEffect(() => {
-    fetchGiftList('all')
-    fetchEventList('all')
+    fetchUser()
   }, [])
+
+  // 필터에 따른 받은 선물 목록 조회
+  const fetchGiftList = useCallback(
+    async (filter) => {
+      if (user?.id) {
+        setIsLoading(true)
+
+        const isUsed =
+          filter === 'used' ? true : filter === 'un_used' ? false : ''
+        const data = await getFilteredGiftList(isUsed, user?.id)
+        data && setGiftRes(filteredGiftList(data))
+
+        setIsLoading(false)
+      }
+    },
+    [user],
+  )
+
+  //필터에 따른 나의 이벤트 목록 조회
+  const fetchEventList = useCallback(
+    async (filter) => {
+      if (user?.id) {
+        setIsLoading(true)
+
+        const status = filter === 'all' ? '' : filter.toUpperCase()
+        const data = await getFilteredEventList(status, user?.id)
+        data && setEventRes(filteredEventList(data))
+
+        setIsLoading(false)
+      }
+    },
+    [user],
+  )
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchGiftList('all')
+      fetchEventList('all')
+    }
+  }, [user])
 
   const handleTabChange = useCallback(
     (e: React.SyntheticEvent, newValue: number) => {
       setSelectedTab(() => (newValue === 0 ? 'gift' : 'event'))
     },
-    [],
+    [user],
   )
 
   useEffect(() => {
     setSelectedTab(router.query.tab === 'event' ? 'event' : 'gift')
-  }, [router.query.tab])
+  }, [router.query.tab, user])
 
   const handleFilterClick = useCallback(
     (e: React.MouseEvent<HTMLInputElement>): void => {
@@ -77,18 +107,17 @@ const MyPage = (): JSX.Element => {
         ? fetchEventList(element?.id)
         : fetchGiftList(element?.id)
     },
-    [selectedTab],
+    [selectedTab, user],
   )
 
-  return (
+  return user?.id ? (
     <>
       <Header />
       <Profile>
-        <MUIAvatar width={'120px'} height={'120px'} />
-        <div style={{ color: COLORS.WHITE }}>
-          <div>산타클로스</div>
-          <div>santa@email.com</div>
-        </div>
+        <MUIAvatar width={'120px'} height={'120px'} src={user?.profileImage} />
+        <Text color="WHITE" size="LARGE">
+          {user?.name}
+        </Text>
       </Profile>
       {router.isReady && currentTab === selectedTab && (
         <>
@@ -110,11 +139,17 @@ const MyPage = (): JSX.Element => {
         </>
       )}
     </>
+  ) : (
+    <></>
   )
 }
 
 const Profile = styled.div`
+  width: 280px;
+  margin: ${DEFAULT_MARGIN} auto;
   display: flex;
+  align-items: center;
+  gap: 40px;
 `
 
 export default MyPage

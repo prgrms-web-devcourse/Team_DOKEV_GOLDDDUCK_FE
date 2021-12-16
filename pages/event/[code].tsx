@@ -4,13 +4,14 @@ import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import { useCallback, useEffect, useState } from 'react'
-import { deleteEvent, getEventDetail } from '../api/event'
-import { eventDetail } from '../api/services/event'
+import { deleteEvent, getEventDetail, getEventWinners } from '../api/event'
+import { eventDetail, eventWinnerList } from '../api/services/event'
 import {
   EVENT_FILTER,
   EVENT_TEMPLATE,
   EVENT_TYPE,
   IFilteredEventItem,
+  IFilteredWinners,
 } from 'types/event'
 import { getUesrInfo } from '../api/user'
 import { useUserContext } from '@contexts/UserProvider'
@@ -31,6 +32,7 @@ const EventPage = (): JSX.Element => {
   const { id: userId } = useUserContext().user
   const [isLoading, setIsLoading] = useState(false)
   const [event, setEvent] = useState<IFilteredEventItem | undefined>()
+  const [winners, setWinners] = useState<IFilteredWinners[] | undefined>()
 
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
@@ -38,7 +40,7 @@ const EventPage = (): JSX.Element => {
     const data = await getUesrInfo()
     if (data) {
       updateUser(data)
-
+      console.log('me', data)
       setIsLoading(false)
     } else {
       router.replace('/login')
@@ -52,21 +54,32 @@ const EventPage = (): JSX.Element => {
   // 이벤트 데이터 조회
   const fetchEventDetail = useCallback(async (code) => {
     setIsLoading(true)
-
-    const data = await getEventDetail(code)
-    data && setEvent(eventDetail(data))
-    setIsLoading(false)
-  }, [])
+    if (userId) {
+      const data = await getEventDetail(code)
+      data && setEvent(eventDetail(data))
+      setIsLoading(false)
+    }
+  }, [userId])
 
   useEffect(() => {
     userId && router.isReady && fetchEventDetail(router.query?.code)
   }, [userId, router.query.code])
 
   // 이벤트 삭제
-  const handleClickRemove = useCallback((): void => {
-    userId && event?._id && deleteEvent(userId.toString(), event._id)
-    router.isReady && router.push('/mypage?tab=event')
+  const handleClickRemove = useCallback(async () => {
+    await deleteEvent(userId, event?._id as string)
   }, [userId, event, router?.query.code])
+
+  // 당첨자 목록 조회
+  const fetchEventWinners = useCallback(async () => {
+    setIsLoading(true)
+
+    if (userId && event?._id) {
+      const data = await getEventWinners(userId, event?._id)
+      data && setWinners(eventWinnerList(data))
+      setIsLoading(false) 
+    }
+  }, [userId, event])
 
   return !isLoading && userId ? (
     <>
@@ -93,7 +106,7 @@ const EventPage = (): JSX.Element => {
         />
         <TimeInfo start={event?.start as string} end={event?.end as string} />
       </EventContainer>
-      <WinnerModal />
+      <WinnerModal winners={winners || []} onClick={fetchEventWinners}/>
     </>
   ) : (
     <></>
