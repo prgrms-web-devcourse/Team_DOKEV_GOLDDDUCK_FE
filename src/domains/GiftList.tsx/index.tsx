@@ -43,7 +43,7 @@ const GiftList = ({
   const handleMoveToDetail = (e: React.MouseEvent<HTMLDivElement>): void => {
     e.stopPropagation()
     const element = e.target as HTMLElement
-    route.push(`/gift/${element.offsetParent?.getAttribute('id')}`)
+    route.push(`/gift/${element?.id}`)
   }
 
   return (
