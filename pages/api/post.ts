@@ -1,8 +1,10 @@
-import { multipart } from './utils'
+import { authInstance } from './utils'
 
-export const addEventApi = async (data: any) => {
+export const addEventApi = async (formData: any) => {
   try {
-    await multipart.post('api/v1/events', data).then((res) => console.log(res))
+    const { data } = await authInstance.post('api/v1/events', formData)
+
+    return data.data
   } catch (error) {
     console.log(error)
   }
