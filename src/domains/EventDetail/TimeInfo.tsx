@@ -20,32 +20,28 @@ const formattedDate = (date: string): string[] => {
 }
 
 const TimeInfo = ({ start, end }: ITimeInfo): JSX.Element => {
-  const infos = [
-    { title: '오픈', date: start },
-    { title: '종료', date: end },
-  ]
+  const Template = (props: { title: string; date: string }): JSX.Element => {
+    return (
+      <Wrapper>
+        <Text>{props.title}</Text>
+        <Text
+          color="TEXT_GRAY_LIGHT"
+          size="MICRO"
+          style={{ marginTop: 16, marginBottom: 4 }}>
+          {formattedDate(props.date)[0]}
+        </Text>
+        <Text size="MICRO" color="TEXT_GRAY_LIGHT">
+          {formattedDate(props.date)[1]}
+        </Text>
+      </Wrapper>
+    )
+  }
 
   return (
     <EventTimeSection>
-      {infos.map(({ title, date }, index) => {
-        return (
-          <>
-            {index && <Divider />}
-            <Wrapper>
-              <Text>{title}</Text>
-              <Text
-                color="TEXT_GRAY_LIGHT"
-                size="MICRO"
-                style={{ marginTop: 16, marginBottom: 4 }}>
-                {formattedDate(date)[0]}
-              </Text>
-              <Text size="MICRO" color="TEXT_GRAY_LIGHT">
-                {formattedDate(date)[1]}
-              </Text>
-            </Wrapper>
-          </>
-        )
-      })}
+      <Template title="종료" date={start} />
+      <Divider />
+      <Template title="종료" date={end} />
     </EventTimeSection>
   )
 }
