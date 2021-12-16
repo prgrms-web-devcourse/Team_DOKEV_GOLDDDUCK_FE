@@ -4,13 +4,11 @@ export const getEvent = async () => {
   try {
     // 추후 라우터를 활용해 url 매개변수를 전달할 예정입니다.
     const { data } = await authInstance.get(
-      'api/v1/events/8a23c692-1a01-4535-bd1a-c1bdcb52e01b',
+      'api/v1/events/545016f0-96b3-4704-86ab-c4fd38b5da68',
     )
     if (data.success) {
       return data.data
     }
-
-    throw new Error(`API ERROR(${data.error.code})::${data.error.message}`)
   } catch (error) {
     console.log(error)
 
@@ -24,8 +22,6 @@ export const postGiftReceipt = async (object: object) => {
     if (data.success) {
       return data.data
     }
-
-    throw new Error(`API ERROR(${data.error.code})::${data.error.message}`)
   } catch (error) {
     if (
       error.response.status === 400 &&

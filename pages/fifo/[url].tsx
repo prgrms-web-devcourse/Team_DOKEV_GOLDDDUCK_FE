@@ -84,6 +84,11 @@ const fifo = (): JSX.Element => {
   // 선물 수령 API
   const handleGiftReceipt = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (!eventStart || !eventData) {
+        alert('지금은 선물을 받을 수 없어요!')
+
+        return
+      }
       if (eventStart && eventData) {
         const eventId = eventData.eventId
         const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
@@ -98,8 +103,6 @@ const fifo = (): JSX.Element => {
           alert('선물 겟!')
           // router.push('/gift/${res.id}')
         }
-      } else {
-        alert('지금은 선물을 받을 수 없어요!')
       }
     },
     [eventStart],
@@ -110,15 +113,15 @@ const fifo = (): JSX.Element => {
     checkRemaining()
   }, 1000)
 
-  // 남아있는 시간 체크 함수 (현재 시간 - 이벤트 시작 시간)
-  const checkRemaining = () => {
+  // 남아있는 시간 체크 함수 (이벤트 시작 시간 - 현재 시간)
+  const checkRemaining = useCallback(() => {
     if (eventData?.startAt) {
       const now = new Date()
-      const eventStartAt = new Date(eventData?.startAt)
+      const eventStartAt = new Date(eventData.startAt)
       const distance = Number(eventStartAt) - Number(now)
       setDistance(distance)
     }
-  }
+  }, [eventData])
 
   // 남아있는 시간이 0 미만이 될 경우, setInterval 클리어 함수 실행 및 상태 변경
   useEffect(() => {

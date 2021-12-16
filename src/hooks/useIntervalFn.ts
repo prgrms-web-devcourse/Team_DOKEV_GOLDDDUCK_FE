@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-const useIntervalFn = (fn: any, ms: number) => {
-  const intervalId = useRef<any>()
+const useIntervalFn = (fn: () => void, ms: number) => {
+  const intervalId = useRef<NodeJS.Timer>()
   const callback = useRef(fn)
 
   useEffect(() => {
