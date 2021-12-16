@@ -3,24 +3,16 @@ import Icon from '@components/Icon'
 import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
 import { COLORS } from '@utils/constants/colors'
-import { EVENT_STATUS, EVENT_TEMPLATE, EVENT_TYPE } from 'types/event'
-
-interface ICover {
-  mainTemplate: EVENT_TEMPLATE
-  title: string
-  status: EVENT_STATUS
-  type: EVENT_TYPE
-  code: string
-}
+import { IFilteredEventItem } from 'types/event'
 
 const Cover = ({
-  mainTemplate,
+  template,
   title,
   status,
-  type,
+  eventType,
   code,
-}: ICover): JSX.Element => {
-  const EVENT_LINK = `http://localhost:3000/${type.toLowerCase()}/${code}`
+}: IFilteredEventItem): JSX.Element => {
+  const EVENT_LINK = `http://localhost:3000/${eventType.toLowerCase()}/${code}`
 
   const handleCopyUrl = () => {
     navigator.clipboard.writeText(EVENT_LINK)
@@ -29,7 +21,7 @@ const Cover = ({
   return (
     <Wrapper
       style={{
-        backgroundImage: `url(/cover/cover${mainTemplate}.png)`,
+        backgroundImage: `url(/cover/cover${template}.png)`,
       }}>
       <Text
         color="BLACK"
@@ -45,7 +37,7 @@ const Cover = ({
         링크 복사
       </MUIButton>
       <Text color="TEXT_GRAY_DARK">
-        {`${type === 'FIFO' ? '#선착순' : '#랜덤'} ${
+        {`${eventType === 'FIFO' ? '#선착순' : '#랜덤'} ${
           status === 'READY'
             ? '#준비중'
             : status === 'RUNNING'
