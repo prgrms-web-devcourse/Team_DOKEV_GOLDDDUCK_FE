@@ -8,9 +8,16 @@ interface ITextarea {
   name: string
   value: string
   onChange(e: React.ChangeEvent<HTMLTextAreaElement>): void
+  style?: React.CSSProperties
 }
 
-const Textarea = ({ id, name, value, onChange }: ITextarea): JSX.Element => {
+const Textarea = ({
+  id,
+  name,
+  value,
+  onChange,
+  style,
+}: ITextarea): JSX.Element => {
   return (
     <TextareaStyled
       id={id}
@@ -20,6 +27,7 @@ const Textarea = ({ id, name, value, onChange }: ITextarea): JSX.Element => {
       placeholder="메시지를 입력해주세요!"
       maxLength={150}
       autoCapitalize="off"
+      style={{ ...style }}
     />
   )
 }
@@ -27,7 +35,7 @@ const Textarea = ({ id, name, value, onChange }: ITextarea): JSX.Element => {
 const TextareaStyled = styled.textarea`
   background-color: ${COLORS.WHITE};
   border: none;
-  border-top: 2px solid ${COLORS.RED};
+  border-top: 4px solid ${COLORS.RED};
   padding: 8px;
   width: 98%;
   height: 190px;
@@ -35,7 +43,7 @@ const TextareaStyled = styled.textarea`
   outline: none;
   margin: 0 auto;
   display: block;
-  font-size: ${FONT_SIZES.LARGE};
+  font-size: ${FONT_SIZES.BASE};
   white-space: break-spaces;
   line-height: 1.3;
   letter-spacing: 1px;

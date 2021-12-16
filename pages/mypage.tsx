@@ -2,9 +2,18 @@ import styled from '@emotion/styled'
 import Header from '@domains/Header'
 import MUIAvatar from '@components/MUIAvatar'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { COLORS } from '@utils/constants/colors'
+import { getFilteredGiftList } from './api/gift'
+import { filteredGiftList } from './api/services/gift'
+import { IFilteredGiftItem, IPagination } from 'types/gift'
+import GiftList from '@domains/GiftList.tsx'
+
+import { filteredEventList } from './api/services/event'
+import EventList from '@domains/EventList'
+import { getFilteredEventList } from './api/event'
+import { IFilteredEventItem } from 'types/event'
 
 const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
   ssr: false,
@@ -17,14 +26,60 @@ const MyPage = (): JSX.Element => {
   const router = useRouter()
   const currentTab = router.query.tab === 'event' ? 'event' : 'gift'
   const [selectedTab, setSelectedTab] = useState(currentTab)
+  const [isLoading, setIsLoading] = useState(false)
+  const [giftRes, setGiftRes] = useState<[IPagination, IFilteredGiftItem[]]>()
+  const [eventRes, setEventRes] =
+    useState<[IPagination, IFilteredEventItem[]]>()
 
-  const handleChange = (e: React.SyntheticEvent, newValue: number) => {
-    setSelectedTab(newValue === 0 ? 'gift' : 'event')
-  }
+  // 필터에 따른 받은 선물 목록 조회
+  const fetchGiftList = useCallback(async (filter) => {
+    setIsLoading(true)
+
+    const isUsed = filter === 'used' ? true : filter === 'un_used' ? false : ''
+    const data = await getFilteredGiftList(isUsed)
+
+    data && setGiftRes(filteredGiftList(data))
+
+    setIsLoading(false)
+  }, [])
+
+  //필터에 따른 나의 이벤트 목록 조회
+  const fetchEventList = useCallback(async (filter) => {
+    setIsLoading(true)
+
+    const status = filter === 'all' ? '' : filter.toUpperCase()
+    const data = await getFilteredEventList(status)
+
+    data && setEventRes(filteredEventList(data))
+
+    setIsLoading(false)
+  }, [])
+
+  useEffect(() => {
+    fetchGiftList('all')
+    fetchEventList('all')
+  }, [])
+
+  const handleTabChange = useCallback(
+    (e: React.SyntheticEvent, newValue: number) => {
+      setSelectedTab(() => (newValue === 0 ? 'gift' : 'event'))
+    },
+    [],
+  )
 
   useEffect(() => {
     setSelectedTab(router.query.tab === 'event' ? 'event' : 'gift')
   }, [router.query.tab])
+
+  const handleFilterClick = useCallback(
+    (e: React.MouseEvent<HTMLInputElement>): void => {
+      const element = e.target as HTMLElement
+      selectedTab === 'event'
+        ? fetchEventList(element?.id)
+        : fetchGiftList(element?.id)
+    },
+    [selectedTab],
+  )
 
   return (
     <>
@@ -38,12 +93,20 @@ const MyPage = (): JSX.Element => {
       </Profile>
       {router.isReady && currentTab === selectedTab && (
         <>
-          <MUITab onChange={handleChange} />
+          <MUITab onChange={handleTabChange} />
           <MUITabPanel selectedTab={selectedTab} tab={'gift'} index={0}>
-            <div>gift list</div>
+            <GiftList
+              filteredGifts={giftRes?.[1] || []}
+              onClick={handleFilterClick}
+              isLoading={isLoading}
+            />
           </MUITabPanel>
           <MUITabPanel selectedTab={selectedTab} tab={'event'} index={1}>
-            <div>event list</div>
+            <EventList
+              filteredEvents={eventRes?.[1] || []}
+              onClick={handleFilterClick}
+              isLoading={isLoading}
+            />
           </MUITabPanel>
         </>
       )}

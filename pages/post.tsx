@@ -36,6 +36,19 @@ const post = () => {
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
     setSkipped(newSkipped)
+
+    if (activeStep === 4) {
+      const data = {
+        eventTitle,
+        participant,
+        coverImage,
+        eventTypeState,
+        gifts,
+        startvalue,
+        endvalue,
+      }
+      console.log(data)
+    }
   }
 
   const handleBack = () => {
@@ -44,7 +57,7 @@ const post = () => {
 
   //step1 EventTitle 상태 로직
   const [eventTitle, setEventTitle] = useState('')
-  const [participant, setParticipant] = useState<number>()
+  const [participant, setParticipant] = useState<number | undefined>()
   const [coverImage, setCoverImage] = useState<string>('')
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,13 +70,7 @@ const post = () => {
     setCoverImage(() => e.target.value)
   }
 
-  //setp3 EventType 상태 로직
-  const [eventTypeState, setEventTypeState] = useState('')
-  const handleTypeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEventTypeState(() => e.target.value)
-  }
-
-  //step2 EventTimer
+  //step2 EventTimer 상태 로직
   const [startvalue, setStartValue] = useState<Date | null>(new Date())
   const [endvalue, setEndValue] = useState<Date | null>(new Date())
 
@@ -73,6 +80,36 @@ const post = () => {
 
   const handleEndTimer = (newValue: Date) => {
     setEndValue(newValue)
+  }
+
+  //setp3 EventType 상태 로직
+  const [eventTypeState, setEventTypeState] = useState('')
+  const handleTypeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEventTypeState(() => e.target.value)
+  }
+
+  //step4 EventPresent 상태 로직
+  interface Gift {
+    id: string
+    category: string
+    giftItems: GiftItem[]
+  }
+
+  interface GiftItem {
+    content?: string
+    image?: File
+    giftType: 'TEXT' | 'IMAGE'
+  }
+
+  const [gifts, setGifts] = useState<Gift[]>([])
+
+  const AddGiftItem = ({ id, category, giftItems }: Gift) => {
+    setGifts((gifts) => [...gifts, { id, category, giftItems }])
+  }
+
+  const delteGiftItem = (id: string) => {
+    const filterData = gifts.filter((gift) => gift.id !== id)
+    setGifts(filterData)
   }
 
   // step별 컴포넌트 로직
@@ -105,7 +142,13 @@ const post = () => {
           />
         )
       case 3:
-        return <EventPresent />
+        return (
+          <EventPresent
+            gifts={gifts}
+            AddGiftItem={AddGiftItem}
+            delteGiftItem={delteGiftItem}
+          />
+        )
       default:
         return
     }
