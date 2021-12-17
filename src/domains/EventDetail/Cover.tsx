@@ -3,33 +3,40 @@ import Icon from '@components/Icon'
 import MUIButton from '@components/MUIButton'
 import styled from '@emotion/styled'
 import { COLORS } from '@utils/constants/colors'
-import { EVENT_STATUS, EVENT_TEMPLATE, EVENT_TYPE } from 'types/event'
-
+import { EVENT_FILTER, EVENT_TEMPLATE, EVENT_TYPE } from 'types/event'
+import { useCallback } from 'react'
+import Swalert from '@components/Swalert'
+import alertImage from '/public/alert.png'
 interface ICover {
-  mainTemplate: EVENT_TEMPLATE
+  template: EVENT_TEMPLATE
   title: string
-  status: EVENT_STATUS
-  type: EVENT_TYPE
+  status: EVENT_FILTER
+  eventType: EVENT_TYPE
   code: string
+  id: string
+  onRemoveEvent: React.MouseEventHandler<SVGElement>
 }
 
 const Cover = ({
-  mainTemplate,
+  template,
   title,
   status,
-  type,
+  eventType,
   code,
+  id,
+  onRemoveEvent,
 }: ICover): JSX.Element => {
-  const EVENT_LINK = `http://localhost:3000/${type.toLowerCase()}/${code}`
+  const EVENT_LINK = `http://localhost:3000/${eventType?.toLowerCase()}/${code}`
+  const TEMPLATE_IMAGE = template && `/templates/${template}.png`
 
-  const handleCopyUrl = () => {
+  const handleCopyUrl = useCallback(() => {
     navigator.clipboard.writeText(EVENT_LINK)
-  }
+  }, [EVENT_LINK])
 
   return (
     <Wrapper
       style={{
-        backgroundImage: `url(/cover/cover${mainTemplate}.png)`,
+        backgroundImage: `url(${TEMPLATE_IMAGE})`,
       }}>
       <Text
         color="BLACK"
@@ -45,7 +52,7 @@ const Cover = ({
         링크 복사
       </MUIButton>
       <Text color="TEXT_GRAY_DARK">
-        {`${type === 'FIFO' ? '#선착순' : '#랜덤'} ${
+        {`${eventType === 'FIFO' ? '#선착순' : '#랜덤'} ${
           status === 'READY'
             ? '#준비중'
             : status === 'RUNNING'
@@ -58,11 +65,9 @@ const Cover = ({
           name="remove"
           size="LARGE"
           style={{ margin: '16px 0 0 16px' }}
-          onIconClick={() => {
-            confirm(
-              '이벤트를 삭제하시겠습니까?\n삭제한 이벤트는 종료 처리되고 더 이상 확인할 수 없습니다.',
-            ) && alert('삭제되었습니다')
-          }}
+          onIconClick={() =>
+            Swalert(onRemoveEvent, alertImage.src, '삭제', '취소')
+          }
         />
       </RemoveButton>
     </Wrapper>

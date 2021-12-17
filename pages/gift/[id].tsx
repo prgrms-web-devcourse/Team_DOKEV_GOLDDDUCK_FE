@@ -1,115 +1,139 @@
 import MUIButton from '@components/MUIButton'
 import Header from '@domains/Header'
 import styled from '@emotion/styled'
-import Image from '@components/Image'
 import Icon from '@components/Icon'
 import Text from '@components/Text'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import giftImage from '/src/assets/gift_test.png'
-import { useState } from 'react'
-import Switch from '@mui/material/Switch'
-import { COLORS } from '@utils/constants/colors'
 import { useRouter } from 'next/router'
-
-const CustomSwitch = styled(Switch)(() => ({
-  '& .MuiSwitch-switchBase': {},
-  '& .MuiSwitch-switchBase.Mui-checked': {
-    color: 'red',
-  },
-  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-    backgroundColor: `${COLORS.RED}`,
-  },
-  '& .MuiSwitch-track': {
-    backgroundColor: `${COLORS.TEXT_GRAY_DARK}`,
-    padding: 0,
-  },
-}))
-
-const MUISwitch = () => {
-  const [checked, setChecked] = useState(false)
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked)
-  }
-
-  return (
-    <CustomSwitch
-      checked={checked}
-      onChange={handleChange}
-      inputProps={{ 'aria-label': 'controlled' }}
-    />
-  )
-}
+import GiftItem from '@domains/GiftItem'
+import MUISwitch from '@components/MUISwitch'
+import { useCallback, useEffect, useState } from 'react'
+import { giftDetail } from '../api/services/gift'
+import { getGiftDetail, updateGiftUsed } from '../api/gift'
+import { useUserContext } from '@contexts/UserProvider'
+import { GIFT_TYPE, IFilteredGiftDetail } from 'types/gift'
+import { getUesrInfo } from '../api/user'
+import { EVENT_TEMPLATE } from 'types/event'
 
 const GiftDetailPage = () => {
   const router = useRouter()
+  const { updateUser } = useUserContext()
+  const { id: userId } = useUserContext().user
+  const [isLoading, setIsLoading] = useState(false)
+  const [gift, setGift] = useState<IFilteredGiftDetail | undefined>()
 
-  return (
+  // 로그인 여부 확인
+  const fetchUser = useCallback(async () => {
+    const data = await getUesrInfo()
+    if (data) {
+      updateUser(data)
+    } else {
+      router.replace('/login')
+    }
+  }, [router])
+
+  useEffect(() => {
+    fetchUser()
+  }, [])
+
+  // 선물 데이터 조회
+  const fetchGiftDetail = useCallback(
+    async (giftId) => {
+      if (userId) {
+        setIsLoading(true)
+
+        const data = await getGiftDetail(userId, giftId)
+        data && setGift(giftDetail(data))
+
+        setIsLoading(false)
+      }
+    },
+    [userId],
+  )
+
+  useEffect(() => {
+    userId && router.isReady && fetchGiftDetail(router.query?.id)
+  }, [userId, router.query.id])
+
+  // 선물 사용여부 수정 (디바운스 필요)
+  const handleUsedSwitch = useCallback(async () => {
+    userId && gift?._id && (await updateGiftUsed(userId, gift?._id))
+  }, [userId, gift])
+
+  return userId && !isLoading ? (
     <>
-      <GiftContainerTop>
+      <ContainerTop>
         <Header />
         <GiftInfo>
           <Wrapper>
             <Icon
-              name={'arrowBack'}
-              color={'WHITE'}
+              name="arrowBack"
+              color="WHITE"
               style={{ marginRight: 8 }}
               onIconClick={() => router.push('/mypage?tab=gift')}
             />
-            <Text size={'BASE'} color={'WHITE'}>
-              {'시원한 아이스아메리카노'}
+            <Text size="BASE" color="WHITE">
+              {gift?.category}
             </Text>
-            <StyledSwitch>
-              <Text size={'MICRO'} color={'TEXT_GRAY_DARK'}>
+            <StyledSwitch onChange={handleUsedSwitch}>
+              <Text size="MICRO" color="TEXT_GRAY_DARK">
                 {'사용 여부'}
               </Text>
-              <MUISwitch />
+              <MUISwitch
+                used={gift?.used as boolean}
+                onChange={handleUsedSwitch}
+              />
             </StyledSwitch>
           </Wrapper>
           <Wrapper>
-            <Text size={'MICRO'} color={'TEXT_GRAY_LIGHT'}>
+            <Text size="MICRO" color="TEXT_GRAY_LIGHT">
               {'받은 날짜'}
             </Text>
             <Text
-              size={'MICRO'}
-              color={'TEXT_GRAY_LIGHT'}
+              size="MICRO"
+              color="TEXT_GRAY_LIGHT"
               style={{ fontWeight: 'bold', marginRight: 8 }}>
-              {'2021년 12월 1일 12시 30분'}
+              {gift?.receivedDate &&
+                `${new Date(gift?.receivedDate).getFullYear()}년 
+                ${new Date(gift?.receivedDate).getMonth() + 1}월 
+                ${new Date(gift?.receivedDate).getDate()}일`}
             </Text>
             <Text
-              size={'MICRO'}
-              color={'TEXT_GRAY_LIGHT'}
+              size="MICRO"
+              color="TEXT_GRAY_LIGHT"
               style={{ fontWeight: 'bold', marginLeft: 'auto' }}>
-              {'from.문타리'}
+              from.{gift?.sender}
             </Text>
           </Wrapper>
-          <Image
-            src={giftImage.src}
-            width={'100%'}
-            height={'100%'}
-            style={{ marginBottom: DEFAULT_MARGIN }}
+          <GiftItem
+            type={gift?.giftType as GIFT_TYPE}
+            imageSrc={gift?.src}
+            template={gift?.template as EVENT_TEMPLATE}
+            message={gift?.message}
           />
         </GiftInfo>
-      </GiftContainerTop>
+      </ContainerTop>
       <ContainerBottom>
         <a href={giftImage.src} download>
           <MUIButton
             style={{
               width: '100%',
-              borderRadius: 20,
               backgroundColor: 'RED',
             }}>
-            <Text color={'WHITE'} size={'BASE'}>
+            <Text color="WHITE" size="BASE">
               선물 저장
             </Text>
           </MUIButton>
         </a>
       </ContainerBottom>
     </>
+  ) : (
+    <></>
   )
 }
 
-const GiftContainerTop = styled.div`
+const ContainerTop = styled.div`
   height: 100%;
   overflow: scroll;
   -ms-overflow-style: none; /* IE and Edge */

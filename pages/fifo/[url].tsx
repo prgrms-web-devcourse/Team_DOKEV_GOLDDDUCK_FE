@@ -89,6 +89,17 @@ const fifo = (): JSX.Element => {
 
         return
       }
+
+      if (eventStart && eventData) {
+        const masterId = eventData.member.id
+        const memberId = user.id
+        if (masterId === memberId) {
+          alert('선물은 참가자들에게 양보해주세요!')
+
+          return
+        }
+      }
+
       if (eventStart && eventData) {
         const eventId = eventData.eventId
         const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
@@ -139,18 +150,21 @@ const fifo = (): JSX.Element => {
 
   // 단일 이벤트 조회 API
   const getEventData = useCallback(async () => {
-    const res = await getEvent()
-    if (res) {
-      res.eventProgressStatus === 'CLOSED' && setEventOver(true)
-      setEventData(res)
+    if (router.query['url']) {
+      const eventCode = router.query['url']
+      const res = await getEvent(eventCode)
+      if (res) {
+        res.eventProgressStatus === 'CLOSED' && setEventOver(true)
+        setEventData(res)
+      }
     }
-  }, [])
+  }, [router])
 
   // 컴포넌트 마운트 시 로그인 체크 & 단일 이벤트 정보 가져오기
   useEffect(() => {
     getUserData()
     getEventData()
-  }, [])
+  }, [router])
 
   return (
     <>
@@ -171,7 +185,7 @@ const fifo = (): JSX.Element => {
                 ({ id, category, itemCount }: Igifts, index) => (
                   <Gift key={id}>
                     <Image
-                      src={`/templates/templates${(index % 6) + 1}.png`}
+                      src={`/templates/template${(index % 6) + 1}.png`}
                       width="60px"
                       height="60px"
                       mode="contain"
