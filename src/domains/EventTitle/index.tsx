@@ -41,7 +41,7 @@ const EventTitle: React.FC<Props> = ({
           <InputText
             id="maxParticipantCount"
             name="maxParticipantCount"
-            value={maxParticipantCount}
+            value={maxParticipantCount || ''}
             onChange={handleInput}
             placeholder="참여할 수 있는 최대 인원수 입력"
           />
@@ -67,7 +67,7 @@ const EventTitle: React.FC<Props> = ({
                 justifyContent: 'center',
               }}>
               {Array.from(Array(6)).map((_, index) => (
-                <Grid item sm={4} key={index}>
+                <Grid item sm={4} xs={4} key={index}>
                   <Image
                     src={`/templates/template${index + 1}.png`}
                     width={100}
@@ -75,7 +75,7 @@ const EventTitle: React.FC<Props> = ({
                     style={{ borderRadius: '10px' }}
                   />
                   <Div>
-                    <label htmlFor={`template${index + 1}`}>{`template${
+                    <label htmlFor={`template${index + 1}`}>{`cover${
                       index + 1
                     }`}</label>
                     <InputRadio
