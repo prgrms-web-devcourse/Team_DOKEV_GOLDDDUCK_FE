@@ -2,8 +2,6 @@ import { GIFT_TYPE } from 'types/gift'
 import Image from '@components/Image'
 import Text from '@components/Text'
 import { EVENT_TEMPLATE } from 'types/event'
-import styled from '@emotion/styled'
-import { COLORS } from '@utils/constants/colors'
 
 interface IGiftItem {
   type: GIFT_TYPE
