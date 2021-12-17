@@ -18,7 +18,7 @@ export const getEvent = async () => {
   try {
     // 추후 라우터를 활용해 url 매개변수를 전달할 예정입니다.
     const { data } = await authInstance.get(
-      'api/v1/events/499b9ecb-26ad-46bb-afb0-ddd35e1f9f71',
+      'api/v1/events/545016f0-96b3-4704-86ab-c4fd38b5da68',
     )
     if (data.success) {
       return data.data
