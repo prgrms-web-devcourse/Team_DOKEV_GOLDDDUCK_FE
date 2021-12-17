@@ -52,7 +52,16 @@ const GiftList = ({
         <ListWrapper>
           {filteredGifts?.length ? (
             filteredGifts.map(
-              ({ _id, giftType, category, src, message, used, template }) => {
+              ({
+                _id,
+                giftType,
+                category,
+                src,
+                message,
+                used,
+                template,
+                sender,
+              }) => {
                 return (
                   <ItemWrapper
                     key={_id}
@@ -97,7 +106,7 @@ const GiftList = ({
                       size="MICRO"
                       color="TEXT_GRAY_LIGHT"
                       style={{ margin: '4px 16px 16px 4px' }}>
-                      from.문타리
+                      from.{sender}
                     </Text>
                   </ItemWrapper>
                 )
