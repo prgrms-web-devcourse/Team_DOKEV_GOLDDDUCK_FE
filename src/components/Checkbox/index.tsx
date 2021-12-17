@@ -8,7 +8,7 @@ interface ICheckbox {
   name: string
   size?: 'MICRO' | 'SMALL' | 'BASE' | 'MEDIUM' | 'LARGE'
   defaultChecked?: boolean
-  onClick?: (e: string) => void
+  onClick: React.MouseEventHandler<HTMLInputElement>
 }
 
 const Checkbox = ({
@@ -20,13 +20,10 @@ const Checkbox = ({
 }: ICheckbox) => {
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLInputElement>): void => {
-      const element = e.target as HTMLElement
-      onClick?.(element.id)
+      onClick?.(e)
     },
-    [defaultChecked],
+    [onClick],
   )
-
-  console.log(defaultChecked, id)
 
   return (
     <Label key={id}>
