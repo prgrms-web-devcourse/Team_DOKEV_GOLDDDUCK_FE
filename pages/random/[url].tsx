@@ -79,15 +79,18 @@ const random = (): JSX.Element => {
     if (muiSlider === 100 && eventStart && eventData) {
       const eventId = eventData.eventId
       const memberId = user.id //선물을 받는 유저의 ID
+      const masterId = eventData.member.id
+      if (masterId === memberId) {
+        alert('선물은 참가자들에게 양보해주세요!')
+
+        return
+      }
       const res = await postRandomGiftReceipt({ eventId, memberId })
       if (Array.isArray(res)) {
-        console.log('error', res)
         //res = ['E002', '이미 참여한 이벤트입니다.']
         const errorMessage = res[1]
         alert(errorMessage)
       } else {
-        // 선물 수령 완료 이후
-        console.log('pass', res)
         setGiftItem(res)
         setIsVideoLoading(true)
       }
@@ -130,10 +133,13 @@ const random = (): JSX.Element => {
 
   // 단일 이벤트 조회 API
   const getEventData = useCallback(async () => {
-    const res = await getEvent()
-    if (res) {
-      res.eventProgressStatus === 'CLOSED' && setEventOver(true)
-      setEventData(res)
+    if (router.query['url']) {
+      const eventCode = router.query['url']
+      const res = await getEvent(eventCode)
+      if (res) {
+        res.eventProgressStatus === 'CLOSED' && setEventOver(true)
+        setEventData(res)
+      }
     }
   }, [router])
 
@@ -141,7 +147,7 @@ const random = (): JSX.Element => {
   useEffect(() => {
     getUserData()
     getEventData()
-  }, [])
+  }, [router])
 
   return (
     <>
