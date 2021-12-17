@@ -60,12 +60,18 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
   }
 
   const AddGift = () => {
-    const giftItems = {
-      giftCheckId: uuidv4(),
-      category,
-      giftItems: [...image, ...contentList],
+    if (category && (image.length > 0 || contentList.length > 0)) {
+      const giftItems = {
+        giftCheckId: uuidv4(),
+        category,
+        giftItems: [...image, ...contentList],
+      }
+      AddGiftItem(giftItems)
+    } else {
+      alert('선물 이름과 이미지 or 메시지를 입력하세요')
+
+      return false
     }
-    AddGiftItem(giftItems)
   }
 
   const handleStateClear = () => {
@@ -189,12 +195,12 @@ const EventPresentContainer = styled.div`
 const GiftWrapper = styled.div`
   width: 100%;
   overflow: auto;
-  height: 55vh;
+  height: 50vh;
   @media all and (max-width: 425px) {
-    height: 55vh;
+    height: 50vh;
   }
   @media all and (max-width: 320px) {
-    height: 50vh;
+    height: 45vh;
   }
   padding-left: ${DEFAULT_MARGIN};
   padding-right: ${DEFAULT_MARGIN};
