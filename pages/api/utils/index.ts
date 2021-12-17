@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 
-const BASE_URL =
-  'http://ec2-3-36-59-242.ap-northeast-2.compute.amazonaws.com:8080/'
+const BASE_URL = 'https://gold-dduck.kro.kr/'
 
 const axiosAuthApi = (
   url: string,

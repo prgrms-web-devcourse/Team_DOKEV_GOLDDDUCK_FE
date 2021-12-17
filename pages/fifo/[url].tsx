@@ -101,7 +101,7 @@ const fifo = (): JSX.Element => {
         } else {
           // 선물 수령 완료 이후 /gift/res.id로 이동
           alert('선물 겟!')
-          // router.push('/gift/${res.id}')
+          router.push(`/gift/${res.id}`)
         }
       }
     },
@@ -171,7 +171,7 @@ const fifo = (): JSX.Element => {
                 ({ id, category, itemCount }: Igifts, index) => (
                   <Gift key={id}>
                     <Image
-                      src={`/cover/cover${(index % 6) + 1}.png`}
+                      src={`/templates/templates${(index % 6) + 1}.png`}
                       width="60px"
                       height="60px"
                       mode="contain"
