@@ -177,6 +177,7 @@ const fifo = (): JSX.Element => {
             <TimerHeader
               eventStart={new Date(eventData.startAt)}
               eventMaster={eventData.member.name}
+              message="선착순이에요. 서둘러주세요!"
             />
           )}
           <GiftWrapper>
