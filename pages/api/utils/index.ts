@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
-const { API_END_POINT } = process.env
+const API_END_POINT = process.env.NEXT_PUBLIC_API_END_POINT
 
 const BASE_URL = API_END_POINT as string
 
