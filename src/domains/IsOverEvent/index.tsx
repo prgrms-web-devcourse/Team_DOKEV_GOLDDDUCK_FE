@@ -1,6 +1,6 @@
-import Text from '@components/Text'
 import Image from '@components/Image'
 import styled from '@emotion/styled'
+import Text from '@components/Text'
 
 const IsOverEvent = (giftType?: string) => {
   const EVENT_OVER_MESSAGE = '현재 종료된 \n 이벤트 입니다.'
