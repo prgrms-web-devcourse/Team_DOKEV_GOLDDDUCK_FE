@@ -57,16 +57,12 @@ const EventType = ({ giftChoiceType, handleTypeCheck }: Props) => {
 }
 
 const EventTypeContainer = styled.div`
-  /* position: absolute; */
-  /* left: 0; */
-  /* right: 0; */
-  /* top: 0; */
-  /* bottom: 0; */
-  margin-top: 10%;
   display: flex;
-  flex-wrap: wrap;
+  height: 100%;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 70px;
 `
 const TypeDiv = styled.div`
   position: relative;
