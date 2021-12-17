@@ -8,7 +8,7 @@ import copy from 'copy-to-clipboard'
 import { GIFT_TYPE } from 'types/gift'
 
 interface ICardFlip {
-  front: any
+  front: JSX.Element
   url: string
   type: GIFT_TYPE
 }
@@ -18,19 +18,6 @@ const CardFlip = ({ front, url, type }: ICardFlip): JSX.Element => {
 
   const handleCardFlip = () => {
     setFlip((prev) => !prev)
-  }
-
-  const download2 = (e: any) => {
-    const element = e.target
-    console.log('url', url)
-    const abc = encodeURI(url)
-    console.log('abc', abc)
-    const file = new Blob([abc], { type: 'image/*' })
-    console.log('file', file)
-    element.href = URL.createObjectURL(file)
-    element.download = 'image.jpg'
-    element.click()
-    console.log(element)
   }
 
   const clipboardCopy = () => {
@@ -71,11 +58,7 @@ const CardFlip = ({ front, url, type }: ICardFlip): JSX.Element => {
       <FadeInWrapper style={{ display: flip ? 'none' : 'block' }}>
         <MUIButton style={{ ...BtnStyle }}>
           {type === 'IMAGE' ? (
-            <a
-              href={url}
-              download="Gift"
-              target="_blank"
-              onClick={(e) => download2(e)}>
+            <a href={url} download>
               저장하기
             </a>
           ) : (

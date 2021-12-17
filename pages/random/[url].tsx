@@ -3,7 +3,6 @@ import styled from '@emotion/styled'
 import TextHeader from '@domains/TimerHeader'
 import { useCallback, useEffect, useState } from 'react'
 import { keyframes } from '@emotion/react'
-import Image from '@components/Image'
 import { COLORS } from '@utils/constants/colors'
 import { FONT_SIZES } from '@utils/constants/sizes'
 import Slider from '@mui/material/Slider'
@@ -14,7 +13,6 @@ import { getUesrInfo } from '../api/user'
 import { useUserContext } from '@contexts/UserProvider'
 import { getEvent, postRandomGiftReceipt } from '../api/event'
 import { useRouter } from 'next/router'
-import useDebounce from '@hooks/useDebounce'
 import { GIFT_TYPE, IGiftItem } from 'types/gift'
 import GiftItem from '@domains/GiftItem'
 import { EVENT_TEMPLATE } from 'types/event'
@@ -55,26 +53,6 @@ interface IeventData {
   gifts: Igifts[]
 }
 
-const textdata: IGiftItem = {
-  id: 6,
-  giftType: 'TEXT',
-  content:
-    '선물코드를 등록하여 선물을 받아보세요. (마르코 타운) ∙ 선물코드 : 3TLVAY2538… 선물함 > 선물코드 등록 ∙ 등록 URL : http://kko.to/Aikttag4o',
-  used: false,
-  category: '커피',
-  mainTemplate: 'template1',
-}
-
-const imagedata: IGiftItem = {
-  id: 73,
-  giftType: 'IMAGE',
-  content:
-    'https://dokev-gold-dduck.s3.ap-northeast-2.amazonaws.com/giftItemTest.jfif',
-  used: false,
-  category: '커피',
-  mainTemplate: 'template1',
-}
-
 const random = (): JSX.Element => {
   const [eventStart, setEventStart] = useState(false)
   const [eventData, setEventData] = useState<IeventData | null>(null)
@@ -88,10 +66,9 @@ const random = (): JSX.Element => {
   const router = useRouter()
 
   const handleSliderChange = useCallback(
-    async (e: Event, newValue: number) => {
+    (e: Event, newValue: number) => {
       if (newValue === 100 && eventStart) {
         setMuiSlider(newValue)
-        // setIsVideoLoading(true)
       }
     },
     [eventStart],
@@ -102,25 +79,22 @@ const random = (): JSX.Element => {
     if (muiSlider === 100 && eventStart && eventData) {
       const eventId = eventData.eventId
       const memberId = user.id //선물을 받는 유저의 ID
-      console.log('123', eventId, memberId)
-      setGiftItem(textdata)
-      setIsVideoLoading(true)
-      // const res = await postRandomGiftReceipt({ eventId, memberId: 2 })
-      // if (Array.isArray(res)) {
-      //   console.log('error', res)
-      //   //res = ['E002', '이미 참여한 이벤트입니다.']
-      //   const errorMessage = res[1]
-      //   alert(errorMessage)
-      // } else {
-      //   // 선물 수령 완료 이후
-      //   // setIsVideoLoading(true)
-      //   console.log('pass', res)
-      //   setGiftItem(imagedata)
-      // }
+      const res = await postRandomGiftReceipt({ eventId, memberId })
+      if (Array.isArray(res)) {
+        console.log('error', res)
+        //res = ['E002', '이미 참여한 이벤트입니다.']
+        const errorMessage = res[1]
+        alert(errorMessage)
+      } else {
+        // 선물 수령 완료 이후
+        console.log('pass', res)
+        setGiftItem(res)
+        setIsVideoLoading(true)
+      }
     }
   }, [muiSlider])
 
-  // 단 1회 API 요청
+  // 단 1회 선물 수령 API 요청
   useEffect(() => {
     postGiftReceipt()
   }, [muiSlider])
@@ -161,7 +135,7 @@ const random = (): JSX.Element => {
       res.eventProgressStatus === 'CLOSED' && setEventOver(true)
       setEventData(res)
     }
-  }, [])
+  }, [router])
 
   // 컴포넌트 마운트 시 로그인 체크 & 단일 이벤트 정보 가져오기
   useEffect(() => {
