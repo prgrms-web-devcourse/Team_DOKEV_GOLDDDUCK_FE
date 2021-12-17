@@ -160,6 +160,7 @@ const random = (): JSX.Element => {
             <TextHeader
               eventStart={new Date(eventData.startAt)}
               eventMaster={eventData.member.name}
+              message="두근두근 랜덤 박스!"
             />
           )}
           {isVideoEnded && giftItem && (

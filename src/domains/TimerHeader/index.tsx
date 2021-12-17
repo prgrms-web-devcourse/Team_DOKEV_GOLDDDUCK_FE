@@ -1,22 +1,18 @@
 import styled from '@emotion/styled'
 import Text from '@components/Text'
 import Timer from '@components/Timer'
-import { useRouter } from 'next/dist/client/router'
-import { useEffect } from 'react'
 
 interface ITimeHeader {
   eventStart: Date
   eventMaster: string
+  message: string
 }
 
-const TimerHeader = ({ eventStart, eventMaster }: ITimeHeader): JSX.Element => {
-  const router = useRouter()
-
-  useEffect(() => {
-    console.log('TimerHeader', router)
-    console.log('GetParams', router.query['url'])
-  }, [router])
-
+const TimerHeader = ({
+  eventStart,
+  eventMaster,
+  message,
+}: ITimeHeader): JSX.Element => {
   return (
     <TimerHeaderContainer>
       <TextWrapper>
@@ -37,7 +33,7 @@ const TimerHeader = ({ eventStart, eventMaster }: ITimeHeader): JSX.Element => {
       <TimerWrapper>
         <Timer size="LARGER" time={eventStart} />
         <Text size="MEDIUM" color="TEXT_GRAY_DARK" style={{ marginTop: '8px' }}>
-          선착순이니 서둘러주세요!!
+          {message}
         </Text>
       </TimerWrapper>
     </TimerHeaderContainer>

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Image from '@components/Image'
 import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
