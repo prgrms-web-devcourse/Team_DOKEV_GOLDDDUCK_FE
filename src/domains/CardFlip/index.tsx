@@ -1,19 +1,28 @@
 import styled from '@emotion/styled'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Image from '@components/Image'
 import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
 import { keyframes } from '@emotion/react'
+import copy from 'copy-to-clipboard'
+import { GIFT_TYPE } from 'types/gift'
 
 interface ICardFlip {
-  front: any
+  front: JSX.Element
+  url: string
+  type: GIFT_TYPE
 }
 
-const CardFlip = ({ front }: ICardFlip): JSX.Element => {
+const CardFlip = ({ front, url, type }: ICardFlip): JSX.Element => {
   const [flip, setFlip] = useState(true)
 
   const handleCardFlip = () => {
     setFlip((prev) => !prev)
+  }
+
+  const clipboardCopy = () => {
+    copy(url)
+    alert('클립보드 복사 완료!')
   }
 
   return (
@@ -48,9 +57,15 @@ const CardFlip = ({ front }: ICardFlip): JSX.Element => {
       </div>
       <FadeInWrapper style={{ display: flip ? 'none' : 'block' }}>
         <MUIButton style={{ ...BtnStyle }}>
-          <a href="/test.jpeg" download>
-            저장하기
-          </a>
+          {type === 'IMAGE' ? (
+            <a href={url} download>
+              저장하기
+            </a>
+          ) : (
+            <a href="#" onClick={clipboardCopy}>
+              저장하기
+            </a>
+          )}
         </MUIButton>
       </FadeInWrapper>
     </CardContainer>
