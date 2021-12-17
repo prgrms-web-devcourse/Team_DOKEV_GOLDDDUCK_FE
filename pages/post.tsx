@@ -26,7 +26,7 @@ const post = () => {
 
   // 사용자 정보 로직
   const { updateUser } = useUserContext()
-  const [memberId, setMemberId] = useState(0)
+  const [memberId, setMemberId] = useState(4)
 
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
@@ -44,11 +44,27 @@ const post = () => {
   const [activeStep, setActiveStep] = useState(0)
   const [apiState, setApiState] = useState('')
 
-  // useEffect(() => {
-  //   if (activeStep === 3) {
-  //     setEventApi()
-  //   }
-  // }, [activeStep])
+  useEffect(() => {
+    if (activeStep === 4) {
+      setEventApi()
+    }
+  }, [activeStep])
+
+  const handleNext = () => {
+    if (activeStep === 0 && title && maxParticipantCount && mainTemplate) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    } else if (activeStep === 1 && giftChoiceType) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    } else if (activeStep === 2 && gifts.length > 0) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    } else if (activeStep === 3 && startAt && endAt) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    } else if (activeStep === 3) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    } else {
+      alert('모든 폼을 입력 하세요')
+    }
+  }
 
   // api 호출 로직 모든 데이터 formData 형식
   const setEventApi = async () => {
@@ -87,9 +103,7 @@ const post = () => {
 
   //step1 EventTitle 상태 로직
   const [title, setTitle] = useState('')
-  const [maxParticipantCount, setMaxParticipantCount] = useState<
-    number | undefined
-  >()
+  const [maxParticipantCount, setMaxParticipantCount] = useState<number>()
   const [mainTemplate, setMainTemplate] = useState<string>('')
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -187,7 +201,7 @@ const post = () => {
   }
 
   return (
-    <div style={{ width: '100%', height: 'calc(100% - 150px)' }}>
+    <PostContainer>
       <Stepper
         activeStep={activeStep}
         alternativeLabel
@@ -209,7 +223,7 @@ const post = () => {
           )
         })}
       </Stepper>
-      {activeStep === steps.length ? (
+      {activeStep === steps.length && apiState ? (
         <div style={{ color: 'red' }}>안녕</div>
       ) : (
         <>
@@ -234,17 +248,27 @@ const post = () => {
 
             <MUIButton
               style={{ color: '#ffffff', backgroundColor: '#CE000B' }}
-              onClick={() =>
-                setActiveStep((prevActiveStep) => prevActiveStep + 1)
-              }>
+              onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </MUIButton>
           </StepButtonContainer>
         </>
       )}
-    </div>
+    </PostContainer>
   )
 }
+
+const PostContainer = styled.div`
+  width: 100%;
+  height: calc(100% - 150px);
+
+  @media all and (max-width: 425px) {
+    height: calc(100% - 120px);
+  }
+  @media all and (max-width: 320px) {
+    height: calc(100% - 120px);
+  }
+`
 
 const StepButtonContainer = styled.div`
   position: absolute;
