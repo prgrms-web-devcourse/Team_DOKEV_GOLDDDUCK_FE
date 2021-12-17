@@ -3,6 +3,7 @@ import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import MUIButton from '@components/MUIButton'
+import Swal from 'sweetalert2'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import Text from '@components/Text'
@@ -27,7 +28,7 @@ const post = () => {
 
   // 사용자 정보 로직
   const { updateUser } = useUserContext()
-  const [memberId, setMemberId] = useState(4)
+  const [memberId, setMemberId] = useState()
 
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
@@ -43,7 +44,7 @@ const post = () => {
 
   // stepper 로직
   const [activeStep, setActiveStep] = useState(0)
-  const [apiState, setApiState] = useState('')
+  const [eventLink, setEventLink] = useState('')
 
   useEffect(() => {
     if (activeStep === 4) {
@@ -59,11 +60,21 @@ const post = () => {
     } else if (activeStep === 2 && gifts.length > 0) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1)
     } else if (activeStep === 3 && startAt && endAt) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1)
-    } else if (activeStep === 3) {
-      setActiveStep((prevActiveStep) => prevActiveStep + 1)
+      if (new Date() < startAt && startAt < endAt) {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1)
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: '시작 시작, 종료 시간을 확인해 주세요!',
+        })
+      }
     } else {
-      alert('모든 폼을 입력 하세요')
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '모든 폼을 입력해주세요!',
+      })
     }
   }
 
@@ -82,7 +93,7 @@ const post = () => {
     formData.append('maxParticipantCount', String(maxParticipantCount))
     formData.append('mainTemplate', mainTemplate)
     formData.append('giftChoiceType', giftChoiceType)
-    formData.append('startAt', String(start))
+    formData.append('startAt', start)
     formData.append('endAt', String(end))
     formData.append('memberId', String(memberId))
 
@@ -99,7 +110,9 @@ const post = () => {
         }
       })
     })
-    await addEventApi(formData).then((res) => setApiState(res))
+    await addEventApi(formData).then((res) => {
+      setEventLink(res)
+    })
   }
 
   //step1 EventTitle 상태 로직
@@ -202,34 +215,35 @@ const post = () => {
   }
 
   return (
-    <PostContainer>
-      <Stepper
-        activeStep={activeStep}
-        alternativeLabel
-        sx={{ paddingTop: '15px' }}>
-        {steps.map((label, index) => {
-          const stepProps: { completed?: boolean } = {}
-          const labelProps: {
-            optional?: React.ReactNode
-          } = {}
-
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>
-                <Text size={'MICRO'} color={'WHITE'}>
-                  {label}
-                </Text>
-              </StepLabel>
-            </Step>
-          )
-        })}
-      </Stepper>
-      {activeStep === steps.length && apiState ? (
+    <>
+      {activeStep === steps.length ? (
         <EventComplete
-          link={apiState}
+          eventLink={eventLink}
           giftChoiceType={giftChoiceType}></EventComplete>
       ) : (
-        <>
+        <PostContainer>
+          <Stepper
+            activeStep={activeStep}
+            alternativeLabel
+            sx={{ paddingTop: '15px' }}>
+            {steps.map((label, index) => {
+              const stepProps: { completed?: boolean } = {}
+              const labelProps: {
+                optional?: React.ReactNode
+              } = {}
+
+              return (
+                <Step key={label} {...stepProps}>
+                  <StepLabel {...labelProps}>
+                    <Text size={'MICRO'} color={'WHITE'}>
+                      {label}
+                    </Text>
+                  </StepLabel>
+                </Step>
+              )
+            })}
+          </Stepper>
+
           <div style={{ color: 'white', height: '100%' }}>
             {getStepContent(activeStep)}
           </div>
@@ -255,9 +269,9 @@ const post = () => {
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </MUIButton>
           </StepButtonContainer>
-        </>
+        </PostContainer>
       )}
-    </PostContainer>
+    </>
   )
 }
 
