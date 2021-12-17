@@ -36,7 +36,6 @@ export const postGiftReceipt = async (object: object) => {
     if (data.success) {
       return data.data
     }
-
   } catch (error) {
     if (
       error.response.status === 400 &&

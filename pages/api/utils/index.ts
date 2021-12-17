@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
+const { API_END_POINT } = process.env
 
-const BASE_URL = 'https://gold-dduck.kro.kr/'
+const BASE_URL = API_END_POINT as string
 
 const axiosAuthApi = (
   url: string,

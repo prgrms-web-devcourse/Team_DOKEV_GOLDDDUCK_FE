@@ -4,11 +4,9 @@ import Image from '@components/Image'
 import Logo from '@components/Logo'
 import Text from '@components/Text'
 import { COLORS } from '@utils/constants/colors'
+const { KAKAO_URL } = process.env
 
 const INTRODUCE = '도깨비님 안녕하세요. \n 금뚝에 오신 것을 환영합니다!'
-
-const KAKAO_URL =
-  'https://gold-dduck.kro.kr/oauth2/authorization/kakao?redirect_uri=http://localhost:3000/oauth/redirect'
 
 const login = (): JSX.Element => {
   return (
