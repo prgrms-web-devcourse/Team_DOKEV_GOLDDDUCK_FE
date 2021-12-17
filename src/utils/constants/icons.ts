@@ -1,4 +1,4 @@
-import { MdArrowBack } from 'react-icons/md'
+import { MdArrowBack, MdLogout } from 'react-icons/md'
 import { FaRegHandPointDown } from 'react-icons/fa'
 import { AiOutlineDelete } from 'react-icons/ai'
 import { BsPlusLg } from 'react-icons/bs'
@@ -16,6 +16,7 @@ const $close = CgClose
 const $plus = BsPlusLg
 const $gift = AiFillGift
 const $remove = AiOutlineDelete
+const $logout = MdLogout
 
 export const ICON_TYPES: IIconTypes = {
   pointDown: $pointDown,
@@ -24,4 +25,5 @@ export const ICON_TYPES: IIconTypes = {
   plus: $plus,
   gift: $gift,
   remove: $remove,
+  logout: $logout,
 }

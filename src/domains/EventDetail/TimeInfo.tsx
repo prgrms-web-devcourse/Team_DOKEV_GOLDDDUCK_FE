@@ -7,43 +7,41 @@ interface ITimeInfo {
   end: string
 }
 
-const formattedDate = (date: string): Array<string> => {
+// 날짜 및 시간 포맷 함수
+const formattedDate = (date: string): string[] => {
   const castingDate = new Date(date)
 
   return [
-    `${castingDate.getFullYear()}년 ${castingDate.getMonth()}월 ${castingDate.getDate()}일`,
+    `${castingDate.getFullYear()}년 ${
+      castingDate.getMonth() + 1
+    }월 ${castingDate.getDate()}일`,
     `${castingDate.getHours()}시 ${castingDate.getMinutes()}분 ${castingDate.getSeconds()}초`,
   ]
 }
 
 const TimeInfo = ({ start, end }: ITimeInfo): JSX.Element => {
+  const Template = (props: { title: string; date: string }): JSX.Element => {
+    return (
+      <Wrapper>
+        <Text>{props.title}</Text>
+        <Text
+          color="TEXT_GRAY_LIGHT"
+          size="MICRO"
+          style={{ marginTop: 16, marginBottom: 4 }}>
+          {formattedDate(props.date)[0]}
+        </Text>
+        <Text size="MICRO" color="TEXT_GRAY_LIGHT">
+          {formattedDate(props.date)[1]}
+        </Text>
+      </Wrapper>
+    )
+  }
+
   return (
     <EventTimeSection>
-      <Wrapper>
-        <Text>오픈</Text>
-        <Text
-          color="TEXT_GRAY_LIGHT"
-          size="MICRO"
-          style={{ marginTop: 16, marginBottom: 4 }}>
-          {formattedDate(start)[0]}
-        </Text>
-        <Text size="MICRO" color="TEXT_GRAY_LIGHT">
-          {formattedDate(start)[1]}
-        </Text>
-      </Wrapper>
+      <Template title="종료" date={start} />
       <Divider />
-      <Wrapper>
-        <Text>종료</Text>
-        <Text
-          color="TEXT_GRAY_LIGHT"
-          size="MICRO"
-          style={{ marginTop: 16, marginBottom: 4 }}>
-          {formattedDate(end)[0]}
-        </Text>
-        <Text size="MICRO" color="TEXT_GRAY_LIGHT">
-          {formattedDate(end)[1]}
-        </Text>
-      </Wrapper>
+      <Template title="종료" date={end} />
     </EventTimeSection>
   )
 }

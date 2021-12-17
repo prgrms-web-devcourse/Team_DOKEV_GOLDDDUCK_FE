@@ -1,17 +1,22 @@
 import Swal from 'sweetalert2'
-import ImgPath from '/public/alert.png'
 import { COLORS } from '@utils/constants/colors'
 
-const Swalert = (onRemove: any) => {
+const Swalert = (
+  onRemove: any,
+  imageUrl: string,
+  confirmMsg: string,
+  canceleMsg: string,
+) => {
   return Swal.fire({
-    imageUrl: String(ImgPath),
+    imageUrl,
+    width: 320,
     imageWidth: 200,
     imageHeight: 200,
     showCancelButton: true,
     confirmButtonColor: COLORS.RED,
-    confirmButtonText: '진짜 삭제',
+    confirmButtonText: confirmMsg,
     cancelButtonColor: COLORS.GREEN,
-    cancelButtonText: '잠시 대기!',
+    cancelButtonText: canceleMsg,
   }).then((result) => {
     if (result.isConfirmed) {
       onRemove()

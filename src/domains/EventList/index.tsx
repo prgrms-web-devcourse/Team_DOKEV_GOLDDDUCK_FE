@@ -73,7 +73,7 @@ const EventList = ({
                   style={{
                     backgroundImage: `url(/templates/${template}.png)`,
                   }}>
-                  {title}
+                  id::{_id}_{title}
                 </ItemWrapper>
               )
             })
