@@ -96,3 +96,21 @@ export const postGiftReceipt = async (object: object) => {
     }
   }
 }
+
+export const postRandomGiftReceipt = async (object: object) => {
+  try {
+    const { data } = await authInstance.post('api/v1/gifts/random', object)
+    if (data.success) {
+      return data.data
+    }
+  } catch (error) {
+    if (
+      error.response.status === 400 &&
+      error.response.data.error.code !== 'E001'
+    ) {
+      return [error.response.data.error.code, error.response.data.error.message]
+    } else {
+      console.error(error)
+    }
+  }
+}
