@@ -62,6 +62,7 @@ const random = (): JSX.Element => {
   const [isVideoEnded, setIsVideoEnded] = useState(false)
   const [muiSlider, setMuiSlider] = useState(0)
   const [giftItem, setGiftItem] = useState<IGiftItem | null>(null)
+  const [isRandom, setIsRandom] = useState(true)
   const { user, updateUser } = useUserContext()
   const router = useRouter()
 
@@ -138,6 +139,7 @@ const random = (): JSX.Element => {
       const res = await getEvent(eventCode)
       if (res) {
         res.eventProgressStatus === 'CLOSED' && setEventOver(true)
+        res.giftChoiceType !== 'RANDOM' && setIsRandom(false)
         setEventData(res)
       }
     }
@@ -151,11 +153,13 @@ const random = (): JSX.Element => {
 
   return (
     <>
+      <Header />
       {eventOver ? (
         IsOverEvent()
+      ) : !isRandom ? (
+        IsOverEvent('선착순')
       ) : (
         <>
-          <Header />
           {eventData && (
             <TextHeader
               eventStart={new Date(eventData.startAt)}

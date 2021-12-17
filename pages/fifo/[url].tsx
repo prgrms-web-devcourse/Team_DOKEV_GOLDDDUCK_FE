@@ -13,6 +13,7 @@ import { getUesrInfo } from '../api/user'
 import { getEvent, postGiftReceipt } from '../api/event'
 import { useUserContext } from '@contexts/UserProvider'
 import useInterval from '@hooks/useInterval'
+import IsOverEvent from '@domains/IsOverEvent'
 
 interface IMember {
   id: number
@@ -50,34 +51,12 @@ interface IeventData {
   gifts: Igifts[]
 }
 
-// 이벤트 종료시 보여줄 JSX를 리턴하는 함수
-const eventIsOver = () => {
-  const EVENT_OVER_MESSAGE = '현재 종료된 \n 이벤트 입니다.'
-
-  return (
-    <>
-      <EventIsOverContainer>
-        <Text
-          color="WHITE"
-          style={{
-            textAlign: 'center',
-            lineHeight: 1.5,
-            whiteSpace: 'pre-wrap',
-            fontSize: '3rem',
-          }}>
-          {EVENT_OVER_MESSAGE}
-        </Text>
-        <Image src="/EventOver.png" width="100%" height="100%" />
-      </EventIsOverContainer>
-    </>
-  )
-}
-
 const fifo = (): JSX.Element => {
   const [eventStart, setEventStart] = useState(false)
   const [eventData, setEventData] = useState<IeventData | null>(null)
   const [eventOver, setEventOver] = useState(false)
   const [distance, setDistance] = useState(0)
+  const [isFifo, setIsFifo] = useState(true)
   const router = useRouter()
   const { user, updateUser } = useUserContext()
 
@@ -89,7 +68,6 @@ const fifo = (): JSX.Element => {
 
         return
       }
-
       if (eventStart && eventData) {
         const masterId = eventData.member.id
         const memberId = user.id
@@ -99,7 +77,6 @@ const fifo = (): JSX.Element => {
           return
         }
       }
-
       if (eventStart && eventData) {
         const eventId = eventData.eventId
         const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
@@ -155,6 +132,7 @@ const fifo = (): JSX.Element => {
       const res = await getEvent(eventCode)
       if (res) {
         res.eventProgressStatus === 'CLOSED' && setEventOver(true)
+        res.giftChoiceType !== 'FIFO' && setIsFifo(false)
         setEventData(res)
       }
     }
@@ -170,7 +148,9 @@ const fifo = (): JSX.Element => {
     <>
       <Header />
       {eventOver ? (
-        eventIsOver()
+        IsOverEvent()
+      ) : !isFifo ? (
+        IsOverEvent('랜덤')
       ) : (
         <>
           {eventData && (
@@ -277,12 +257,6 @@ const GiftTextWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: 8px;
-`
-
-const EventIsOverContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 `
 
 export default fifo
