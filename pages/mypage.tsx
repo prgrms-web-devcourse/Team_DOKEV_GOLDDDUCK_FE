@@ -4,7 +4,6 @@ import MUIAvatar from '@components/MUIAvatar'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { COLORS } from '@utils/constants/colors'
 import { getFilteredGiftList } from './api/gift'
 import { filteredGiftList } from './api/services/gift'
 import { IFilteredGiftItem, IPagination } from 'types/gift'
@@ -17,6 +16,9 @@ import { useUserContext } from '@contexts/UserProvider'
 import { getUesrInfo } from './api/user'
 import Text from '@components/Text'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
+import Icon from '@components/Icon'
+import alertImage from '/public/alert.png'
+import Swalert from '@components/Swalert'
 
 const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
   ssr: false,
@@ -27,7 +29,7 @@ const MUITabPanel = dynamic(() => import('@components/MUITab/MUITabPanel'), {
 
 const MyPage = (): JSX.Element => {
   const router = useRouter()
-  const { user, updateUser } = useUserContext()
+  const { user, updateUser, clearToken } = useUserContext()
   const currentTab = router.query.tab === 'event' ? 'event' : 'gift'
   const [selectedTab, setSelectedTab] = useState(currentTab)
   const [isLoading, setIsLoading] = useState(false)
@@ -110,6 +112,11 @@ const MyPage = (): JSX.Element => {
     [selectedTab, user],
   )
 
+  const logOut = () => {
+    clearToken()
+    router.push('/login')
+  }
+
   return user?.id ? (
     <>
       <Header />
@@ -117,7 +124,17 @@ const MyPage = (): JSX.Element => {
         <MUIAvatar width={'120px'} height={'120px'} src={user?.profileImage} />
         <Text color="WHITE" size="LARGE">
           {user?.name}
+          {user?.id}
         </Text>
+        <Icon
+          name="logout"
+          color="TEXT_GRAY_DARK"
+          size="MEDIUM"
+          onIconClick={() =>
+            Swalert(logOut, alertImage.src, '로그아웃', '머무르기')
+          }
+          style={{ marginLeft: 'auto', marginTop: 100 }}
+        />
       </Profile>
       {router.isReady && currentTab === selectedTab && (
         <>
@@ -145,10 +162,10 @@ const MyPage = (): JSX.Element => {
 }
 
 const Profile = styled.div`
-  width: 280px;
+  width: 320px;
   margin: ${DEFAULT_MARGIN} auto;
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 40px;
 `
 
