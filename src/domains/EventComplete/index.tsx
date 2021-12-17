@@ -9,7 +9,7 @@ import MUIButton from '@components/MUIButton'
 
 interface Props {
   link: string
-  giftChoiceType: 'RANDOM' | 'FIFO'
+  giftChoiceType: string
 }
 
 interface Message {
