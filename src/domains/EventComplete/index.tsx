@@ -7,11 +7,16 @@ import Text from '@components/Text'
 import Header from '@domains/Header'
 import MUIButton from '@components/MUIButton'
 
+interface Props {
+  link: string
+  giftChoiceType: 'RANDOM' | 'FIFO'
+}
+
 interface Message {
   copyMessage: boolean
 }
 
-const EventComplete = ({ link = '안녕하세요' }) => {
+const EventComplete = ({ link, giftChoiceType }: Props) => {
   const [copyMessage, setCopyMessage] = useState(false)
   const handleCopy = () => {
     copy(link)
@@ -39,7 +44,10 @@ const EventComplete = ({ link = '안녕하세요' }) => {
         </Div>
 
         <Div>
-          <a href={link}>
+          <a
+            href={
+              giftChoiceType === 'FIFO' ? `fifo/${link}` : `random/${link}`
+            }>
             <Text size="MEDIUM">{link}</Text>
           </a>
         </Div>
