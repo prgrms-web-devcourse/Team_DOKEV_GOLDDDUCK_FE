@@ -10,6 +10,7 @@ import EventTimer from '@domains/EventTimer'
 import EventTitle from '@domains/EventTitle'
 import EventPresent from '@domains/EventPresent'
 import EventType from '@domains/EventType/index'
+import EventComplete from '@domains/EventComplete'
 import { useRouter } from 'next/router'
 import { useUserContext } from '@contexts/UserProvider'
 import { getUesrInfo } from '../pages/api/user'
@@ -224,7 +225,9 @@ const post = () => {
         })}
       </Stepper>
       {activeStep === steps.length && apiState ? (
-        <div style={{ color: 'red' }}>안녕</div>
+        <EventComplete
+          link={apiState}
+          giftChoiceType={giftChoiceType}></EventComplete>
       ) : (
         <>
           <div style={{ color: 'white', height: '100%' }}>
