@@ -6,19 +6,25 @@ import Text from '@components/Text'
 import Icon from '@components/Icon'
 
 interface Props {
-  id: string
+  giftCheckId: string
   index: number
   length: number
   category: string
   delteGiftItem(e: string): void
 }
 
-const GiftForm = ({ id, index, category, length, delteGiftItem }: Props) => {
+const GiftForm = ({
+  giftCheckId,
+  index,
+  category,
+  length,
+  delteGiftItem,
+}: Props) => {
   return (
     <>
-      <Gift key={id}>
+      <Gift key={giftCheckId}>
         <Image
-          src={`/cover/cover${(index % 6) + 1}.png`}
+          src={`/templates/template${(index % 6) + 1}.png`}
           width="60px"
           height="60px"
           mode="contain"
@@ -38,7 +44,7 @@ const GiftForm = ({ id, index, category, length, delteGiftItem }: Props) => {
           name="close"
           color="TEXT_GRAY_DARK"
           size="LARGE"
-          onIconClick={() => delteGiftItem(id)}></Icon>
+          onIconClick={() => delteGiftItem(giftCheckId)}></Icon>
       </Gift>
     </>
   )

@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import styled from '@emotion/styled'
 import Image from '@components/Image'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
+import Swal from 'sweetalert2'
 import Text from '@components/Text'
 import Icon from '@components/Icon'
 import noting from '/public/nothing.png'
@@ -18,7 +19,7 @@ interface Props {
 }
 
 interface Gift {
-  id: string
+  giftCheckId: string
   category: string
   giftItems: GiftItem[]
 }
@@ -60,12 +61,22 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
   }
 
   const AddGift = () => {
-    const giftItems = {
-      id: uuidv4(),
-      category,
-      giftItems: [...image, ...contentList],
+    if (category && (image.length > 0 || contentList.length > 0)) {
+      const giftItems = {
+        giftCheckId: uuidv4(),
+        category,
+        giftItems: [...image, ...contentList],
+      }
+      AddGiftItem(giftItems)
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '선물 이름과 이미지 or 메시지를 입력하세요!',
+      })
+
+      return false
     }
-    AddGiftItem(giftItems)
   }
 
   const handleStateClear = () => {
@@ -140,11 +151,11 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
 
         <GiftWrapper>
           {gifts &&
-            gifts.map(({ id, category, giftItems }, index) => {
+            gifts.map(({ giftCheckId, category, giftItems }, index) => {
               return (
                 <GiftForm
-                  key={id}
-                  id={id}
+                  key={giftCheckId}
+                  giftCheckId={giftCheckId}
                   index={index}
                   category={category}
                   length={giftItems.length}
@@ -189,12 +200,12 @@ const EventPresentContainer = styled.div`
 const GiftWrapper = styled.div`
   width: 100%;
   overflow: auto;
-  height: 55vh;
+  height: 50vh;
   @media all and (max-width: 425px) {
-    height: 55vh;
+    height: 50vh;
   }
   @media all and (max-width: 320px) {
-    height: 50vh;
+    height: 45vh;
   }
   padding-left: ${DEFAULT_MARGIN};
   padding-right: ${DEFAULT_MARGIN};

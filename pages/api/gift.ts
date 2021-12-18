@@ -36,9 +36,15 @@ export const getGiftDetail = async (userId: number, giftId: string) => {
 }
 
 // 선물 사용여부 수정
-export const updateGiftUsed = async (userId: number, giftId: string) => {
+export const updateGiftUsed = async (
+  userId: number,
+  giftId: string,
+  used: boolean,
+) => {
   try {
-    await authInstance.patch(`/api/v1/members/${userId}/giftItems/${giftId}`)
+    await authInstance.patch(`api/v1/members/${userId}/giftItems/${giftId}`, {
+      used,
+    })
   } catch (error) {
     console.error(error)
   }
