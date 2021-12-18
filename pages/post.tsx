@@ -28,18 +28,18 @@ const post = () => {
 
   // 사용자 정보 로직
   const { updateUser } = useUserContext()
-  const [memberId, setMemberId] = useState(7)
+  const [memberId, setMemberId] = useState()
 
   // 사용자 정보 API
-  // const getUserData = useCallback(async () => {
-  //   const res = await getUesrInfo()
-  //   setMemberId(res.id)
-  //   res ? updateUser(res) : router.replace('/login')
-  // }, [])
+  const getUserData = useCallback(async () => {
+    const res = await getUesrInfo()
+    setMemberId(res.id)
+    res ? updateUser(res) : router.replace('/login')
+  }, [])
 
-  // useEffect(() => {
-  //   getUserData()
-  // }, [])
+  useEffect(() => {
+    getUserData()
+  }, [])
 
   // stepper 로직
   const [activeStep, setActiveStep] = useState(0)
