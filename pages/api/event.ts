@@ -56,8 +56,6 @@ export const getEventWinners = async (userId: number, eventId: string) => {
     )
 
     if (data.success) {
-      console.log('res', data.data)
-
       return data.data
     }
   } catch (error) {
@@ -67,7 +65,6 @@ export const getEventWinners = async (userId: number, eventId: string) => {
 
 export const getEvent = async (url: string | string[]) => {
   try {
-    // 추후 라우터를 활용해 url 매개변수를 전달할 예정입니다.
     const { data } = await authInstance.get(`api/v1/events/${url}`)
     if (data.success) {
       return data.data

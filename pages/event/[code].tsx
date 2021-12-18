@@ -48,42 +48,47 @@ const EventPage = (): JSX.Element => {
     fetchUser()
   }, [])
 
-
   // 이벤트 데이터 조회
-  const fetchEventDetail = useCallback(async (code) => {
-    if (userId) {
-      setIsLoading(true)
+  const fetchEventDetail = useCallback(
+    async (code) => {
+      if (userId) {
+        setIsLoading(true)
 
-      const data = await getEventDetail(code)
-      data && setEvent(eventDetail(data))
+        const data = await getEventDetail(code)
+        data && setEvent(eventDetail(data))
 
-      setIsLoading(false)
-    }
-  }, [userId])
+        setIsLoading(false)
+      }
+    },
+    [userId],
+  )
 
   useEffect(() => {
-    userId && router.isReady && fetchEventDetail(router.query?.code)
+    fetchEventDetail(router.query?.code)
   }, [userId, router.query.code])
 
   // 이벤트 삭제
   const handleClickRemove = useCallback(async () => {
-    userId && event?._id && await deleteEvent(userId, event._id)
+    userId && event?._id && (await deleteEvent(userId, event._id))
   }, [userId, event])
 
   // 당첨자 목록 조회
   const fetchEventWinners = useCallback(async () => {
-    if (userId && event?._id) {
+    if (userId && event?._id && event?.status === 'CLOSED') {
       setIsLoading(true)
-
       const data = await getEventWinners(userId, event?._id)
       data && setWinners(eventWinnerList(data))
 
-      setIsLoading(false) 
+      setIsLoading(false)
     }
   }, [userId, event])
 
+  useEffect(() => {
+    fetchEventWinners()
+  }, [userId, event?._id])
+
   return !isLoading && userId ? (
-    <>
+    <Wrapper>
       <Header />
       <Icon
         name="arrowBack"
@@ -107,22 +112,31 @@ const EventPage = (): JSX.Element => {
         />
         <TimeInfo start={event?.start as string} end={event?.end as string} />
       </EventContainer>
-      <WinnerModal winners={winners || []} isClosed={event?.status === 'CLOSED' ? true : false} onClick={fetchEventWinners}/>
-    </>
+      <WinnerModal
+        winners={winners || []}
+        isClosed={event?.status === 'CLOSED' ? true : false}
+      />
+    </Wrapper>
   ) : (
     <></>
   )
 }
+
+const Wrapper = styled.div`
+  background-color: inherit;
+  padding-bottom: 16px;
+  height: 100vh;
+`
 
 const EventContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
   width: 70%;
   height: 60%;
   margin: ${DEFAULT_MARGIN} auto;
+  gap: 16px;
 `
 
 export default EventPage

@@ -39,7 +39,7 @@ const TimeInfo = ({ start, end }: ITimeInfo): JSX.Element => {
 
   return (
     <EventTimeSection>
-      <Template title="종료" date={start} />
+      <Template title="오픈" date={start} />
       <Divider />
       <Template title="종료" date={end} />
     </EventTimeSection>

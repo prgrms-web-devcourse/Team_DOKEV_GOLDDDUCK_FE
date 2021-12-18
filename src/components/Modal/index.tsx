@@ -70,7 +70,7 @@ const StyledModal = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  height: ${({ open }: IProps) => (open ? '100vh' : 0)};
+  height: ${({ open }: IProps) => (open ? '100%' : 0)};
   background-color: ${COLORS.BLACK};
   z-index: 1000;
   transition: all 600ms cubic-bezier(0.86, 0, 0.07, 1);

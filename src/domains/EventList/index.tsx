@@ -73,7 +73,7 @@ const EventList = ({
                   style={{
                     backgroundImage: `url(/templates/${template}.png)`,
                   }}>
-                  id::{_id}_{title}
+                  {title}
                 </ItemWrapper>
               )
             })
@@ -92,24 +92,25 @@ const EventList = ({
 
 const ListWrapper = styled.section`
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
-  margin: ${DEFAULT_MARGIN} 0;
+  width: 332px;
+  margin: ${DEFAULT_MARGIN} auto;
 `
 
 const ItemWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: calc(50% - 8px);
-  height: 240px;
+  width: 150px;
+  height: 210px;
   line-height: 1.5;
   padding: ${DEFAULT_MARGIN};
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
   border-radius: 8px;
   cursor: pointer;
-  margin-bottom: ${DEFAULT_MARGIN};
+  margin: 8px;
   text-align: center;
   word-break: keep-all;
   color: ${COLORS.BLACK};

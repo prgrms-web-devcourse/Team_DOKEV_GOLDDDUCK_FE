@@ -61,14 +61,16 @@ export const eventDetail = ({
   }
 }
 
-export const eventWinnerList = (winnerList: IWinners[]): IFilteredWinners[] | undefined => {
+export const eventWinnerList = (
+  winnerList: IWinners[],
+): IFilteredWinners[] | undefined => {
   return winnerList?.map(({ category, winners }: IWinners) => {
     return {
       category,
       winners: {
-        _id: winners.id.toString(),
-        name: winners.name
-      }
+        _id: winners.id?.toString(),
+        name: winners.name,
+      },
     }
   })
 }
