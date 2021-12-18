@@ -1,3 +1,4 @@
+import EventStateChecker from '@domains/EventStateChecker'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import { getEvent, postGiftReceipt } from '../api/event'
 import { useCallback, useEffect, useState } from 'react'
@@ -6,7 +7,6 @@ import { useRouter } from 'next/dist/client/router'
 import { FONT_SIZES } from '@utils/constants/sizes'
 import { COLORS } from '@utils/constants/colors'
 import TimerHeader from '@domains/TimerHeader'
-import IsOverEvent from '@domains/IsOverEvent'
 import MUIButton from '@components/MUIButton'
 import useInterval from '@hooks/useInterval'
 import { getUesrInfo } from '../api/user'
@@ -144,59 +144,50 @@ const fifo = (): JSX.Element => {
     getEventData()
   }, [router])
 
-  return (
+  return eventOver ? (
+    <EventStateChecker state="EVENT_OVER" />
+  ) : !isFifo ? (
+    <EventStateChecker state="EVENT_INCORRECT" giftType="랜덤" />
+  ) : !eventData ? (
+    <EventStateChecker />
+  ) : (
     <>
       <Header />
-      {eventOver ? (
-        IsOverEvent()
-      ) : !isFifo ? (
-        IsOverEvent('랜덤')
-      ) : (
-        <>
-          {eventData && (
-            <TimerHeader
-              eventStart={new Date(eventData.startAt)}
-              eventMaster={eventData.member.name}
-              message="선착순이에요. 서둘러주세요!"
+      <TimerHeader
+        eventStart={new Date(eventData.startAt)}
+        eventMaster={eventData.member.name}
+        message="선착순이에요. 서둘러주세요!"
+      />
+      <GiftWrapper>
+        {eventData.gifts.map(({ id, category, itemCount }: Igifts, index) => (
+          <Gift key={id}>
+            <Image
+              src={`/templates/template${(index % 6) + 1}.png`}
+              width="60px"
+              height="60px"
+              mode="contain"
             />
-          )}
-          <GiftWrapper>
-            {eventData &&
-              eventData.gifts.map(
-                ({ id, category, itemCount }: Igifts, index) => (
-                  <Gift key={id}>
-                    <Image
-                      src={`/templates/template${(index % 6) + 1}.png`}
-                      width="60px"
-                      height="60px"
-                      mode="contain"
-                    />
-                    <GiftTextWrapper>
-                      <Text size="MEDIUM" color="WHITE">
-                        {category}
-                      </Text>
-                      <Text size="BASE" color="TEXT_GRAY_DARK">
-                        수량 : {itemCount}개
-                      </Text>
-                    </GiftTextWrapper>
-                    {itemCount ? (
-                      <MUIButton
-                        id={String(id)}
-                        onClick={handleGiftReceipt}
-                        style={{ ...GetStyle }}>
-                        GET
-                      </MUIButton>
-                    ) : (
-                      <MUIButton style={{ ...SoldOutStyle }}>
-                        SOLD OUT
-                      </MUIButton>
-                    )}
-                  </Gift>
-                ),
-              )}
-          </GiftWrapper>
-        </>
-      )}
+            <GiftTextWrapper>
+              <Text size="MEDIUM" color="WHITE">
+                {category}
+              </Text>
+              <Text size="BASE" color="TEXT_GRAY_DARK">
+                수량 : {itemCount}개
+              </Text>
+            </GiftTextWrapper>
+            {itemCount ? (
+              <MUIButton
+                id={String(id)}
+                onClick={handleGiftReceipt}
+                style={{ ...GetStyle }}>
+                GET
+              </MUIButton>
+            ) : (
+              <MUIButton style={{ ...SoldOutStyle }}>SOLD OUT</MUIButton>
+            )}
+          </Gift>
+        ))}
+      </GiftWrapper>
     </>
   )
 }
