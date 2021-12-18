@@ -78,11 +78,7 @@ const EventPresent = ({
       maxParticipantCount <
       totalQuantity + image.length + contentList.length
     ) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: '참여인원보다 선물이 많습니다.!',
-      })
+      ErrorAlert('참여인원보다 선물이 많습니다.!')
 
       return false
     }
