@@ -1,18 +1,20 @@
+import { ErrorAlert, GiftGetAlert } from '@components/Swalert'
+import EventStateChecker from '@domains/EventStateChecker'
+import { DEFAULT_MARGIN } from '@utils/constants/sizes'
+import { getEvent, postGiftReceipt } from '../api/event'
+import { useCallback, useEffect, useState } from 'react'
+import { useUserContext } from '@contexts/UserProvider'
+import { useRouter } from 'next/dist/client/router'
+import { FONT_SIZES } from '@utils/constants/sizes'
+import { COLORS } from '@utils/constants/colors'
+import TimerHeader from '@domains/TimerHeader'
+import MUIButton from '@components/MUIButton'
+import useInterval from '@hooks/useInterval'
+import { getUesrInfo } from '../api/user'
+import Image from '@components/Image'
 import Header from '@domains/Header'
 import styled from '@emotion/styled'
-import { DEFAULT_MARGIN } from '@utils/constants/sizes'
-import Image from '@components/Image'
-import MUIButton from '@components/MUIButton'
-import { useRouter } from 'next/dist/client/router'
-import TimerHeader from '@domains/TimerHeader'
 import Text from '@components/Text'
-import { useCallback, useEffect, useState } from 'react'
-import { COLORS } from '@utils/constants/colors'
-import { FONT_SIZES } from '@utils/constants/sizes'
-import { getUesrInfo } from '../api/user'
-import { getEvent, postGiftReceipt } from '../api/event'
-import { useUserContext } from '@contexts/UserProvider'
-import useInterval from '@hooks/useInterval'
 
 interface IMember {
   id: number
@@ -50,34 +52,12 @@ interface IeventData {
   gifts: Igifts[]
 }
 
-// 이벤트 종료시 보여줄 JSX를 리턴하는 함수
-const eventIsOver = () => {
-  const EVENT_OVER_MESSAGE = '현재 종료된 \n 이벤트 입니다.'
-
-  return (
-    <>
-      <EventIsOverContainer>
-        <Text
-          color="WHITE"
-          style={{
-            textAlign: 'center',
-            lineHeight: 1.5,
-            whiteSpace: 'pre-wrap',
-            fontSize: '3rem',
-          }}>
-          {EVENT_OVER_MESSAGE}
-        </Text>
-        <Image src="/EventOver.png" width="100%" height="100%" />
-      </EventIsOverContainer>
-    </>
-  )
-}
-
 const fifo = (): JSX.Element => {
   const [eventStart, setEventStart] = useState(false)
   const [eventData, setEventData] = useState<IeventData | null>(null)
   const [eventOver, setEventOver] = useState(false)
   const [distance, setDistance] = useState(0)
+  const [isFifo, setIsFifo] = useState(true)
   const router = useRouter()
   const { user, updateUser } = useUserContext()
 
@@ -85,33 +65,29 @@ const fifo = (): JSX.Element => {
   const handleGiftReceipt = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
       if (!eventStart || !eventData) {
-        alert('지금은 선물을 받을 수 없어요!')
+        ErrorAlert('지금은 선물을 받을 수 없어요!')
 
         return
       }
-
       if (eventStart && eventData) {
         const masterId = eventData.member.id
         const memberId = user.id
         if (masterId === memberId) {
-          alert('선물은 참가자들에게 양보해주세요!')
+          ErrorAlert('선물은 참가자들에게 양보해주세요!!')
 
           return
         }
       }
-
       if (eventStart && eventData) {
         const eventId = eventData.eventId
         const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
         const memberId = user.id
         const res = await postGiftReceipt({ eventId, giftId, memberId })
         if (Array.isArray(res)) {
-          //res = ['E002', '이미 참여한 이벤트입니다.']
           const errorMessage = res[1]
-          alert(errorMessage)
+          ErrorAlert(errorMessage)
         } else {
-          // 선물 수령 완료 이후 /gift/res.id로 이동
-          alert('선물 겟!')
+          GiftGetAlert('선물 당첨!!')
           router.push(`/gift/${res.id}`)
         }
       }
@@ -155,6 +131,7 @@ const fifo = (): JSX.Element => {
       const res = await getEvent(eventCode)
       if (res) {
         res.eventProgressStatus === 'CLOSED' && setEventOver(true)
+        res.giftChoiceType !== 'FIFO' && setIsFifo(false)
         setEventData(res)
       }
     }
@@ -166,56 +143,50 @@ const fifo = (): JSX.Element => {
     getEventData()
   }, [router])
 
-  return (
+  return eventOver ? (
+    <EventStateChecker state="EVENT_OVER" />
+  ) : !isFifo ? (
+    <EventStateChecker state="EVENT_INCORRECT" giftType="랜덤" />
+  ) : !eventData ? (
+    <EventStateChecker />
+  ) : (
     <>
       <Header />
-      {eventOver ? (
-        eventIsOver()
-      ) : (
-        <>
-          {eventData && (
-            <TimerHeader
-              eventStart={new Date(eventData.startAt)}
-              eventMaster={eventData.member.name}
+      <TimerHeader
+        eventStart={new Date(eventData.startAt)}
+        eventMaster={eventData.member.name}
+        message="선착순이에요. 서둘러주세요!"
+      />
+      <GiftWrapper>
+        {eventData.gifts.map(({ id, category, itemCount }: Igifts, index) => (
+          <Gift key={id}>
+            <Image
+              src={`/templates/template${(index % 6) + 1}.png`}
+              width="60px"
+              height="60px"
+              mode="contain"
             />
-          )}
-          <GiftWrapper>
-            {eventData &&
-              eventData.gifts.map(
-                ({ id, category, itemCount }: Igifts, index) => (
-                  <Gift key={id}>
-                    <Image
-                      src={`/templates/template${(index % 6) + 1}.png`}
-                      width="60px"
-                      height="60px"
-                      mode="contain"
-                    />
-                    <GiftTextWrapper>
-                      <Text size="MEDIUM" color="WHITE">
-                        {category}
-                      </Text>
-                      <Text size="BASE" color="TEXT_GRAY_DARK">
-                        수량 : {itemCount}개
-                      </Text>
-                    </GiftTextWrapper>
-                    {itemCount ? (
-                      <MUIButton
-                        id={String(id)}
-                        onClick={handleGiftReceipt}
-                        style={{ ...GetStyle }}>
-                        GET
-                      </MUIButton>
-                    ) : (
-                      <MUIButton style={{ ...SoldOutStyle }}>
-                        SOLD OUT
-                      </MUIButton>
-                    )}
-                  </Gift>
-                ),
-              )}
-          </GiftWrapper>
-        </>
-      )}
+            <GiftTextWrapper>
+              <Text size="MEDIUM" color="WHITE">
+                {category}
+              </Text>
+              <Text size="BASE" color="TEXT_GRAY_DARK">
+                수량 : {itemCount}개
+              </Text>
+            </GiftTextWrapper>
+            {itemCount ? (
+              <MUIButton
+                id={String(id)}
+                onClick={handleGiftReceipt}
+                style={{ ...GetStyle }}>
+                GET
+              </MUIButton>
+            ) : (
+              <MUIButton style={{ ...SoldOutStyle }}>SOLD OUT</MUIButton>
+            )}
+          </Gift>
+        ))}
+      </GiftWrapper>
     </>
   )
 }
@@ -276,12 +247,6 @@ const GiftTextWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: 8px;
-`
-
-const EventIsOverContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 `
 
 export default fifo

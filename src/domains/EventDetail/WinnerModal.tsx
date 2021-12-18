@@ -1,34 +1,27 @@
 import styled from '@emotion/styled'
 import { COLORS } from '@utils/constants/colors'
 import Text from '@components/Text'
-import Icon from '@components/Icon'
 import Modal from '@components/Modal'
 import MUIButton from '@components/MUIButton'
 import { IFilteredWinners } from 'types/event'
-import { useCallback } from 'react'
 
 interface IWinnerModal {
-  winners: IFilteredWinners[]
+  winners: IFilteredWinners[] | []
   isClosed: boolean
-  onClick: () => void
 }
 
-const WinnerModal = ({
-  winners,
-  isClosed,
-  onClick,
-}: IWinnerModal): JSX.Element => {
-  const handleClick = useCallback(() => {
-    isClosed && onClick?.()
-  }, [onClick])
+const WinnerModal = ({ winners, isClosed }: IWinnerModal): JSX.Element => {
+  console.log(winners)
 
   return (
     <WinnerSection>
-      <Text>당첨자 확인</Text>
-      <Icon name="pointDown" size="MEDIUM" />
       <Modal title="당첨자 목록" btnStyle={{ ...winnerBtnStyle }}>
-        <MUIButton style={{ ...winnerBtnStyle }} onClick={handleClick}>
-          클릭
+        <MUIButton
+          style={{
+            backgroundColor: isClosed ? COLORS.GREEN : COLORS.TEXT_GRAY_DARK,
+            ...winnerBtnStyle,
+          }}>
+          당첨자 목록 보기
         </MUIButton>
         <>
           {isClosed ? (
@@ -57,20 +50,20 @@ const WinnerModal = ({
 }
 
 const winnerBtnStyle: React.CSSProperties = {
-  backgroundColor: COLORS.GREEN,
+  border: 'none',
+  outline: `1px solid ${COLORS.WHITE}`,
   borderRadius: 20,
   lineHeight: 2,
   cursor: 'pointer',
+  width: 240,
+  color: COLORS.WHITE,
 }
 
 const WinnerSection = styled.section`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
-  min-height: 100px;
-  background-color: inherit;
-  margin-top: 30px;
+  margin-top: 72px;
 `
 
 export default WinnerModal
