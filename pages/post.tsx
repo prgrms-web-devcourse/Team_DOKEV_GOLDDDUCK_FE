@@ -3,7 +3,7 @@ import Stepper from '@mui/material/Stepper'
 import Step from '@mui/material/Step'
 import StepLabel from '@mui/material/StepLabel'
 import MUIButton from '@components/MUIButton'
-import Swal from 'sweetalert2'
+import { ErrorAlert } from '@components/Swalert'
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import Text from '@components/Text'
@@ -63,18 +63,10 @@ const post = () => {
       if (new Date() < startAt && startAt < endAt) {
         setActiveStep((prevActiveStep) => prevActiveStep + 1)
       } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: '시작 시작, 종료 시간을 확인해 주세요!',
-        })
+        ErrorAlert('시작 시간, 종료 시간을 확인해 주세요!')
       }
     } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: '모든 폼을 입력해주세요!',
-      })
+      ErrorAlert('모든 폼을 입력해주세요!')
     }
   }
 

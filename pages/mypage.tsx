@@ -17,8 +17,7 @@ import { getUesrInfo } from './api/user'
 import Text from '@components/Text'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import Icon from '@components/Icon'
-import alertImage from '/public/alert.png'
-import Swalert from '@components/Swalert'
+import { LogOutAlert } from '@components/Swalert'
 
 const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
   ssr: false,
@@ -130,9 +129,7 @@ const MyPage = (): JSX.Element => {
           name="logout"
           color="TEXT_GRAY_DARK"
           size="MEDIUM"
-          onIconClick={() =>
-            Swalert(logOut, alertImage.src, '로그아웃', '머무르기')
-          }
+          onIconClick={() => LogOutAlert(logOut)}
           style={{ marginLeft: 'auto', marginTop: 100 }}
         />
       </Profile>
