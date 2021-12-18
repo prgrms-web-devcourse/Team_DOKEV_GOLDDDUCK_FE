@@ -151,20 +151,37 @@ const EventPresent = ({
           </div>
         </div>
 
-        <GiftWrapper>
-          {gifts &&
-            gifts.map(({ giftCheckId, category, giftItems }, index) => {
-              return (
-                <GiftForm
-                  key={giftCheckId}
-                  giftCheckId={giftCheckId}
-                  index={index}
-                  category={category}
-                  length={giftItems.length}
-                  delteGiftItem={delteGiftItem}></GiftForm>
-              )
-            })}
-        </GiftWrapper>
+        {giftChoiceType === 'FIFO' ? (
+          <GiftFifoWrapper>
+            {gifts &&
+              gifts.map(({ giftCheckId, category, giftItems }, index) => {
+                return (
+                  <GiftForm
+                    key={giftCheckId}
+                    giftCheckId={giftCheckId}
+                    index={index}
+                    category={category}
+                    length={giftItems.length}
+                    delteGiftItem={delteGiftItem}></GiftForm>
+                )
+              })}
+          </GiftFifoWrapper>
+        ) : (
+          <GiftRandomWrapper>
+            {gifts &&
+              gifts.map(({ giftCheckId, category, giftItems }, index) => {
+                return (
+                  <GiftForm
+                    key={giftCheckId}
+                    giftCheckId={giftCheckId}
+                    index={index}
+                    category={category}
+                    length={giftItems.length}
+                    delteGiftItem={delteGiftItem}></GiftForm>
+                )
+              })}
+          </GiftRandomWrapper>
+        )}
 
         <DisplayStyle giftChoiceType={giftChoiceType}>
           <Image src={noting.src} width="60px" height="60px" />
@@ -193,15 +210,18 @@ const EventPresent = ({
 const EventPresentContainer = styled.div`
   margin-top: 10%;
 `
-const GiftWrapper = styled.div`
+const GiftFifoWrapper = styled.div`
   width: 100%;
   overflow: auto;
-  height: 50vh;
+  height: 60vh;
   @media all and (max-width: 425px) {
-    height: 50vh;
+    height: 65vh;
+  }
+  @media all and (max-width: 375px) {
+    height: 63vh;
   }
   @media all and (max-width: 320px) {
-    height: 45vh;
+    height: 57vh;
   }
   padding-left: ${DEFAULT_MARGIN};
   padding-right: ${DEFAULT_MARGIN};
@@ -211,6 +231,29 @@ const GiftWrapper = styled.div`
     display: none; /* Chrome, Safari, Opera*/
   }
 `
+
+const GiftRandomWrapper = styled.div`
+  width: 100%;
+  overflow: auto;
+  height: 65vh;
+  @media all and (max-width: 425px) {
+    height: 57vh;
+  }
+  @media all and (max-width: 375px) {
+    height: 52vh;
+  }
+  @media all and (max-width: 320px) {
+    height: 47vh;
+  }
+  padding-left: ${DEFAULT_MARGIN};
+  padding-right: ${DEFAULT_MARGIN};
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
+`
+
 const ItemForm = styled.div`
   display: flex;
   border: 1px dashed white;
@@ -231,7 +274,7 @@ const DisplayStyle = styled.div`
           justify-content: space-between;
         `
       : css`
-          visibility: hidden;
+          display: none;
         `
   }}
 `

@@ -216,8 +216,8 @@ const post = () => {
           <Stepper
             activeStep={activeStep}
             alternativeLabel
-            sx={{ paddingTop: '15px' }}>
-            {steps.map((label, index) => {
+            sx={{ padding: '12px' }}>
+            {steps.map((label) => {
               const stepProps: { completed?: boolean } = {}
               const labelProps: {
                 optional?: React.ReactNode
@@ -226,7 +226,10 @@ const post = () => {
               return (
                 <Step key={label} {...stepProps}>
                   <StepLabel {...labelProps}>
-                    <Text size={'MICRO'} color={'WHITE'}>
+                    <Text
+                      size={'MICRO'}
+                      color={'WHITE'}
+                      style={{ whiteSpace: 'nowrap' }}>
                       {label}
                     </Text>
                   </StepLabel>
