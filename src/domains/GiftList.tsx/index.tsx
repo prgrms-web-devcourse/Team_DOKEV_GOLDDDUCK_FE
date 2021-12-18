@@ -21,24 +21,31 @@ const GiftList = ({
   onClick,
   isLoading,
 }: IProps): JSX.Element => {
-  const route = useRouter()
-  const [filter, setFilter] = useState<GIFT_FILTER>('ALL')
+  const router = useRouter()
   const [selectedChip, setSelectedChip] = useState(
-    filter === 'USED' ? 2 : filter === 'UN_USED' ? 1 : 0,
+    router.query?.filter === 'used'
+      ? 2
+      : router.query?.filter === 'un_used'
+      ? 1
+      : 0,
   )
 
   const handleFilterClick = useCallback(
     (e: React.MouseEvent<HTMLInputElement>): void => {
-      const element = e.target as HTMLElement
-      setFilter(element.id.toUpperCase() as GIFT_FILTER)
       onClick?.(e)
     },
     [onClick],
   )
 
   useEffect(() => {
-    setSelectedChip(filter === 'USED' ? 2 : filter === 'UN_USED' ? 1 : 0)
-  }, [filter])
+    setSelectedChip(
+      router.query?.filter === 'used'
+        ? 2
+        : router.query?.filter === 'un_used'
+        ? 1
+        : 0,
+    )
+  }, [router.query?.filter])
 
   return (
     <>
@@ -66,7 +73,7 @@ const GiftList = ({
                   <ItemWrapper
                     key={_id}
                     id={_id}
-                    onClick={() => route.push(`/gift/${_id}`)}>
+                    onClick={() => router.push(`/gift/${_id}`)}>
                     <Image
                       src={used_mark.src}
                       style={{

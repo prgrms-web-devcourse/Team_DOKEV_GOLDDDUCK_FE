@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { DEFAULT_MARGIN, FONT_SIZES } from '@utils/constants/sizes'
 import { useCallback, useEffect, useState } from 'react'
 import { EVENT_FILTER, IFilteredEventItem } from 'types/event'
-import { useRouter } from 'next/router'
+import { NextRouter, useRouter } from 'next/router'
 import Spinner from '@components/Spinner'
 import { COLORS } from '@utils/constants/colors'
 
@@ -15,43 +15,37 @@ interface IProps {
   isLoading: boolean
 }
 
+const currentChip = (router: NextRouter) => {
+  switch (router.query?.filter) {
+    case 'closed':
+      return 3
+    case 'running':
+      return 2
+    case 'ready':
+      return 1
+    default:
+      return 0
+  }
+}
+
 const EventList = ({
   filteredEvents,
   onClick,
   isLoading,
 }: IProps): JSX.Element => {
-  const route = useRouter()
-  const [filter, setFilter] = useState<EVENT_FILTER>('ALL')
-  const [selectedChip, setSelectedChip] = useState(
-    filter === 'CLOSED'
-      ? 3
-      : filter === 'RUNNING'
-      ? 2
-      : filter === 'READY'
-      ? 1
-      : 0,
-  )
-
+  const router = useRouter()
+  const [selectedChip, setSelectedChip] = useState(currentChip(router))
+  console.log(selectedChip)
   const handleFilterClick = useCallback(
     (e: React.MouseEvent<HTMLInputElement>): void => {
-      const element = e.target as HTMLElement
-      setFilter(element.id.toUpperCase() as EVENT_FILTER)
       onClick?.(e)
     },
     [onClick],
   )
 
   useEffect(() => {
-    setSelectedChip(
-      filter === 'CLOSED'
-        ? 3
-        : filter === 'RUNNING'
-        ? 2
-        : filter === 'READY'
-        ? 1
-        : 0,
-    )
-  }, [filter])
+    setSelectedChip(currentChip(router))
+  }, [router.query?.filter])
 
   return (
     <>
@@ -69,7 +63,7 @@ const EventList = ({
               return (
                 <ItemWrapper
                   key={_id}
-                  onClick={() => code && route.push(`/event/${code}`)}
+                  onClick={() => code && router.push(`/event/${code}`)}
                   style={{
                     backgroundImage: `url(/templates/${template}.png)`,
                   }}>

@@ -74,7 +74,11 @@ const GiftDetailPage = () => {
               name="arrowBack"
               color="WHITE"
               style={{ marginRight: 8 }}
-              onIconClick={() => router.push('/mypage?tab=gift')}
+              onIconClick={() =>
+                router.push(
+                  `/mypage?tab=gift&filter=${gift?.used ? 'used' : 'un_used'}`,
+                )
+              }
             />
             <Text size="BASE" color="WHITE">
               {gift?.category}
