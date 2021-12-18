@@ -33,7 +33,6 @@ const post = () => {
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
     const res = await getUesrInfo()
-    console.log(res)
     setMemberId(res.id)
     res ? updateUser(res) : router.replace('/login')
   }, [])
@@ -198,6 +197,8 @@ const post = () => {
             gifts={gifts}
             AddGiftItem={AddGiftItem}
             delteGiftItem={delteGiftItem}
+            maxParticipantCount={maxParticipantCount}
+            giftChoiceType={giftChoiceType}
           />
         )
       case 3:

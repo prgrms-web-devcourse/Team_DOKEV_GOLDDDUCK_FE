@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 import Image from '@components/Image'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import Swal from 'sweetalert2'
@@ -12,10 +13,16 @@ import MUIButton from '@components/MUIButton'
 import PresentModal from './PresentModal'
 import GiftForm from './GiftForm'
 
+interface Display {
+  giftChoiceType: string
+}
+
 interface Props {
   gifts: Gift[]
   AddGiftItem(e: Gift): void
   delteGiftItem(e: string): void
+  maxParticipantCount: number | undefined
+  giftChoiceType: string
 }
 
 interface Gift {
@@ -30,7 +37,13 @@ interface GiftItem {
   giftType: 'TEXT' | 'IMAGE'
 }
 
-const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
+const EventPresent = ({
+  gifts,
+  AddGiftItem,
+  delteGiftItem,
+  maxParticipantCount = 0,
+  giftChoiceType,
+}: Props) => {
   const [category, setCategory] = useState('')
   const [content, setContent] = useState('')
   const [contentList, setContentList] = useState<GiftItem[]>([])
@@ -105,7 +118,7 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
               color="RED"
               size="LARGE"
               style={{ cursor: 'auto' }}></Icon>
-            <Text size="MICRO">{`${totalQuantity}개`}</Text>
+            <Text size="MICRO">{totalQuantity}개</Text>
           </div>
           <div
             style={{
@@ -164,7 +177,8 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
             })}
         </GiftWrapper>
 
-        <div
+        <DisplayStyle
+          giftChoiceType={giftChoiceType}
           style={{
             padding: '10px 0 0 12px',
             display: 'flex',
@@ -180,7 +194,7 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
               size="BASE"
               color="TEXT_GRAY_DARK"
               style={{ paddingTop: '3px' }}>
-              수량 : 10 개
+              수량 : {maxParticipantCount - totalQuantity} 개
             </Text>
           </div>
           <div>
@@ -188,7 +202,7 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
               * 등록한 선물이 부족하면 꽝으로 채워집니다.
             </Text>
           </div>
-        </div>
+        </DisplayStyle>
       </EventPresentContainer>
     </>
   )
@@ -214,6 +228,17 @@ const GiftWrapper = styled.div`
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
+`
+const DisplayStyle = styled.div`
+  ${({ giftChoiceType }: Display) => {
+    return giftChoiceType === 'RANDOM'
+      ? css`
+          display: black;
+        `
+      : css`
+          visibility: hidden;
+        `
+  }}
 `
 
 export default EventPresent
