@@ -11,6 +11,8 @@ export const getFilteredGiftList = async (
     )
 
     if (data.success) {
+      console.log(data.data)
+
       return data.data
     }
   } catch (error) {

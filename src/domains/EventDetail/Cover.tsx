@@ -77,11 +77,12 @@ const Cover = ({
 const Wrapper = styled.div`
   position: relative;
   display: flex;
+  width: 240px;
+  min-height: 340px;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  height: 70%;
-  padding: 40px;
+  padding: 70px 30px;
   border-radius: 20px;
   background-repeat: no-repeat;
   background-size: cover;
