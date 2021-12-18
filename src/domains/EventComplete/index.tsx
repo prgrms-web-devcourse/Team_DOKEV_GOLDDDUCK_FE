@@ -7,14 +7,20 @@ import Text from '@components/Text'
 import Header from '@domains/Header'
 import MUIButton from '@components/MUIButton'
 
+interface Props {
+  eventLink: string
+  giftChoiceType: string
+}
+
 interface Message {
   copyMessage: boolean
 }
 
-const EventComplete = ({ link = '안녕하세요' }) => {
+const EventComplete = ({ eventLink, giftChoiceType }: Props) => {
   const [copyMessage, setCopyMessage] = useState(false)
+
   const handleCopy = () => {
-    copy(link)
+    copy(eventLink)
     setCopyMessage(true)
 
     setTimeout(() => {
@@ -25,38 +31,62 @@ const EventComplete = ({ link = '안녕하세요' }) => {
   return (
     <>
       <Header />
+
       <EventCompleteContainer>
-        <Text style={{ textAlign: 'center' }} size="LARGE">
-          링크가 생성되었습니다
-        </Text>
+        {!!eventLink ? (
+          <>
+            <Text style={{ textAlign: 'center' }} size="LARGE">
+              링크가 생성되었습니다
+            </Text>
 
-        <Text style={{ textAlign: 'center', marginTop: '5%' }} size="LARGE">
-          이제 선물을 전달해보세요!
-        </Text>
+            <Text style={{ textAlign: 'center', marginTop: '5%' }} size="LARGE">
+              이제 선물을 전달해보세요!
+            </Text>
 
-        <Div>
-          <Image src="/roudolf.png"></Image>
-        </Div>
+            <Div>
+              <Image src="/roudolf.png"></Image>
+            </Div>
 
-        <Div>
-          <a href={link}>
-            <Text size="MEDIUM">{link}</Text>
-          </a>
-        </Div>
+            <Div>
+              <a
+                href={
+                  giftChoiceType === 'FIFO'
+                    ? `fifo/${eventLink}`
+                    : `random/${eventLink}`
+                }>
+                <Text size="MEDIUM">{eventLink}</Text>
+              </a>
+            </Div>
 
-        <Div>
-          <MUIButton
-            style={{ backgroundColor: '#CE000B' }}
-            onClick={handleCopy}>
-            링크 복사
-          </MUIButton>
-        </Div>
+            <Div>
+              <MUIButton
+                style={{ backgroundColor: '#CE000B' }}
+                onClick={handleCopy}>
+                링크 복사
+              </MUIButton>
+            </Div>
 
-        <DisplayStyle copyMessage={copyMessage}>
-          <Div>
-            <Text size="SMALL">복사 완료</Text>
-          </Div>
-        </DisplayStyle>
+            <DisplayStyle copyMessage={copyMessage}>
+              <Div>
+                <Text size="SMALL">복사 완료</Text>
+              </Div>
+            </DisplayStyle>
+          </>
+        ) : (
+          <>
+            <Text style={{ textAlign: 'center' }} size="LARGE">
+              선물 생성에 실패했습니다
+            </Text>
+
+            <Text style={{ textAlign: 'center', marginTop: '5%' }} size="LARGE">
+              다시 생성해 주세요!
+            </Text>
+
+            <Div>
+              <Image src="/giftfail.png"></Image>
+            </Div>
+          </>
+        )}
       </EventCompleteContainer>
     </>
   )

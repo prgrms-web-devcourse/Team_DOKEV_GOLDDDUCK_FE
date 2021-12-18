@@ -7,22 +7,22 @@ import { InputRadio } from '@components/Input'
 
 interface Props {
   handleTypeCheck(e: React.ChangeEvent<HTMLInputElement>): void
-  eventTypeState: string
+  giftChoiceType: string
 }
 
-const EventType = ({ eventTypeState, handleTypeCheck }: Props) => {
+const EventType = ({ giftChoiceType, handleTypeCheck }: Props) => {
   return (
     <>
       <EventTypeContainer>
         <TypeDiv>
-          <label htmlFor="random">
+          <label htmlFor="RANDOM">
             <Image src={eventType1.src} width={378} height={120}></Image>
           </label>
           <InputRadio
-            id="random"
-            value="random"
-            name="random"
-            checked={eventTypeState === 'random'}
+            id="RANDOM"
+            value="RANDOM"
+            name="RANDOM"
+            checked={giftChoiceType === 'RANDOM'}
             onChange={handleTypeCheck}
             style={{
               display: 'block',
@@ -34,14 +34,14 @@ const EventType = ({ eventTypeState, handleTypeCheck }: Props) => {
         </TypeDiv>
 
         <TypeDiv>
-          <label htmlFor="fifo">
+          <label htmlFor="FIFO">
             <Image src={eventType2.src} width={378} height={120}></Image>
           </label>
           <InputRadio
-            id="fifo"
-            value="fifo"
-            name="fifo"
-            checked={eventTypeState === 'fifo'}
+            id="FIFO"
+            value="FIFO"
+            name="FIFO"
+            checked={giftChoiceType === 'FIFO'}
             onChange={handleTypeCheck}
             style={{
               display: 'block',
@@ -57,16 +57,12 @@ const EventType = ({ eventTypeState, handleTypeCheck }: Props) => {
 }
 
 const EventTypeContainer = styled.div`
-  /* position: absolute; */
-  /* left: 0; */
-  /* right: 0; */
-  /* top: 0; */
-  /* bottom: 0; */
-  margin-top: 10%;
   display: flex;
-  flex-wrap: wrap;
+  height: 100%;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 70px;
 `
 const TypeDiv = styled.div`
   position: relative;
