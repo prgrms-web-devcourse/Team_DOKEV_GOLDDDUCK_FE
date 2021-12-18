@@ -2,11 +2,11 @@ import styled from '@emotion/styled'
 import Header from '@domains/Header'
 import MUIAvatar from '@components/MUIAvatar'
 import { useRouter } from 'next/router'
-import { LegacyRef, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { getFilteredGiftList } from './api/gift'
 import { filteredGiftList } from './api/services/gift'
-import { IFilteredGiftItem, IPagination } from 'types/gift'
+import { IFilteredGiftItem } from 'types/gift'
 import GiftList from '@domains/GiftList.tsx'
 import { filteredEventList } from './api/services/event'
 import EventList from '@domains/EventList'
@@ -121,10 +121,6 @@ const MyPage = (): JSX.Element => {
     setSelectedTab(router.query.tab === 'event' ? 'event' : 'gift')
   }, [router.query.tab])
 
-  useEffect(() => {
-    setSelectedFilter(router.query.filter ? router.query.filter : 'all')
-  }, [router.query.filter])
-
   const handleFilterClick = useCallback(
     (e: React.MouseEvent<HTMLInputElement>): void => {
       const element = e.target as HTMLElement
@@ -136,6 +132,10 @@ const MyPage = (): JSX.Element => {
     },
     [selectedTab],
   )
+
+  useEffect(() => {
+    setSelectedFilter(router.query.filter ? router.query.filter : 'all')
+  }, [router.query.filter])
 
   const logOut = () => {
     clearToken()
