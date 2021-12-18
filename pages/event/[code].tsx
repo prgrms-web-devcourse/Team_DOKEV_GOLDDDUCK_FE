@@ -76,7 +76,6 @@ const EventPage = (): JSX.Element => {
   const fetchEventWinners = useCallback(async () => {
     if (userId && event?._id && event?.status === 'CLOSED') {
       setIsLoading(true)
-      console.log(456)
       const data = await getEventWinners(userId, event?._id)
       data && setWinners(eventWinnerList(data))
 
