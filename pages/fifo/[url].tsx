@@ -1,3 +1,4 @@
+import { ErrorAlert, GiftGetAlert } from '@components/Swalert'
 import EventStateChecker from '@domains/EventStateChecker'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import { getEvent, postGiftReceipt } from '../api/event'
@@ -64,7 +65,7 @@ const fifo = (): JSX.Element => {
   const handleGiftReceipt = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
       if (!eventStart || !eventData) {
-        alert('지금은 선물을 받을 수 없어요!')
+        ErrorAlert('지금은 선물을 받을 수 없어요!')
 
         return
       }
@@ -72,7 +73,7 @@ const fifo = (): JSX.Element => {
         const masterId = eventData.member.id
         const memberId = user.id
         if (masterId === memberId) {
-          alert('선물은 참가자들에게 양보해주세요!')
+          ErrorAlert('선물은 참가자들에게 양보해주세요!!')
 
           return
         }
@@ -83,12 +84,10 @@ const fifo = (): JSX.Element => {
         const memberId = user.id
         const res = await postGiftReceipt({ eventId, giftId, memberId })
         if (Array.isArray(res)) {
-          //res = ['E002', '이미 참여한 이벤트입니다.']
           const errorMessage = res[1]
-          alert(errorMessage)
+          ErrorAlert(errorMessage)
         } else {
-          // 선물 수령 완료 이후 /gift/res.id로 이동
-          alert('선물 겟!')
+          GiftGetAlert('선물 당첨!!')
           router.push(`/gift/${res.id}`)
         }
       }

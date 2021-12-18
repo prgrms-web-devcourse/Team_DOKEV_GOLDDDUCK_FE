@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from 'uuid'
 import styled from '@emotion/styled'
 import Image from '@components/Image'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
-import Swal from 'sweetalert2'
 import Text from '@components/Text'
 import Icon from '@components/Icon'
 import noting from '/public/nothing.png'
@@ -11,6 +10,7 @@ import Modal from '@components/Modal'
 import MUIButton from '@components/MUIButton'
 import PresentModal from './PresentModal'
 import GiftForm from './GiftForm'
+import { ErrorAlert } from '@components/Swalert'
 
 interface Props {
   gifts: Gift[]
@@ -69,11 +69,7 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
       }
       AddGiftItem(giftItems)
     } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: '선물 이름과 이미지 or 메시지를 입력하세요!',
-      })
+      ErrorAlert('선물 이름과 이미지 or 메시지를 입력하세요!')
 
       return false
     }
