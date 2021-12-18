@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
+const API_END_POINT = process.env.NEXT_PUBLIC_API_END_POINT
 
-const BASE_URL =
-  'http://ec2-3-36-59-242.ap-northeast-2.compute.amazonaws.com:8080/'
+const BASE_URL = API_END_POINT as string
 
 const axiosAuthApi = (
   url: string,

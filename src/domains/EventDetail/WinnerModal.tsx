@@ -4,95 +4,53 @@ import Text from '@components/Text'
 import Icon from '@components/Icon'
 import Modal from '@components/Modal'
 import MUIButton from '@components/MUIButton'
+import { IFilteredWinners } from 'types/event'
+import { useCallback } from 'react'
 
-const WINNER_MOCK = {
-  data: [
-    {
-      category: '시원한 아이스아메리카노',
-      users: [
-        {
-          id: 1,
-          name: '파트로',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 2,
-          name: '문타리',
-          email: 'adsf@email.com',
-        },
-      ],
-    },
-    {
-      category: '리아 친필사인',
-      members: [
-        {
-          id: 3,
-          name: '도가가',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 4,
-          name: '윤쏘닉',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 5,
-          name: '조이',
-          email: 'adsf@email.com',
-        },
-      ],
-    },
-    {
-      category: '기팍팍 응원메세지',
-      members: [
-        {
-          id: 3,
-          name: '도가가',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 6,
-          name: '맹귄',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 2,
-          name: '문타리',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 7,
-          name: '로니',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 8,
-          name: '라엘',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 9,
-          name: '리아',
-          email: 'adsf@email.com',
-        },
-        {
-          id: 10,
-          name: '스펜서',
-          email: 'adsf@email.com',
-        },
-      ],
-    },
-  ],
+interface IWinnerModal {
+  winners: IFilteredWinners[]
+  isClosed: boolean
+  onClick: () => void
 }
 
-const WinnerModal = () => {
+const WinnerModal = ({
+  winners,
+  isClosed,
+  onClick,
+}: IWinnerModal): JSX.Element => {
+  const handleClick = useCallback(() => {
+    isClosed && onClick?.()
+  }, [onClick])
+
   return (
     <WinnerSection>
       <Text>당첨자 확인</Text>
       <Icon name="pointDown" size="MEDIUM" />
       <Modal title="당첨자 목록" btnStyle={{ ...winnerBtnStyle }}>
-        <MUIButton style={{ ...winnerBtnStyle }}>클릭</MUIButton>
-        <Text>당첨자 확인</Text>
+        <MUIButton style={{ ...winnerBtnStyle }} onClick={handleClick}>
+          클릭
+        </MUIButton>
+        <>
+          {isClosed ? (
+            winners?.map(({ category, winners }: IFilteredWinners, index) => {
+              return (
+                <section key={index}>
+                  <Text color="WHITE" size="MEDIUM">
+                    {category}
+                  </Text>
+                  <Text color="WHITE" size="BASE">
+                    {winners._id}
+                    {winners.name}
+                  </Text>
+                </section>
+              )
+            })
+          ) : (
+            <Text color="WHITE" size="BASE">
+              이벤트가 종료되면 당첨자 목록을 확인할 수 있어요!
+            </Text>
+          )}
+        </>
       </Modal>
     </WinnerSection>
   )

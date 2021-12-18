@@ -6,49 +6,48 @@ import MUIButton from '@components/MUIButton'
 import { useRouter } from 'next/dist/client/router'
 import TimerHeader from '@domains/TimerHeader'
 import Text from '@components/Text'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { COLORS } from '@utils/constants/colors'
 import { FONT_SIZES } from '@utils/constants/sizes'
+import { getUesrInfo } from '../api/user'
+import { getEvent, postGiftReceipt } from '../api/event'
+import { useUserContext } from '@contexts/UserProvider'
+import useInterval from '@hooks/useInterval'
 
-const startDate = new Date('12/13/2021')
+interface IMember {
+  id: number
+  name: string
+  email: string | null
+  socialId: string | null
+  profileImage: string | null
+}
 
-const MOCK_DATA = {
-  id: 12345,
-  eventCode: 'vllvlvla',
-  eventTitle: '이벤트 제목',
-  eventStart: startDate,
-  eventMaster: '도가가',
-  eventProgressStatus: 'IsOver',
-  gifts: [
-    { id: 1, giftTitle: '시언한 아이스 아메리카노', quantity: 10 },
-    { id: 2, giftTitle: '리아 친필 싸인', quantity: 10 },
-    { id: 3, giftTitle: '파트로 초코초코 파우더', quantity: 0 },
-    { id: 4, giftTitle: '가가 맥주 세트', quantity: 0 },
-    { id: 5, giftTitle: '문타리 사과', quantity: 10 },
-    { id: 6, giftTitle: '스펜서 친필 싸인', quantity: 10 },
-    { id: 7, giftTitle: '파트로 딸기딸기 파우더', quantity: 5 },
-    { id: 8, giftTitle: '가가 소 세트', quantity: 3 },
-    { id: 9, giftTitle: '시언한 아이스 아메리카노', quantity: 10 },
-    { id: 10, giftTitle: '리아 친필 싸인', quantity: 10 },
-    { id: 11, giftTitle: '파트로 나나바나나 파우더', quantity: 5 },
-    { id: 12, giftTitle: '가가 양주 세트', quantity: 3 },
-  ],
+interface IgiftItem {
+  id: number
+  giftType: string
+  content: string
+  used: boolean
+}
+
+interface Igifts {
+  id: number
+  category: string
+  itemCount: number
+  giftItems: IgiftItem[]
 }
 
 interface IeventData {
-  id: number
-  eventCode: string
-  eventTitle: string
-  eventStart: Date
-  eventMaster: string
+  eventId: number
+  title: string
+  giftChoiceType: string
+  startAt: string
+  endAt: string
+  code: string
   eventProgressStatus: string
-  gifts: object[]
-}
-
-interface IGift {
-  id: number
-  giftTitle: string
-  quantity: number
+  mainTemplate: string
+  maxParticipantCount: number
+  member: IMember
+  gifts: Igifts[]
 }
 
 // 이벤트 종료시 보여줄 JSX를 리턴하는 함수
@@ -75,81 +74,135 @@ const eventIsOver = () => {
 }
 
 const fifo = (): JSX.Element => {
-  const [isOver, setIsOver] = useState(false)
+  const [eventStart, setEventStart] = useState(false)
   const [eventData, setEventData] = useState<IeventData | null>(null)
+  const [eventOver, setEventOver] = useState(false)
+  const [distance, setDistance] = useState(0)
   const router = useRouter()
-  let timer: NodeJS.Timer
+  const { user, updateUser } = useUserContext()
 
-  const initEvent = () => {
-    //api 로직
-    //이벤트 종료 여부 체크
-    if (MOCK_DATA.eventProgressStatus === 'IsOver') {
-      setIsOver(true)
-    } else {
-      setIsOver(false)
+  // 선물 수령 API
+  const handleGiftReceipt = useCallback(
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (!eventStart || !eventData) {
+        alert('지금은 선물을 받을 수 없어요!')
+
+        return
+      }
+
+      if (eventStart && eventData) {
+        const masterId = eventData.member.id
+        const memberId = user.id
+        if (masterId === memberId) {
+          alert('선물은 참가자들에게 양보해주세요!')
+
+          return
+        }
+      }
+
+      if (eventStart && eventData) {
+        const eventId = eventData.eventId
+        const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
+        const memberId = user.id
+        const res = await postGiftReceipt({ eventId, giftId, memberId })
+        if (Array.isArray(res)) {
+          //res = ['E002', '이미 참여한 이벤트입니다.']
+          const errorMessage = res[1]
+          alert(errorMessage)
+        } else {
+          // 선물 수령 완료 이후 /gift/res.id로 이동
+          alert('선물 겟!')
+          router.push(`/gift/${res.id}`)
+        }
+      }
+    },
+    [eventStart],
+  )
+
+  // setInterval Clear 함수
+  const clear = useInterval(() => {
+    checkRemaining()
+  }, 1000)
+
+  // 남아있는 시간 체크 함수 (이벤트 시작 시간 - 현재 시간)
+  const checkRemaining = useCallback(() => {
+    if (eventData?.startAt) {
+      const now = new Date()
+      const eventStartAt = new Date(eventData.startAt)
+      const distance = Number(eventStartAt) - Number(now)
+      setDistance(distance)
     }
-    setEventData(() => MOCK_DATA)
-  }
+  }, [eventData])
 
-  const onButtonClick = () => {
-    if (isOver) {
-      // if '선물을 받은 사람인지 아닌지 체크!'
-      // 선물 받기 전에 수량 체크 한번 더 해야함.
-      // 수량 체크 해서 이상없으면 받고, 있으면 못받음! + 데이터 한번 더 받아야함.
-      console.log('서버에 해당 선물 당첨자 저장')
-      alert('선물 겟')
-    } else {
-      alert('지금은 선물을 받을 수 없어요!')
-    }
-  }
-
-  const checkRemaining = () => {
-    const now = new Date()
-    const distance = Number(MOCK_DATA.eventStart) - Number(now)
-    if (distance < 0) {
-      clearTimeout(timer)
-      setIsOver(true)
-    }
-  }
-
+  // 남아있는 시간이 0 미만이 될 경우, setInterval 클리어 함수 실행 및 상태 변경
   useEffect(() => {
-    initEvent()
-    timer = setInterval(checkRemaining, 1000)
+    if (distance < 0) {
+      clear()
+      setEventStart(true)
+    }
+  }, [distance])
+
+  // 사용자 정보 API
+  const getUserData = useCallback(async () => {
+    const res = await getUesrInfo()
+    res ? updateUser(res) : router.replace('/login')
   }, [])
+
+  // 단일 이벤트 조회 API
+  const getEventData = useCallback(async () => {
+    if (router.query['url']) {
+      const eventCode = router.query['url']
+      const res = await getEvent(eventCode)
+      if (res) {
+        res.eventProgressStatus === 'CLOSED' && setEventOver(true)
+        setEventData(res)
+      }
+    }
+  }, [router])
+
+  // 컴포넌트 마운트 시 로그인 체크 & 단일 이벤트 정보 가져오기
+  useEffect(() => {
+    getUserData()
+    getEventData()
+  }, [router])
 
   return (
     <>
       <Header />
-      {isOver ? (
+      {eventOver ? (
         eventIsOver()
       ) : (
         <>
-          <TimerHeader
-            eventStart={MOCK_DATA.eventStart}
-            eventMaster={MOCK_DATA.eventMaster}
-          />
+          {eventData && (
+            <TimerHeader
+              eventStart={new Date(eventData.startAt)}
+              eventMaster={eventData.member.name}
+              message="선착순이에요. 서둘러주세요!"
+            />
+          )}
           <GiftWrapper>
             {eventData &&
               eventData.gifts.map(
-                ({ id, giftTitle, quantity }: IGift, index) => (
+                ({ id, category, itemCount }: Igifts, index) => (
                   <Gift key={id}>
                     <Image
-                      src={`/cover/cover${(index % 6) + 1}.png`}
+                      src={`/templates/template${(index % 6) + 1}.png`}
                       width="60px"
                       height="60px"
                       mode="contain"
                     />
                     <GiftTextWrapper>
                       <Text size="MEDIUM" color="WHITE">
-                        {giftTitle}
+                        {category}
                       </Text>
                       <Text size="BASE" color="TEXT_GRAY_DARK">
-                        수량 : {quantity}개
+                        수량 : {itemCount}개
                       </Text>
                     </GiftTextWrapper>
-                    {quantity ? (
+                    {itemCount ? (
                       <MUIButton
-                        onClick={onButtonClick}
+                        id={String(id)}
+                        onClick={handleGiftReceipt}
                         style={{ ...GetStyle }}>
                         GET
                       </MUIButton>
@@ -192,7 +245,7 @@ const GiftWrapper = styled.div`
   position: absolute;
   overflow: auto;
   bottom: 0;
-  height: 60vh;
+  height: 45vh;
   @media all and (max-width: 425px) {
     height: 55vh;
   }
