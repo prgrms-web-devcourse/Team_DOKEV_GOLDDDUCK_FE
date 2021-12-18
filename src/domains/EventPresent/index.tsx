@@ -59,8 +59,10 @@ const EventPresent = ({
   }
 
   const onCilckMessage = () => {
-    setContentList([...contentList, { content, giftType: 'TEXT' }])
-    setContent('')
+    if (content.length > 0) {
+      setContentList([...contentList, { content, giftType: 'TEXT' }])
+      setContent('')
+    }
   }
 
   const hadleImageUpload = (fileList: File[]) => {
