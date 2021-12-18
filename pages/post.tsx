@@ -218,9 +218,7 @@ const post = () => {
   return (
     <>
       {activeStep === steps.length ? (
-        <EventComplete
-          eventLink={eventLink}
-          giftChoiceType={giftChoiceType}></EventComplete>
+        <EventComplete eventLink={eventLink} giftChoiceType={giftChoiceType} />
       ) : (
         <PostContainer>
           <Stepper
