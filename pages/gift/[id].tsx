@@ -93,7 +93,7 @@ const GiftDetailPage = () => {
             <Text
               size="MICRO"
               color="TEXT_GRAY_LIGHT"
-              style={{ fontWeight: 'bold', marginRight: 8 }}>
+              style={{ fontWeight: 'bold', marginLeft: 8 }}>
               {gift?.receivedDate &&
                 `${new Date(gift?.receivedDate).getFullYear()}년
                 ${new Date(gift?.receivedDate).getMonth() + 1}월
@@ -111,6 +111,7 @@ const GiftDetailPage = () => {
             imageSrc={gift?.src}
             template={gift?.template as EVENT_TEMPLATE}
             message={gift?.message}
+            imageStyle={imageStyle}
           />
         </GiftInfo>
       </ContainerTop>
@@ -171,5 +172,10 @@ const ContainerBottom = styled.div`
   background-color: inherit;
   padding: ${DEFAULT_MARGIN};
 `
+
+const imageStyle: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+}
 
 export default GiftDetailPage
