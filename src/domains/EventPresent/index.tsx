@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styled from '@emotion/styled'
+import { css } from '@emotion/react'
 import Image from '@components/Image'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import Text from '@components/Text'
@@ -12,10 +13,16 @@ import PresentModal from './PresentModal'
 import GiftForm from './GiftForm'
 import { ErrorAlert } from '@components/Swalert'
 
+interface Display {
+  giftChoiceType: string
+}
+
 interface Props {
   gifts: Gift[]
   AddGiftItem(e: Gift): void
   delteGiftItem(e: string): void
+  maxParticipantCount: number | undefined
+  giftChoiceType: string
 }
 
 interface Gift {
@@ -30,7 +37,13 @@ interface GiftItem {
   giftType: 'TEXT' | 'IMAGE'
 }
 
-const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
+const EventPresent = ({
+  gifts,
+  AddGiftItem,
+  delteGiftItem,
+  maxParticipantCount = 0,
+  giftChoiceType,
+}: Props) => {
   const [category, setCategory] = useState('')
   const [content, setContent] = useState('')
   const [contentList, setContentList] = useState<GiftItem[]>([])
@@ -101,7 +114,7 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
               color="RED"
               size="LARGE"
               style={{ cursor: 'auto' }}></Icon>
-            <Text size="MICRO">{`${totalQuantity}개`}</Text>
+            <Text size="MICRO">{totalQuantity}개</Text>
           </div>
           <div
             style={{
@@ -113,17 +126,10 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
               title="선물 등록"
               handleStateClear={handleStateClear}
               confirm>
-              <div
-                style={{
-                  display: 'flex',
-                  border: '1px dashed white',
-                  width: '50px',
-                  height: '50px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+              <ItemForm>
                 <Icon name="plus" color="WHITE" size="LARGE"></Icon>
-              </div>
+              </ItemForm>
+
               <PresentModal
                 category={category}
                 content={content}
@@ -160,13 +166,7 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
             })}
         </GiftWrapper>
 
-        <div
-          style={{
-            padding: '10px 0 0 12px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
+        <DisplayStyle giftChoiceType={giftChoiceType}>
           <Image src={noting.src} width="60px" height="60px" />
           <div>
             <Text size="MEDIUM" color="WHITE">
@@ -176,7 +176,7 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
               size="BASE"
               color="TEXT_GRAY_DARK"
               style={{ paddingTop: '3px' }}>
-              수량 : 10 개
+              수량 : {maxParticipantCount - totalQuantity} 개
             </Text>
           </div>
           <div>
@@ -184,7 +184,7 @@ const EventPresent = ({ gifts, AddGiftItem, delteGiftItem }: Props) => {
               * 등록한 선물이 부족하면 꽝으로 채워집니다.
             </Text>
           </div>
-        </div>
+        </DisplayStyle>
       </EventPresentContainer>
     </>
   )
@@ -210,6 +210,30 @@ const GiftWrapper = styled.div`
   &::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera*/
   }
+`
+const ItemForm = styled.div`
+  display: flex;
+  border: 1px dashed white;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+`
+
+const DisplayStyle = styled.div`
+  ${({ giftChoiceType }: Display) => {
+    return giftChoiceType === 'RANDOM'
+      ? css`
+          display: black;
+          padding: 10px 0 0 12px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        `
+      : css`
+          visibility: hidden;
+        `
+  }}
 `
 
 export default EventPresent
