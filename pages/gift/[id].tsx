@@ -116,6 +116,7 @@ const GiftDetailPage = () => {
             template={gift?.template as EVENT_TEMPLATE}
             message={gift?.message}
             imageStyle={imageStyle}
+            textStyle={textStyle}
           />
         </GiftInfo>
       </ContainerTop>
@@ -139,7 +140,7 @@ const GiftDetailPage = () => {
 }
 
 const ContainerTop = styled.div`
-  height: 100%;
+  height: calc(100% - 72px);
   overflow: scroll;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
@@ -149,8 +150,8 @@ const ContainerTop = styled.div`
 `
 const GiftInfo = styled.div`
   position: relative;
-  bottom: 0;
   width: 100%;
+  height: (100% - 88px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -158,8 +159,9 @@ const GiftInfo = styled.div`
   background-color: inherit;
 `
 const Wrapper = styled.div`
+  width: 320px;
   display: flex;
-  margin: 8px 0;
+  margin: 8px auto;
   align-items: center;
 `
 const StyledSwitch = styled.div`
@@ -180,6 +182,16 @@ const ContainerBottom = styled.div`
 const imageStyle: React.CSSProperties = {
   width: '100%',
   height: '100%',
+}
+
+const textStyle: React.CSSProperties = {
+  width: 320,
+  height: 450,
+  minHeight: 450,
+  margin: '0 auto',
+  backgroundPosition: 'center',
+  backgroundSize: 'cover',
+  borderRadius: 4,
 }
 
 export default GiftDetailPage
