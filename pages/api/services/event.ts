@@ -1,7 +1,6 @@
 import {
   IFilteredEventItem,
   IEventList,
-  IPagination,
   IEventItem,
   IWinners,
   IFilteredWinners,
@@ -10,10 +9,10 @@ import {
 export const filteredEventList = ({
   pagination,
   simpleEventList,
-}: IEventList): [IPagination, IFilteredEventItem[]] | undefined => {
-  return [
-    pagination,
-    simpleEventList?.map(
+}: IEventList): { totalPages: number; eventList: IFilteredEventItem[] } => {
+  return {
+    totalPages: pagination.totalPages,
+    eventList: simpleEventList?.map(
       ({
         code,
         endAt,
@@ -36,7 +35,7 @@ export const filteredEventList = ({
         }
       },
     ),
-  ]
+  }
 }
 
 export const eventDetail = ({

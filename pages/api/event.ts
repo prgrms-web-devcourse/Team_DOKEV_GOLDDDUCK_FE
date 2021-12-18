@@ -5,10 +5,12 @@ import { authInstance } from './utils'
 export const getFilteredEventList = async (
   filter: string | '',
   userId: number,
+  page: number,
+  size: number,
 ) => {
   try {
     const { data } = await authInstance.get(
-      `api/v1/members/${userId}/events?eventProgressStatus=${filter}&page=0&size=4`,
+      `api/v1/members/${userId}/events?eventProgressStatus=${filter}&page=${page}&size=${size}`,
     )
 
     if (data.success) {

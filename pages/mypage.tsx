@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import Header from '@domains/Header'
 import MUIAvatar from '@components/MUIAvatar'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
+import { LegacyRef, useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { getFilteredGiftList } from './api/gift'
 import { filteredGiftList } from './api/services/gift'
@@ -18,6 +18,7 @@ import Text from '@components/Text'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import Icon from '@components/Icon'
 import { LogOutAlert } from '@components/Swalert'
+import useInfiniteScroll from '@hooks/useInfiniteScroll'
 
 const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
   ssr: false,
@@ -29,13 +30,15 @@ const MUITabPanel = dynamic(() => import('@components/MUITab/MUITabPanel'), {
 const MyPage = (): JSX.Element => {
   const router = useRouter()
   const { user, updateUser, clearToken } = useUserContext()
+  const [target, setTarget] = useState<Element | null>(null)
+  const [totalPages, setTotalPages] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0)
   const currentTab = router.query.tab === 'event' ? 'event' : 'gift'
   const [selectedTab, setSelectedTab] = useState(currentTab)
+  const [selectedFilter, setSelectedFilter] = useState('all')
   const [isLoading, setIsLoading] = useState(false)
   const [giftRes, setGiftRes] = useState<[IPagination, IFilteredGiftItem[]]>()
-  const [eventRes, setEventRes] =
-    useState<[IPagination, IFilteredEventItem[]]>()
-
+  const [eventList, setEventList] = useState([] as IFilteredEventItem[])
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
     const data = await getUesrInfo()
@@ -49,6 +52,8 @@ const MyPage = (): JSX.Element => {
   useEffect(() => {
     fetchUser()
   }, [])
+
+  console.log('render')
 
   // 필터에 따른 받은 선물 목록 조회
   const fetchGiftList = useCallback(
@@ -74,21 +79,39 @@ const MyPage = (): JSX.Element => {
         setIsLoading(true)
 
         const status = filter === 'all' ? '' : filter.toUpperCase()
-        const data = await getFilteredEventList(status, user?.id)
-        data && setEventRes(filteredEventList(data))
+        const data = await getFilteredEventList(
+          status,
+          user?.id,
+          currentPage,
+          2,
+        )
+        if (data) {
+          console.log(
+            currentPage,
+            totalPages,
+            eventList.concat(filteredEventList(data).eventList),
+          )
+          setEventList(eventList.concat(filteredEventList(data).eventList))
+          !totalPages && setTotalPages(filteredEventList(data).totalPages)
+        }
 
         setIsLoading(false)
       }
     },
-    [user],
+    [user, currentPage],
   )
 
   useEffect(() => {
     if (user?.id) {
-      fetchGiftList('all')
-      fetchEventList('all')
+      fetchGiftList(selectedFilter)
     }
-  }, [user])
+  }, [user, currentPage])
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchEventList(selectedFilter)
+    }
+  }, [user, currentPage])
 
   const handleTabChange = useCallback(
     (e: React.SyntheticEvent, newValue: number) => {
@@ -107,6 +130,7 @@ const MyPage = (): JSX.Element => {
       selectedTab === 'event'
         ? fetchEventList(element?.id)
         : fetchGiftList(element?.id)
+      setSelectedFilter(element?.id)
     },
     [selectedTab, user],
   )
@@ -115,6 +139,17 @@ const MyPage = (): JSX.Element => {
     clearToken()
     router.push('/login')
   }
+
+  useInfiniteScroll({
+    target,
+    onIntersect: ([{ isIntersecting }]) => {
+      if (currentPage < totalPages && isIntersecting) {
+        setCurrentPage((prevPage) => prevPage + 1)
+        console.log('/////////intersecting')
+      }
+    },
+    threshold: 1,
+  })
 
   return user?.id ? (
     <>
@@ -145,10 +180,11 @@ const MyPage = (): JSX.Element => {
           </MUITabPanel>
           <MUITabPanel selectedTab={selectedTab} tab={'event'} index={1}>
             <EventList
-              filteredEvents={eventRes?.[1] || []}
+              filteredEvents={eventList}
               onClick={handleFilterClick}
               isLoading={isLoading}
             />
+            <div ref={setTarget} style={{ width: '100%' }} />
           </MUITabPanel>
         </>
       )}
