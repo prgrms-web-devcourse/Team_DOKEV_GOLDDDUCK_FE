@@ -130,17 +130,10 @@ const EventPresent = ({
               title="선물 등록"
               handleStateClear={handleStateClear}
               confirm>
-              <div
-                style={{
-                  display: 'flex',
-                  border: '1px dashed white',
-                  width: '50px',
-                  height: '50px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+              <ItemForm>
                 <Icon name="plus" color="WHITE" size="LARGE"></Icon>
-              </div>
+              </ItemForm>
+
               <PresentModal
                 category={category}
                 content={content}
@@ -177,14 +170,7 @@ const EventPresent = ({
             })}
         </GiftWrapper>
 
-        <DisplayStyle
-          giftChoiceType={giftChoiceType}
-          style={{
-            padding: '10px 0 0 12px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
+        <DisplayStyle giftChoiceType={giftChoiceType}>
           <Image src={noting.src} width="60px" height="60px" />
           <div>
             <Text size="MEDIUM" color="WHITE">
@@ -229,11 +215,24 @@ const GiftWrapper = styled.div`
     display: none; /* Chrome, Safari, Opera*/
   }
 `
+const ItemForm = styled.div`
+  display: flex;
+  border: 1px dashed white;
+  width: 50px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+`
+
 const DisplayStyle = styled.div`
   ${({ giftChoiceType }: Display) => {
     return giftChoiceType === 'RANDOM'
       ? css`
           display: black;
+          padding: 10px 0 0 12px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
         `
       : css`
           visibility: hidden;
