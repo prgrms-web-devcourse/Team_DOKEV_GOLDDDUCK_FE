@@ -74,7 +74,7 @@ const EventPage = (): JSX.Element => {
 
   // 당첨자 목록 조회
   const fetchEventWinners = useCallback(async () => {
-    if (userId && event?._id) {
+    if (userId && event?._id && event?.status === 'CLOSED') {
       setIsLoading(true)
       console.log(456)
       const data = await getEventWinners(userId, event?._id)
