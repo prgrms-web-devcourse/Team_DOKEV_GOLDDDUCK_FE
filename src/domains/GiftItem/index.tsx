@@ -28,7 +28,7 @@ const GiftItem = ({
       size="MEDIUM"
       color="BLACK"
       style={{
-        backgroundImage: `url(/templates/${template}.png)`,
+        backgroundImage: template && `url(/templates/${template}.png)`,
         ...messageStyle,
         ...textStyle,
       }}>

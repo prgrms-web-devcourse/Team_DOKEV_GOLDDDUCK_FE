@@ -22,6 +22,7 @@ const GiftDetailPage = () => {
   const { id: userId } = useUserContext().user
   const [isLoading, setIsLoading] = useState(false)
   const [gift, setGift] = useState<IFilteredGiftDetail | undefined>()
+  const [used, setUsed] = useState<boolean>(gift?.used || false)
 
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
@@ -42,10 +43,9 @@ const GiftDetailPage = () => {
     async (giftId) => {
       if (userId) {
         setIsLoading(true)
-
         const data = await getGiftDetail(userId, giftId)
         data && setGift(giftDetail(data))
-
+        setUsed(data.used)
         setIsLoading(false)
       }
     },
@@ -56,10 +56,13 @@ const GiftDetailPage = () => {
     userId && router.isReady && fetchGiftDetail(router.query?.id)
   }, [userId, router.query.id])
 
-  // 선물 사용여부 수정 (디바운스 필요)
-  const handleUsedSwitch = useCallback(async () => {
-    userId && gift?._id && (await updateGiftUsed(userId, gift?._id))
-  }, [userId, gift])
+  const handleChangeSwitch = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setUsed(e.target.checked)
+      userId && gift?._id && updateGiftUsed(userId, gift?._id, e.target.checked)
+    },
+    [userId, gift?._id],
+  )
 
   return userId && !isLoading ? (
     <>
@@ -76,14 +79,11 @@ const GiftDetailPage = () => {
             <Text size="BASE" color="WHITE">
               {gift?.category}
             </Text>
-            <StyledSwitch onChange={handleUsedSwitch}>
+            <StyledSwitch>
               <Text size="MICRO" color="TEXT_GRAY_DARK">
                 {'사용 여부'}
               </Text>
-              <MUISwitch
-                used={gift?.used as boolean}
-                onChange={handleUsedSwitch}
-              />
+              <MUISwitch used={used} handleChange={handleChangeSwitch} />
             </StyledSwitch>
           </Wrapper>
           <Wrapper>
@@ -93,10 +93,10 @@ const GiftDetailPage = () => {
             <Text
               size="MICRO"
               color="TEXT_GRAY_LIGHT"
-              style={{ fontWeight: 'bold', marginRight: 8 }}>
+              style={{ fontWeight: 'bold', marginLeft: 8 }}>
               {gift?.receivedDate &&
-                `${new Date(gift?.receivedDate).getFullYear()}년 
-                ${new Date(gift?.receivedDate).getMonth() + 1}월 
+                `${new Date(gift?.receivedDate).getFullYear()}년
+                ${new Date(gift?.receivedDate).getMonth() + 1}월
                 ${new Date(gift?.receivedDate).getDate()}일`}
             </Text>
             <Text
@@ -111,6 +111,7 @@ const GiftDetailPage = () => {
             imageSrc={gift?.src}
             template={gift?.template as EVENT_TEMPLATE}
             message={gift?.message}
+            imageStyle={imageStyle}
           />
         </GiftInfo>
       </ContainerTop>
@@ -142,7 +143,6 @@ const ContainerTop = styled.div`
     display: none; /* Chrome, Safari, Opera*/
   }
 `
-
 const GiftInfo = styled.div`
   position: relative;
   bottom: 0;
@@ -153,19 +153,16 @@ const GiftInfo = styled.div`
   padding: ${DEFAULT_MARGIN};
   background-color: inherit;
 `
-
 const Wrapper = styled.div`
   display: flex;
   margin: 8px 0;
   align-items: center;
 `
-
 const StyledSwitch = styled.div`
   display: flex;
   align-items: center;
   margin-left: auto;
 `
-
 const ContainerBottom = styled.div`
   position: absolute;
   left: 0;
@@ -175,5 +172,10 @@ const ContainerBottom = styled.div`
   background-color: inherit;
   padding: ${DEFAULT_MARGIN};
 `
+
+const imageStyle: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+}
 
 export default GiftDetailPage

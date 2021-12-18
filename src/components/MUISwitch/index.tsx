@@ -1,23 +1,15 @@
-import { useCallback, useState } from 'react'
 import Switch from '@mui/material/Switch'
 import { COLORS } from '@utils/constants/colors'
 import styled from '@emotion/styled'
 
 const MUISwitch = (props: {
   used: boolean
-  onChange: () => void
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }): JSX.Element => {
-  const [checked, setChecked] = useState(props.used)
-
-  const handleChange = useCallback(() => {
-    setChecked(() => !checked)
-    props.onChange?.()
-  }, [props.onChange])
-
   return (
     <CustomSwitch
-      checked={checked}
-      onChange={handleChange}
+      checked={props.used}
+      onChange={props.handleChange}
       inputProps={{ 'aria-label': 'controlled' }}
     />
   )
