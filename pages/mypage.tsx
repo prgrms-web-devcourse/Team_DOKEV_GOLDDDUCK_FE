@@ -37,7 +37,7 @@ const MyPage = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState(currentTab)
   const [selectedFilter, setSelectedFilter] = useState('all')
   const [isLoading, setIsLoading] = useState(false)
-  const [giftRes, setGiftRes] = useState<[IPagination, IFilteredGiftItem[]]>()
+  const [giftList, setGiftList] = useState([] as IFilteredGiftItem[])
   const [eventList, setEventList] = useState([] as IFilteredEventItem[])
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
@@ -53,8 +53,6 @@ const MyPage = (): JSX.Element => {
     fetchUser()
   }, [])
 
-  console.log('render')
-
   // 필터에 따른 받은 선물 목록 조회
   const fetchGiftList = useCallback(
     async (filter) => {
@@ -63,13 +61,17 @@ const MyPage = (): JSX.Element => {
 
         const isUsed =
           filter === 'used' ? true : filter === 'un_used' ? false : ''
-        const data = await getFilteredGiftList(isUsed, user?.id)
-        data && setGiftRes(filteredGiftList(data))
+        const data = await getFilteredGiftList(isUsed, user?.id, currentPage, 4)
+
+        if (data) {
+          setGiftList(giftList.concat(filteredGiftList(data).giftList))
+          setTotalPages(filteredEventList(data).totalPages)
+        }
 
         setIsLoading(false)
       }
     },
-    [user],
+    [user, currentPage],
   )
 
   //필터에 따른 나의 이벤트 목록 조회
@@ -77,22 +79,16 @@ const MyPage = (): JSX.Element => {
     async (filter) => {
       if (user?.id) {
         setIsLoading(true)
-
         const status = filter === 'all' ? '' : filter.toUpperCase()
         const data = await getFilteredEventList(
           status,
           user?.id,
           currentPage,
-          2,
+          4,
         )
         if (data) {
-          console.log(
-            currentPage,
-            totalPages,
-            eventList.concat(filteredEventList(data).eventList),
-          )
           setEventList(eventList.concat(filteredEventList(data).eventList))
-          !totalPages && setTotalPages(filteredEventList(data).totalPages)
+          setTotalPages(filteredEventList(data).totalPages)
         }
 
         setIsLoading(false)
@@ -103,36 +99,36 @@ const MyPage = (): JSX.Element => {
 
   useEffect(() => {
     if (user?.id) {
-      fetchGiftList(selectedFilter)
+      selectedTab === 'gift'
+        ? fetchGiftList(selectedFilter)
+        : fetchEventList(selectedFilter)
     }
-  }, [user, currentPage])
-
-  useEffect(() => {
-    if (user?.id) {
-      fetchEventList(selectedFilter)
-    }
-  }, [user, currentPage])
+  }, [user, currentPage, selectedFilter, selectedTab])
 
   const handleTabChange = useCallback(
     (e: React.SyntheticEvent, newValue: number) => {
+      setCurrentPage(0)
+      setTotalPages(0)
+      setSelectedFilter('all')
       setSelectedTab(() => (newValue === 0 ? 'gift' : 'event'))
+      newValue === 0 ? setEventList([]) : setGiftList([])
     },
-    [user],
+    [],
   )
 
   useEffect(() => {
     setSelectedTab(router.query.tab === 'event' ? 'event' : 'gift')
-  }, [router.query.tab, user])
+  }, [router.query.tab])
 
   const handleFilterClick = useCallback(
     (e: React.MouseEvent<HTMLInputElement>): void => {
       const element = e.target as HTMLElement
-      selectedTab === 'event'
-        ? fetchEventList(element?.id)
-        : fetchGiftList(element?.id)
+      selectedTab === 'gift' ? setGiftList([]) : setEventList([])
+      setTotalPages(0)
+      setCurrentPage(0)
       setSelectedFilter(element?.id)
     },
-    [selectedTab, user],
+    [selectedTab],
   )
 
   const logOut = () => {
@@ -143,9 +139,8 @@ const MyPage = (): JSX.Element => {
   useInfiniteScroll({
     target,
     onIntersect: ([{ isIntersecting }]) => {
-      if (currentPage < totalPages && isIntersecting) {
+      if (currentPage + 1 < totalPages && isIntersecting) {
         setCurrentPage((prevPage) => prevPage + 1)
-        console.log('/////////intersecting')
       }
     },
     threshold: 1,
@@ -173,7 +168,7 @@ const MyPage = (): JSX.Element => {
           <MUITab onChange={handleTabChange} />
           <MUITabPanel selectedTab={selectedTab} tab={'gift'} index={0}>
             <GiftList
-              filteredGifts={giftRes?.[1] || []}
+              filteredGifts={giftList}
               onClick={handleFilterClick}
               isLoading={isLoading}
             />
@@ -184,8 +179,8 @@ const MyPage = (): JSX.Element => {
               onClick={handleFilterClick}
               isLoading={isLoading}
             />
-            <div ref={setTarget} style={{ width: '100%' }} />
           </MUITabPanel>
+          <div ref={setTarget} />
         </>
       )}
     </>

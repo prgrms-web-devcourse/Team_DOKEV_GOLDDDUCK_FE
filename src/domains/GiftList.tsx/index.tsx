@@ -92,7 +92,7 @@ const GiftList = ({
                           style={{
                             ...itemTextStyle,
                           }}>
-                          {_id + message}
+                          {message}
                         </Text>
                       </div>
                     )}
@@ -126,10 +126,11 @@ const GiftList = ({
 }
 
 const ListWrapper = styled.section`
+  width: 332px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin: ${DEFAULT_MARGIN} 0;
+  margin: ${DEFAULT_MARGIN} auto;
 `
 
 const ItemWrapper = styled.div`
@@ -141,21 +142,22 @@ const ItemWrapper = styled.div`
 
 const markImageStyle: React.CSSProperties = {
   position: 'absolute',
-  top: '24%',
-  left: '16%',
+  top: 45,
+  left: 15,
   width: '120px',
   height: '120px',
 }
 
 const imageItemStyle: React.CSSProperties = {
-  width: '100%',
-  height: '240px',
+  width: 150,
+  height: 210,
   objectFit: 'cover',
   borderRadius: 8,
 }
 
 const textItemStyle: React.CSSProperties = {
-  height: '240px',
+  width: 150,
+  height: 210,
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   wordBreak: 'keep-all',
@@ -164,6 +166,7 @@ const textItemStyle: React.CSSProperties = {
   alignItems: 'center',
   borderRadius: 8,
   padding: DEFAULT_MARGIN,
+  backgroundPosition: 'center',
 }
 
 const itemTextStyle: React.CSSProperties = {

@@ -11,7 +11,7 @@ export const filteredEventList = ({
   simpleEventList,
 }: IEventList): { totalPages: number; eventList: IFilteredEventItem[] } => {
   return {
-    totalPages: pagination.totalPages,
+    totalPages: pagination?.totalPages,
     eventList: simpleEventList?.map(
       ({
         code,
