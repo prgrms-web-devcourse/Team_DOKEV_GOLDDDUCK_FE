@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useUserContext } from '@contexts/UserProvider'
 import { FONT_SIZES } from '@utils/constants/sizes'
 import { GIFT_TYPE, IGiftItem } from 'types/gift'
+import { ErrorAlert } from '@components/Swalert'
 import { COLORS } from '@utils/constants/colors'
 import TextHeader from '@domains/TimerHeader'
 import useInterval from '@hooks/useInterval'
@@ -82,15 +83,14 @@ const random = (): JSX.Element => {
       const memberId = user.id //선물을 받는 유저의 ID
       const masterId = eventData.member.id
       if (masterId === memberId) {
-        alert('선물은 참가자들에게 양보해주세요!')
+        ErrorAlert('선물은 참가자들에게 양보해주세요!')
 
         return
       }
       const res = await postRandomGiftReceipt({ eventId, memberId })
       if (Array.isArray(res)) {
-        //res = ['E002', '이미 참여한 이벤트입니다.']
         const errorMessage = res[1]
-        alert(errorMessage)
+        ErrorAlert(errorMessage)
       } else {
         setGiftItem(res)
         setIsVideoLoading(true)
