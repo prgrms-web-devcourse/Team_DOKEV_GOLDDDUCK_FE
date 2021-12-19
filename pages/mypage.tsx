@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import Header from '@domains/Header'
 import MUIAvatar from '@components/MUIAvatar'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
+import { LegacyRef, useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { getFilteredGiftList } from './api/gift'
 import { filteredGiftList } from './api/services/gift'
@@ -159,7 +159,6 @@ const MyPage = (): JSX.Element => {
         <MUIAvatar width={'120px'} height={'120px'} src={user?.profileImage} />
         <Text color="WHITE" size="LARGE">
           {user?.name}
-          {user?.id}
         </Text>
         <Icon
           name="logout"

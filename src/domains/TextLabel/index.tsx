@@ -19,6 +19,6 @@ export default TextLabel
 
 const LabelStyled = styled.label`
   display: block;
-  width: 30%;
+  width: 25%;
   font-size: 1.5rem;
 `
