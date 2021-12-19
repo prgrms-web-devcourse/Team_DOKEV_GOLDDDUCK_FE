@@ -63,7 +63,7 @@ const CardFlip = ({ front, url, type }: ICardFlip): JSX.Element => {
             </a>
           ) : (
             <a href="#" onClick={clipboardCopy}>
-              저장하기
+              복사하기
             </a>
           )}
         </MUIButton>

@@ -257,7 +257,7 @@ const FadeInDownWrapper = styled.div`
   height: 100%;
   position: absolute;
   top: 0;
-  z-index: 99;
+  z-index: 9;
   animation: ${fadeInDown} 2s ease-out;
 `
 
