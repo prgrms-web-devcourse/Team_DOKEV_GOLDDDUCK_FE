@@ -93,7 +93,11 @@ const EventPage = (): JSX.Element => {
       <Icon
         name="arrowBack"
         size="LARGE"
-        onIconClick={() => router.push('/mypage?tab=event')}
+        onIconClick={() =>
+          router.push(
+            `/mypage?tab=event&filter=${event?.status.toLocaleLowerCase()}`,
+          )
+        }
         style={{
           position: 'absolute',
           top: 108,

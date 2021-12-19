@@ -21,24 +21,31 @@ const GiftList = ({
   onClick,
   isLoading,
 }: IProps): JSX.Element => {
-  const route = useRouter()
-  const [filter, setFilter] = useState<GIFT_FILTER>('ALL')
+  const router = useRouter()
   const [selectedChip, setSelectedChip] = useState(
-    filter === 'USED' ? 2 : filter === 'UN_USED' ? 1 : 0,
+    router.query?.filter === 'used'
+      ? 2
+      : router.query?.filter === 'un_used'
+      ? 1
+      : 0,
   )
 
   const handleFilterClick = useCallback(
     (e: React.MouseEvent<HTMLInputElement>): void => {
-      const element = e.target as HTMLElement
-      setFilter(element.id.toUpperCase() as GIFT_FILTER)
       onClick?.(e)
     },
     [onClick],
   )
 
   useEffect(() => {
-    setSelectedChip(filter === 'USED' ? 2 : filter === 'UN_USED' ? 1 : 0)
-  }, [filter])
+    setSelectedChip(
+      router.query?.filter === 'used'
+        ? 2
+        : router.query?.filter === 'un_used'
+        ? 1
+        : 0,
+    )
+  }, [router.query?.filter])
 
   return (
     <>
@@ -66,7 +73,7 @@ const GiftList = ({
                   <ItemWrapper
                     key={_id}
                     id={_id}
-                    onClick={() => route.push(`/gift/${_id}`)}>
+                    onClick={() => router.push(`/gift/${_id}`)}>
                     <Image
                       src={used_mark.src}
                       style={{
@@ -92,7 +99,7 @@ const GiftList = ({
                           style={{
                             ...itemTextStyle,
                           }}>
-                          {_id + message}
+                          {message}
                         </Text>
                       </div>
                     )}
@@ -126,10 +133,11 @@ const GiftList = ({
 }
 
 const ListWrapper = styled.section`
+  width: 332px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin: ${DEFAULT_MARGIN} 0;
+  margin: ${DEFAULT_MARGIN} auto;
 `
 
 const ItemWrapper = styled.div`
@@ -141,21 +149,22 @@ const ItemWrapper = styled.div`
 
 const markImageStyle: React.CSSProperties = {
   position: 'absolute',
-  top: '24%',
-  left: '16%',
+  top: 45,
+  left: 15,
   width: '120px',
   height: '120px',
 }
 
 const imageItemStyle: React.CSSProperties = {
-  width: '100%',
-  height: '240px',
+  width: 150,
+  height: 210,
   objectFit: 'cover',
   borderRadius: 8,
 }
 
 const textItemStyle: React.CSSProperties = {
-  height: '240px',
+  width: 150,
+  height: 210,
   backgroundRepeat: 'no-repeat',
   backgroundSize: 'cover',
   wordBreak: 'keep-all',
@@ -164,6 +173,7 @@ const textItemStyle: React.CSSProperties = {
   alignItems: 'center',
   borderRadius: 8,
   padding: DEFAULT_MARGIN,
+  backgroundPosition: 'center',
 }
 
 const itemTextStyle: React.CSSProperties = {

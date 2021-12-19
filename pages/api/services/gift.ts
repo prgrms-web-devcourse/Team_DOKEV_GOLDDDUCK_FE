@@ -3,16 +3,15 @@ import {
   IFilteredGiftItem,
   IGiftDetail,
   IGiftList,
-  IPagination,
 } from 'types/gift'
 
 export const filteredGiftList = ({
   pagination,
   giftItemList,
-}: IGiftList): [IPagination, IFilteredGiftItem[]] | undefined => {
-  return [
-    pagination,
-    giftItemList?.map(
+}: IGiftList): { totalPages: number; giftList: IFilteredGiftItem[] } => {
+  return {
+    totalPages: pagination.totalPages,
+    giftList: giftItemList?.map(
       ({ content, giftType, category, id, used, mainTemplate, sender }) => {
         return {
           _id: id.toString(),
@@ -26,7 +25,7 @@ export const filteredGiftList = ({
         }
       },
     ),
-  ]
+  }
 }
 
 export const giftDetail = ({

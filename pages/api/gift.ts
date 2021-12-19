@@ -4,10 +4,12 @@ import { authInstance } from './utils'
 export const getFilteredGiftList = async (
   filter: boolean | '',
   userId: number,
+  currentPage: number,
+  size: number,
 ) => {
   try {
     const { data } = await authInstance.get(
-      `api/v1/members/${userId}/gifts?used=${filter}&page=0&size=4`,
+      `api/v1/members/${userId}/gifts?used=${filter}&page=${currentPage}&size=${size}`,
     )
 
     if (data.success) {
