@@ -108,7 +108,7 @@ const EventTitle: React.FC<Props> = ({
 }
 
 const EventTitleContainer = styled.div`
-  height: calc(100vh - 136px);
+  height: calc(100% - 132px);
   padding: 16px 0;
   overflow: scroll;
   -ms-overflow-style: none; /* IE and Edge */

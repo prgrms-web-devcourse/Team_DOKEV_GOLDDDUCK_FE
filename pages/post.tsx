@@ -237,9 +237,7 @@ const post = () => {
             })}
           </Stepper>
 
-          <div style={{ color: 'white', height: '100%' }}>
-            {getStepContent(activeStep)}
-          </div>
+          {getStepContent(activeStep)}
 
           <StepButtonContainer>
             <DisplayStyle activeStep={activeStep}>
@@ -271,6 +269,8 @@ const post = () => {
 const PostContainer = styled.div`
   width: 100%;
   background-color: ${COLORS.BLACK};
+  height: 100%;
+  overflow: hidden;
   /* @media all and (max-width: 425px) {
     height: calc(100% - 120px);
   }

@@ -58,7 +58,7 @@ const EventType = ({ giftChoiceType, handleTypeCheck }: Props) => {
 
 const EventTypeContainer = styled.div`
   display: flex;
-  height: calc(100vh - 136px);
+  height: calc(100% - 136px);
   flex-direction: column;
   justify-content: center;
   align-items: center;
