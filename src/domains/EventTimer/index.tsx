@@ -57,7 +57,7 @@ const EventTimer = ({
 
 const EventTimerContainer = styled.div`
   display: flex;
-  height: 100%;
+  height: calc(100vh - 132px);
   flex-direction: column;
   justify-content: center;
   align-items: center;

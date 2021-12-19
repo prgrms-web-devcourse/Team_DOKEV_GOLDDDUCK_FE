@@ -44,6 +44,7 @@ const PresentModal = ({
             value={category}
             onChange={handleInput}
             placeholder="등록할 선물의 이름을 입력하세요."
+            autoFocus={true}
             style={{ width: '100%' }}
           />
         </Div>
@@ -105,6 +106,11 @@ const Div = styled.div`
 const UploadWrapper = styled.div`
   white-space: nowrap;
   overflow-x: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `
 const PlusButton = styled(Fab)(() => ({
   position: 'absolute',

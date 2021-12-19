@@ -16,6 +16,7 @@ import { useRouter } from 'next/router'
 import { useUserContext } from '@contexts/UserProvider'
 import { getUesrInfo } from '../pages/api/user'
 import { addEventApi } from '../pages/api/post'
+import { COLORS } from '@utils/constants/colors'
 
 interface Props {
   activeStep: number
@@ -33,8 +34,12 @@ const post = () => {
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
     const res = await getUesrInfo()
-    setMemberId(res.id)
-    res ? updateUser(res) : router.replace('/login')
+    if (res) {
+      setMemberId(res?.id)
+      updateUser(res)
+    } else {
+      router.replace('/login')
+    }
   }, [])
 
   useEffect(() => {
@@ -109,7 +114,7 @@ const post = () => {
   //step1 EventTitle 상태 로직
   const [title, setTitle] = useState('')
   const [maxParticipantCount, setMaxParticipantCount] = useState<number>()
-  const [mainTemplate, setMainTemplate] = useState<string>('')
+  const [mainTemplate, setMainTemplate] = useState<string>('template1')
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.name === 'title'
@@ -122,7 +127,7 @@ const post = () => {
   }
 
   //setp2 EventType 상태 로직
-  const [giftChoiceType, setGiftChoiceType] = useState('')
+  const [giftChoiceType, setGiftChoiceType] = useState('RANDOM')
   const handleTypeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGiftChoiceType(() => e.target.value)
   }
@@ -207,17 +212,18 @@ const post = () => {
     }
   }
 
-  return (
+  return memberId ? (
     <>
-      {activeStep === steps.length ? (
+      {/* {activeStep === steps.length ? ( */}
+      {eventLink ? (
         <EventComplete eventLink={eventLink} giftChoiceType={giftChoiceType} />
       ) : (
         <PostContainer>
           <Stepper
             activeStep={activeStep}
             alternativeLabel
-            sx={{ padding: '12px' }}>
-            {steps.map((label) => {
+            sx={{ paddingTop: '15px' }}>
+            {steps.map((label, index) => {
               const stepProps: { completed?: boolean } = {}
               const labelProps: {
                 optional?: React.ReactNode
@@ -226,10 +232,7 @@ const post = () => {
               return (
                 <Step key={label} {...stepProps}>
                   <StepLabel {...labelProps}>
-                    <Text
-                      size={'MICRO'}
-                      color={'WHITE'}
-                      style={{ whiteSpace: 'nowrap' }}>
+                    <Text size={'MICRO'} color={'WHITE'}>
                       {label}
                     </Text>
                   </StepLabel>
@@ -238,9 +241,7 @@ const post = () => {
             })}
           </Stepper>
 
-          <div style={{ color: 'white', height: '100%' }}>
-            {getStepContent(activeStep)}
-          </div>
+          {getStepContent(activeStep)}
 
           <StepButtonContainer>
             <DisplayStyle activeStep={activeStep}>
@@ -266,13 +267,16 @@ const post = () => {
         </PostContainer>
       )}
     </>
+  ) : (
+    <></>
   )
 }
 
 const PostContainer = styled.div`
   width: 100%;
-  height: calc(100% - 150px);
-
+  background-color: ${COLORS.BLACK};
+  height: 100%;
+  overflow: hidden;
   /* @media all and (max-width: 425px) {
     height: calc(100% - 120px);
   }
@@ -288,6 +292,7 @@ const StepButtonContainer = styled.div`
   right: 20px;
   display: flex;
   justify-content: space-between;
+  background-color: ${COLORS.BLACK};
 `
 
 const DisplayStyle = styled.div`
@@ -297,7 +302,7 @@ const DisplayStyle = styled.div`
           visibility: hidden;
         `
       : css`
-          display: black;
+          display: block;
         `
   }}
 `

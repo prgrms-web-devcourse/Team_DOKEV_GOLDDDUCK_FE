@@ -32,7 +32,7 @@ const EventTitle: React.FC<Props> = ({
             value={title}
             onChange={handleInput}
             placeholder="이벤트의 제목을 입력해주세요. 15자 내외"
-            autoFocus
+            autoFocus={true}
           />
         </Div>
 
@@ -108,7 +108,8 @@ const EventTitle: React.FC<Props> = ({
 }
 
 const EventTitleContainer = styled.div`
-  height: 100%;
+  height: calc(100% - 132px);
+  padding: 16px 0;
   overflow: scroll;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */

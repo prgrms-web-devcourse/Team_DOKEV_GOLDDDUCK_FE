@@ -16,7 +16,7 @@ const EventType = ({ giftChoiceType, handleTypeCheck }: Props) => {
       <EventTypeContainer>
         <TypeDiv>
           <label htmlFor="RANDOM">
-            <Image src={eventType1.src} width="100%" height="100%" />
+            <Image src={eventType1.src} width={378} height={120}></Image>
           </label>
           <InputRadio
             id="RANDOM"
@@ -35,7 +35,7 @@ const EventType = ({ giftChoiceType, handleTypeCheck }: Props) => {
 
         <TypeDiv>
           <label htmlFor="FIFO">
-            <Image src={eventType2.src} width="100%" height="100%" />
+            <Image src={eventType2.src} width={378} height={120}></Image>
           </label>
           <InputRadio
             id="FIFO"
@@ -58,12 +58,11 @@ const EventType = ({ giftChoiceType, handleTypeCheck }: Props) => {
 
 const EventTypeContainer = styled.div`
   display: flex;
-  height: 100%;
+  height: calc(100% - 136px);
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 70px;
-  padding: 8px;
+  gap: 32px;
 `
 const TypeDiv = styled.div`
   position: relative;

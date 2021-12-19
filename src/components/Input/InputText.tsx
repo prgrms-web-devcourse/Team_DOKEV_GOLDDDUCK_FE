@@ -7,10 +7,10 @@ interface IInputText {
   id: string
   name: string
   maxlength?: number
-  autoFocus?: boolean
   style?: React.CSSProperties
   placeholder?: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  autoFocus?: boolean
 }
 
 const InputText = ({
@@ -32,6 +32,7 @@ const InputText = ({
       onChange={onChange}
       maxLength={maxlength}
       placeholder={placeholder}
+      autoComplete="off"
       autoFocus={autoFocus ? true : false}
       style={{ ...style }}
     />
@@ -47,9 +48,13 @@ const InputStyled = styled.input`
   font-size: ${FONT_SIZES.BASE};
   height: 32px;
   width: 70%;
+  outline: none;
   ::placeholder {
     font-size: ${FONT_SIZES.MICRO};
     color: ${COLORS.TEXT_GRAY_DARK};
+  }
+  :focus {
+    border: 1px solid ${COLORS.WHITE};
   }
 `
 
