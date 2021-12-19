@@ -74,6 +74,14 @@ const post = () => {
     }
   }
 
+  const handleBack = () => {
+    if (activeStep < 1) {
+      router.push('/')
+    } else {
+      setActiveStep((prevActiveStep) => prevActiveStep - 1)
+    }
+  }
+
   // api 호출 로직 모든 데이터 formData 형식
   const setEventApi = async () => {
     const offset = new Date().getTimezoneOffset() * 60000
@@ -244,19 +252,15 @@ const post = () => {
           {getStepContent(activeStep)}
 
           <StepButtonContainer>
-            <DisplayStyle activeStep={activeStep}>
-              <MUIButton
-                style={{
-                  color: '#ffffff',
-                  backgroundColor: '#000000',
-                }}
-                onClick={() =>
-                  setActiveStep((prevActiveStep) => prevActiveStep - 1)
-                }
-                sx={{ mr: 1 }}>
-                Back
-              </MUIButton>
-            </DisplayStyle>
+            <MUIButton
+              style={{
+                color: '#ffffff',
+                backgroundColor: '#000000',
+              }}
+              onClick={handleBack}
+              sx={{ mr: 1 }}>
+              Back
+            </MUIButton>
 
             <MUIButton
               style={{ color: '#ffffff', backgroundColor: '#CE000B' }}
@@ -293,18 +297,6 @@ const StepButtonContainer = styled.div`
   display: flex;
   justify-content: space-between;
   background-color: ${COLORS.BLACK};
-`
-
-const DisplayStyle = styled.div`
-  ${({ activeStep }: Props) => {
-    return activeStep === 0
-      ? css`
-          visibility: hidden;
-        `
-      : css`
-          display: block;
-        `
-  }}
 `
 
 export default post
