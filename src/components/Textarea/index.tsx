@@ -35,7 +35,7 @@ const Textarea = ({
 const TextareaStyled = styled.textarea`
   background-color: ${COLORS.WHITE};
   border: none;
-  border-top: 4px solid ${COLORS.RED};
+  border-top: 2px solid ${COLORS.RED};
   padding: 8px;
   width: 98%;
   height: 190px;

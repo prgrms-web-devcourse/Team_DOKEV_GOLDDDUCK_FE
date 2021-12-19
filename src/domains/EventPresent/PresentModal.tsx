@@ -59,15 +59,18 @@ const PresentModal = ({
           </UploadWrapper>
         </Div>
         <Div style={{ position: 'relative' }}>
-          <Textarea
-            id="presentMessage"
-            name="presentMessage"
-            value={content}
-            onChange={handleInput}
-          />
-          <PlusButton aria-label="add" onClick={onCilckMessage}>
-            <AddIcon />
-          </PlusButton>
+          <TextareaWrapper>
+            <LabelStyled htmlFor="textarea">메시지</LabelStyled>
+            <Textarea
+              id="presentMessage"
+              name="presentMessage"
+              value={content}
+              onChange={handleInput}
+            />
+            <PlusButton aria-label="add" onClick={onCilckMessage}>
+              <AddIcon />
+            </PlusButton>
+          </TextareaWrapper>
         </Div>
         <Div>
           {contentList.map(({ content }, index) => (
@@ -112,6 +115,20 @@ const UploadWrapper = styled.div`
     display: none; /* Chrome, Safari, Opera*/
   }
 `
+
+const LabelStyled = styled.label`
+  font-size: 1.5rem;
+  width: 100%;
+  text-align: center;
+  display: inline-block;
+`
+const TextareaWrapper = styled.div`
+  width: 98%;
+  margin: 0 auto;
+  margin-top: 16px;
+  background-color: #ffffff;
+`
+
 const PlusButton = styled(Fab)(() => ({
   position: 'absolute',
   bottom: '5px',
