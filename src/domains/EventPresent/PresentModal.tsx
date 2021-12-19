@@ -44,7 +44,7 @@ const PresentModal = ({
             value={category}
             onChange={handleInput}
             placeholder="등록할 선물의 이름을 입력하세요."
-            autoFocus
+            autoFocus={true}
             style={{ width: '100%' }}
           />
         </Div>

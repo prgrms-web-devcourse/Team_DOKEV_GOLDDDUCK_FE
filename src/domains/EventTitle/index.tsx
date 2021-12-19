@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { InputText, InputRadio } from '@components/Input'
 import TextLabel from '@domains/TextLabel'
 import Text from '@components/Text'
@@ -32,7 +32,7 @@ const EventTitle: React.FC<Props> = ({
             value={title}
             onChange={handleInput}
             placeholder="이벤트의 제목을 입력해주세요. 15자 내외"
-            autoFocus
+            autoFocus={true}
           />
         </Div>
 

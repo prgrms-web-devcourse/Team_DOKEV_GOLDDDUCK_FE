@@ -34,8 +34,12 @@ const post = () => {
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
     const res = await getUesrInfo()
-    setMemberId(res.id)
-    res ? updateUser(res) : router.replace('/login')
+    if (res) {
+      setMemberId(res?.id)
+      updateUser(res)
+    } else {
+      router.replace('/login')
+    }
   }, [])
 
   useEffect(() => {
@@ -208,7 +212,7 @@ const post = () => {
     }
   }
 
-  return (
+  return memberId ? (
     <>
       {/* {activeStep === steps.length ? ( */}
       {eventLink ? (
@@ -263,6 +267,8 @@ const post = () => {
         </PostContainer>
       )}
     </>
+  ) : (
+    <></>
   )
 }
 
