@@ -235,7 +235,7 @@ const GiftFifoWrapper = styled.div`
 const GiftRandomWrapper = styled.div`
   width: 100%;
   overflow: auto;
-  height: 65vh;
+  height: 55vh;
   @media all and (max-width: 425px) {
     height: 57vh;
   }
