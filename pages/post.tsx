@@ -16,6 +16,7 @@ import { useRouter } from 'next/router'
 import { useUserContext } from '@contexts/UserProvider'
 import { getUesrInfo } from '../pages/api/user'
 import { addEventApi } from '../pages/api/post'
+import { COLORS } from '@utils/constants/colors'
 
 interface Props {
   activeStep: number
@@ -109,7 +110,7 @@ const post = () => {
   //step1 EventTitle 상태 로직
   const [title, setTitle] = useState('')
   const [maxParticipantCount, setMaxParticipantCount] = useState<number>()
-  const [mainTemplate, setMainTemplate] = useState<string>('')
+  const [mainTemplate, setMainTemplate] = useState<string>('template1')
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.name === 'title'
@@ -122,7 +123,7 @@ const post = () => {
   }
 
   //setp2 EventType 상태 로직
-  const [giftChoiceType, setGiftChoiceType] = useState('')
+  const [giftChoiceType, setGiftChoiceType] = useState('RANDOM')
   const handleTypeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     setGiftChoiceType(() => e.target.value)
   }
@@ -209,7 +210,8 @@ const post = () => {
 
   return (
     <>
-      {activeStep === steps.length ? (
+      {/* {activeStep === steps.length ? ( */}
+      {eventLink ? (
         <EventComplete eventLink={eventLink} giftChoiceType={giftChoiceType} />
       ) : (
         <PostContainer>
@@ -268,14 +270,13 @@ const post = () => {
 
 const PostContainer = styled.div`
   width: 100%;
-  height: calc(100% - 150px);
-
-  @media all and (max-width: 425px) {
+  background-color: ${COLORS.BLACK};
+  /* @media all and (max-width: 425px) {
     height: calc(100% - 120px);
   }
   @media all and (max-width: 320px) {
     height: calc(100% - 120px);
-  }
+  } */
 `
 
 const StepButtonContainer = styled.div`
@@ -285,6 +286,7 @@ const StepButtonContainer = styled.div`
   right: 20px;
   display: flex;
   justify-content: space-between;
+  background-color: ${COLORS.BLACK};
 `
 
 const DisplayStyle = styled.div`
@@ -294,7 +296,7 @@ const DisplayStyle = styled.div`
           visibility: hidden;
         `
       : css`
-          display: black;
+          display: block;
         `
   }}
 `

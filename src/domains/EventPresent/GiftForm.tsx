@@ -24,7 +24,7 @@ const GiftForm = ({
     <>
       <Gift key={giftCheckId}>
         <Image
-          src={`/templates/template${(index % 6) + 1}.png`}
+          src={`/gifts/gift${(index % 8) + 1}.png`}
           width="60px"
           height="60px"
           mode="contain"
@@ -54,10 +54,7 @@ const Gift = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  margin-top: ${DEFAULT_MARGIN};
-  &:first-of-type {
-    margin: 0;
-  }
+  margin: ${DEFAULT_MARGIN} 0;
 `
 
 const GiftTextWrapper = styled.div`
