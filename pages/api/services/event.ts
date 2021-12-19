@@ -5,7 +5,7 @@ import {
   IEventItem,
   IWinnerList,
   IWinner,
-  IFilteredWinners,
+  IFilteredWinnerList,
 } from 'types/event'
 
 export const filteredEventList = ({
@@ -64,7 +64,7 @@ export const eventDetail = ({
 
 export const eventWinnerList = (
   winnerList: IWinnerList[],
-): IFilteredWinners[] | undefined => {
+): IFilteredWinnerList[] | undefined => {
   return winnerList?.map(({ category, winners }: IWinnerList) => {
     return {
       category,

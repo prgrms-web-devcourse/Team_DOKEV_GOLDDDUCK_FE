@@ -65,10 +65,15 @@ export interface IWinner {
 }
 
 // 받아온 이벤트 당첨자 목록에 대한 정제 데이터 타입
-export interface IFilteredWinners {
+export interface IFilteredWinnerList {
   category: string
   winners: {
     _id: string
     name: string
   }[]
+}
+
+export interface IFilteredWinner {
+  _id: string
+  name: string
 }

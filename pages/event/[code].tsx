@@ -11,7 +11,7 @@ import {
   EVENT_TEMPLATE,
   EVENT_TYPE,
   IFilteredEventItem,
-  IFilteredWinners,
+  IFilteredWinnerList,
 } from 'types/event'
 import { getUesrInfo } from '../api/user'
 import { useUserContext } from '@contexts/UserProvider'
@@ -32,7 +32,7 @@ const EventPage = (): JSX.Element => {
   const { id: userId } = useUserContext().user
   const [isLoading, setIsLoading] = useState(false)
   const [event, setEvent] = useState<IFilteredEventItem | undefined>()
-  const [winners, setWinners] = useState<IFilteredWinners[] | undefined>()
+  const [winners, setWinners] = useState<IFilteredWinnerList[] | undefined>()
 
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
