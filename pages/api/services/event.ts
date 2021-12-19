@@ -3,7 +3,8 @@ import {
   IEventList,
   IPagination,
   IEventItem,
-  IWinners,
+  IWinnerList,
+  IWinner,
   IFilteredWinners,
 } from 'types/event'
 
@@ -62,15 +63,17 @@ export const eventDetail = ({
 }
 
 export const eventWinnerList = (
-  winnerList: IWinners[],
+  winnerList: IWinnerList[],
 ): IFilteredWinners[] | undefined => {
-  return winnerList?.map(({ category, winners }: IWinners) => {
+  return winnerList?.map(({ category, winners }: IWinnerList) => {
     return {
       category,
-      winners: {
-        _id: winners.id?.toString(),
-        name: winners.name,
-      },
+      winners: winners?.map(({ id, name }: IWinner) => {
+        return {
+          _id: String(id),
+          name,
+        }
+      }),
     }
   })
 }
