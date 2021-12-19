@@ -97,7 +97,7 @@ const fadeIn = keyframes`
 `
 
 const Fade = styled.div`
-  animation: ${fadeIn} 3s 7s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+  animation: ${fadeIn} 3s 5s cubic-bezier(0.215, 0.61, 0.355, 1) both;
 `
 
 export default main
