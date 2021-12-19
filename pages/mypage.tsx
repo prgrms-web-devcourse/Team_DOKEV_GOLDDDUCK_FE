@@ -6,7 +6,7 @@ import { LegacyRef, useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { getFilteredGiftList } from './api/gift'
 import { filteredGiftList } from './api/services/gift'
-import { IFilteredGiftItem, IPagination } from 'types/gift'
+import { IFilteredGiftItem } from 'types/gift'
 import GiftList from '@domains/GiftList.tsx'
 import { filteredEventList } from './api/services/event'
 import EventList from '@domains/EventList'
@@ -34,8 +34,9 @@ const MyPage = (): JSX.Element => {
   const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(0)
   const currentTab = router.query.tab === 'event' ? 'event' : 'gift'
+  const currentFilter = router.query.filter ? router.query.filter : 'all'
   const [selectedTab, setSelectedTab] = useState(currentTab)
-  const [selectedFilter, setSelectedFilter] = useState('all')
+  const [selectedFilter, setSelectedFilter] = useState(currentFilter)
   const [isLoading, setIsLoading] = useState(false)
   const [giftList, setGiftList] = useState([] as IFilteredGiftItem[])
   const [eventList, setEventList] = useState([] as IFilteredEventItem[])
@@ -127,9 +128,14 @@ const MyPage = (): JSX.Element => {
       setTotalPages(0)
       setCurrentPage(0)
       setSelectedFilter(element?.id)
+      router.push(`/mypage?tab=${selectedTab}&filter=${element.id}`)
     },
     [selectedTab],
   )
+
+  useEffect(() => {
+    setSelectedFilter(router.query.filter ? router.query.filter : 'all')
+  }, [router.query.filter])
 
   const logOut = () => {
     clearToken()
@@ -153,7 +159,6 @@ const MyPage = (): JSX.Element => {
         <MUIAvatar width={'120px'} height={'120px'} src={user?.profileImage} />
         <Text color="WHITE" size="LARGE">
           {user?.name}
-          {user?.id}
         </Text>
         <Icon
           name="logout"

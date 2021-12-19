@@ -4,11 +4,11 @@ import styled from '@emotion/styled'
 import Icon from '@components/Icon'
 import Text from '@components/Text'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
-import giftImage from '/src/assets/gift_test.png'
+import html2canvas from 'html2canvas'
 import { useRouter } from 'next/router'
 import GiftItem from '@domains/GiftItem'
 import MUISwitch from '@components/MUISwitch'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { giftDetail } from '../api/services/gift'
 import { getGiftDetail, updateGiftUsed } from '../api/gift'
 import { useUserContext } from '@contexts/UserProvider'
@@ -23,6 +23,7 @@ const GiftDetailPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [gift, setGift] = useState<IFilteredGiftDetail | undefined>()
   const [used, setUsed] = useState<boolean>(gift?.used || false)
+  const saveTarget = useRef(null)
 
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
@@ -64,17 +65,38 @@ const GiftDetailPage = () => {
     [userId, gift?._id],
   )
 
+  // download html as png
+  const onCapture = () => {
+    saveTarget.current &&
+      html2canvas(saveTarget?.current as HTMLElement).then((canvas) => {
+        onSaveAs(canvas.toDataURL('image/png'), `my_gift_${gift?.category}.png`)
+      })
+
+    const onSaveAs = (uri: string, filename: string) => {
+      const link = document.createElement('a')
+      document.body.appendChild(link)
+      link.href = uri
+      link.download = filename
+      link.click()
+      document.body.removeChild(link)
+    }
+  }
+
   return userId && !isLoading ? (
     <>
       <ContainerTop>
         <Header />
         <GiftInfo>
-          <Wrapper>
+          <Wrapper style={{ width: '100%' }}>
             <Icon
               name="arrowBack"
               color="WHITE"
               style={{ marginRight: 8 }}
-              onIconClick={() => router.push('/mypage?tab=gift')}
+              onIconClick={() =>
+                router.push(
+                  `/mypage?tab=gift&filter=${gift?.used ? 'used' : 'un_used'}`,
+                )
+              }
             />
             <Text size="BASE" color="WHITE">
               {gift?.category}
@@ -86,7 +108,7 @@ const GiftDetailPage = () => {
               <MUISwitch used={used} handleChange={handleChangeSwitch} />
             </StyledSwitch>
           </Wrapper>
-          <Wrapper>
+          <Wrapper style={{ width: 320 }}>
             <Text size="MICRO" color="TEXT_GRAY_LIGHT">
               {'받은 날짜'}
             </Text>
@@ -106,17 +128,32 @@ const GiftDetailPage = () => {
               from.{gift?.sender}
             </Text>
           </Wrapper>
-          <GiftItem
-            type={gift?.giftType as GIFT_TYPE}
-            imageSrc={gift?.src}
-            template={gift?.template as EVENT_TEMPLATE}
-            message={gift?.message}
-            imageStyle={imageStyle}
-          />
+          <div ref={saveTarget}>
+            <GiftItem
+              type={gift?.giftType as GIFT_TYPE}
+              imageSrc={gift?.src}
+              template={gift?.template as EVENT_TEMPLATE}
+              message={gift?.message}
+              imageStyle={imageStyle}
+              textStyle={textStyle}
+            />
+          </div>
         </GiftInfo>
       </ContainerTop>
-      <ContainerBottom>
-        <a href={giftImage.src} download>
+      <ContainerBottom onClick={() => gift?.giftType === 'TEXT' && onCapture()}>
+        {gift?.giftType === 'IMAGE' ? (
+          <a href={gift?.src} download>
+            <MUIButton
+              style={{
+                width: '100%',
+                backgroundColor: 'RED',
+              }}>
+              <Text color="WHITE" size="BASE">
+                선물 저장
+              </Text>
+            </MUIButton>
+          </a>
+        ) : (
           <MUIButton
             style={{
               width: '100%',
@@ -126,7 +163,7 @@ const GiftDetailPage = () => {
               선물 저장
             </Text>
           </MUIButton>
-        </a>
+        )}
       </ContainerBottom>
     </>
   ) : (
@@ -135,7 +172,7 @@ const GiftDetailPage = () => {
 }
 
 const ContainerTop = styled.div`
-  height: 100%;
+  height: calc(100% - 72px);
   overflow: scroll;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
@@ -145,8 +182,7 @@ const ContainerTop = styled.div`
 `
 const GiftInfo = styled.div`
   position: relative;
-  bottom: 0;
-  width: 100%;
+  height: (100% - 88px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -155,7 +191,7 @@ const GiftInfo = styled.div`
 `
 const Wrapper = styled.div`
   display: flex;
-  margin: 8px 0;
+  margin: 8px auto;
   align-items: center;
 `
 const StyledSwitch = styled.div`
@@ -174,8 +210,19 @@ const ContainerBottom = styled.div`
 `
 
 const imageStyle: React.CSSProperties = {
-  width: '100%',
+  width: 320,
   height: '100%',
+  margin: '0 auto',
+}
+
+const textStyle: React.CSSProperties = {
+  width: 320,
+  height: 450,
+  minHeight: 450,
+  margin: '0 auto',
+  backgroundPosition: 'center',
+  backgroundSize: 'cover',
+  borderRadius: 4,
 }
 
 export default GiftDetailPage
