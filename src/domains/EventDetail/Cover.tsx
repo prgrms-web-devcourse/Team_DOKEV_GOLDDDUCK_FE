@@ -5,7 +5,7 @@ import styled from '@emotion/styled'
 import { COLORS } from '@utils/constants/colors'
 import { EVENT_FILTER, EVENT_TEMPLATE, EVENT_TYPE } from 'types/event'
 import { useCallback } from 'react'
-import Swalert from '@components/Swalert'
+import RemoveAlert from '@components/Swalert/RemoveAlert'
 import alertImage from '/public/alert.png'
 interface ICover {
   template: EVENT_TEMPLATE
@@ -66,7 +66,7 @@ const Cover = ({
           size="LARGE"
           style={{ margin: '16px 0 0 16px' }}
           onIconClick={() =>
-            Swalert(onRemoveEvent, alertImage.src, '삭제', '취소')
+            RemoveAlert(onRemoveEvent, alertImage.src, '삭제', '취소')
           }
         />
       </RemoveButton>
