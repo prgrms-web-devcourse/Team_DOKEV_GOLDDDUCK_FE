@@ -7,6 +7,7 @@ interface IInputText {
   id: string
   name: string
   maxlength?: number
+  autoFocus?: boolean
   style?: React.CSSProperties
   placeholder?: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -20,6 +21,7 @@ const InputText = ({
   style,
   placeholder,
   maxlength = 15,
+  autoFocus,
 }: IInputText): JSX.Element => {
   return (
     <InputStyled
@@ -30,6 +32,7 @@ const InputText = ({
       onChange={onChange}
       maxLength={maxlength}
       placeholder={placeholder}
+      autoFocus={autoFocus ? true : false}
       style={{ ...style }}
     />
   )

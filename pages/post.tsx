@@ -273,12 +273,12 @@ const PostContainer = styled.div`
   width: 100%;
   height: calc(100% - 150px);
 
-  @media all and (max-width: 425px) {
+  /* @media all and (max-width: 425px) {
     height: calc(100% - 120px);
   }
   @media all and (max-width: 320px) {
     height: calc(100% - 120px);
-  }
+  } */
 `
 
 const StepButtonContainer = styled.div`

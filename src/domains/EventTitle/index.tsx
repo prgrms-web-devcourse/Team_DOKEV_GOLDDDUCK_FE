@@ -1,6 +1,5 @@
 import React from 'react'
 import { InputText, InputRadio } from '@components/Input'
-import Image from '@components/Image'
 import TextLabel from '@domains/TextLabel'
 import Text from '@components/Text'
 import styled from '@emotion/styled'
@@ -23,79 +22,107 @@ const EventTitle: React.FC<Props> = ({
   handleCoverImage,
 }) => {
   return (
-    <EventTitleContainer>
-      <TitleItem>
-        <TextLabel title={'제목'} />
-        <InputText
-          id="title"
-          name="title"
-          value={title}
-          onChange={handleInput}
-          placeholder="이벤트의 제목을 입력해주세요. 15자 내외"
-        />
-      </TitleItem>
-      <TitleItem>
-        <TextLabel title={'참여인원수'} />
-        <InputText
-          id="maxParticipantCount"
-          name="maxParticipantCount"
-          value={maxParticipantCount || ''}
-          onChange={handleInput}
-          placeholder="참여할 수 있는 최대 인원수 입력"
-        />
-      </TitleItem>
-      <TitleItem>
-        <TextLabel title={'커버이미지'} />
-        <Text size="MICRO" color="TEXT_GRAY_DARK">
-          이벤트 커버 이미지는 편지지로 활용됩니다.
-        </Text>
-      </TitleItem>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid
-          container
-          columnSpacing={3}
-          rowSpacing={0}
-          style={{ textAlign: 'center' }}>
-          {Array.from(Array(6)).map((_, index) => (
-            <Grid item sm={4} xs={4} key={index}>
-              <Image
-                src={`/templates/template${index + 1}.png`}
-                width="100%"
-                height="75%"
-                style={{ borderRadius: '16px' }}
-              />
-              <label htmlFor={`template${index + 1}`}>{`cover${
-                index + 1
-              }`}</label>
-              <InputRadio
-                id={`template${index + 1}`}
-                value={`template${index + 1}`}
-                name={'RadioGroup'}
-                checked={mainTemplate === `template${index + 1}`}
-                onChange={handleCoverImage}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-    </EventTitleContainer>
+    <>
+      <EventTitleContainer>
+        <Div>
+          <TextLabel title={'제목'} />
+          <InputText
+            id="title"
+            name="title"
+            value={title}
+            onChange={handleInput}
+            placeholder="이벤트의 제목을 입력해주세요. 15자 내외"
+            autoFocus
+          />
+        </Div>
+
+        <Div>
+          <TextLabel title={'참여인원수'} />
+          <InputText
+            id="maxParticipantCount"
+            name="maxParticipantCount"
+            value={maxParticipantCount || ''}
+            onChange={handleInput}
+            placeholder="참여할 수 있는 최대 인원수 입력"
+          />
+        </Div>
+
+        <Div>
+          <TextLabel title={'커버이미지'} />
+          <Text
+            size="MICRO"
+            color="TEXT_GRAY_DARK"
+            style={{
+              paddingTop: '8px',
+              paddingLeft: '10%',
+              whiteSpace: 'nowrap',
+            }}>
+            이벤트 커버 이미지는 편지지로 활용됩니다.
+          </Text>
+        </Div>
+
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid
+            container
+            columnSpacing={'1%'}
+            rowSpacing={2}
+            style={{
+              width: 332,
+              margin: '0 auto',
+              display: 'flex',
+              justifyContent: 'center',
+            }}>
+            {Array.from(Array(9)).map((_, index) => (
+              <Grid item sm={4} xs={4} key={index}>
+                <div
+                  style={{
+                    borderRadius: 4,
+                    backgroundImage: `url(/templates/template${index + 1}.png)`,
+                    width: 100,
+                    height: 142,
+                    backgroundSize: 'cover',
+                    opacity:
+                      mainTemplate === `template${index + 1}` ||
+                      (!mainTemplate && index) === 0
+                        ? 1
+                        : 0.7,
+                  }}>
+                  <label htmlFor={`template${index + 1}`} />
+                  <InputRadio
+                    id={`template${index + 1}`}
+                    value={`template${index + 1}`}
+                    name={'RadioGroup'}
+                    checked={
+                      mainTemplate === `template${index + 1}` ? true : false
+                    }
+                    onChange={handleCoverImage}
+                  />
+                </div>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      </EventTitleContainer>
+    </>
   )
 }
 
 const EventTitleContainer = styled.div`
-  width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  gap: 3%;
+  overflow: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `
 
-const TitleItem = styled.div`
+const Div = styled.div`
+  padding-top: 5%;
+  width: calc(100% - 32px);
+  margin: 0 auto;
   display: flex;
-  width: 90%;
+  align-items: center;
 `
 
 export default EventTitle
