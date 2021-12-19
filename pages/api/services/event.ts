@@ -2,8 +2,9 @@ import {
   IFilteredEventItem,
   IEventList,
   IEventItem,
-  IWinners,
-  IFilteredWinners,
+  IWinnerList,
+  IWinner,
+  IFilteredWinnerList,
 } from 'types/event'
 
 export const filteredEventList = ({
@@ -61,15 +62,17 @@ export const eventDetail = ({
 }
 
 export const eventWinnerList = (
-  winnerList: IWinners[],
-): IFilteredWinners[] | undefined => {
-  return winnerList?.map(({ category, winners }: IWinners) => {
+  winnerList: IWinnerList[],
+): IFilteredWinnerList[] | undefined => {
+  return winnerList?.map(({ category, winners }: IWinnerList) => {
     return {
       category,
-      winners: {
-        _id: winners.id?.toString(),
-        name: winners.name,
-      },
+      winners: winners?.map(({ id, name }: IWinner) => {
+        return {
+          _id: String(id),
+          name,
+        }
+      }),
     }
   })
 }

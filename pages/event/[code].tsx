@@ -2,6 +2,7 @@ import Header from '@domains/Header'
 import Icon from '@components/Icon'
 import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
+import Text from '@components/Text'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import { useCallback, useEffect, useState } from 'react'
 import { deleteEvent, getEventDetail, getEventWinners } from '../api/event'
@@ -11,7 +12,7 @@ import {
   EVENT_TEMPLATE,
   EVENT_TYPE,
   IFilteredEventItem,
-  IFilteredWinners,
+  IFilteredWinnerList,
 } from 'types/event'
 import { getUesrInfo } from '../api/user'
 import { useUserContext } from '@contexts/UserProvider'
@@ -32,7 +33,7 @@ const EventPage = (): JSX.Element => {
   const { id: userId } = useUserContext().user
   const [isLoading, setIsLoading] = useState(false)
   const [event, setEvent] = useState<IFilteredEventItem | undefined>()
-  const [winners, setWinners] = useState<IFilteredWinners[] | undefined>()
+  const [winners, setWinners] = useState<IFilteredWinnerList[] | undefined>()
 
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
@@ -116,10 +117,17 @@ const EventPage = (): JSX.Element => {
         />
         <TimeInfo start={event?.start as string} end={event?.end as string} />
       </EventContainer>
-      <WinnerModal
-        winners={winners || []}
-        isClosed={event?.status === 'CLOSED' ? true : false}
-      />
+
+      {/* eventProgressStatus 이벤트가 종료 되었을 경우 당첨자 모달 렌더링  */}
+      {event?.status === 'CLOSED' ? (
+        <>
+          <WinnerModal winners={winners || []} />
+        </>
+      ) : (
+        <Text color="WHITE" size="BASE" style={{ textAlign: 'center' }}>
+          이벤트가 종료되면 당첨자 목록을 확인할 수 있어요!
+        </Text>
+      )}
     </Wrapper>
   ) : (
     <></>

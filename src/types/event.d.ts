@@ -49,20 +49,31 @@ export interface IPagination {
   totalPages: number
 }
 
-// api 요청으로 받아오는 이벤트 당첨자 목록
-export interface IWinners {
+// api 요청으로 받아오는 이벤트 당첨자 목록 타입
+export interface IWinnerList {
   category: string
   winners: {
     id: number
     name: string
-  }
+  }[]
 }
 
-// 받아온 이벤트 당첨자 목록에 대한 정제 데이터
-export interface IFilteredWinners {
+// IWinnerList winners Type
+export interface IWinner {
+  id: number
+  name: string
+}
+
+// 받아온 이벤트 당첨자 목록에 대한 정제 데이터 타입
+export interface IFilteredWinnerList {
   category: string
   winners: {
     _id: string
     name: string
-  }
+  }[]
+}
+
+export interface IFilteredWinner {
+  _id: string
+  name: string
 }

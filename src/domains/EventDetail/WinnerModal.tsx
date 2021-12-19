@@ -3,46 +3,42 @@ import { COLORS } from '@utils/constants/colors'
 import Text from '@components/Text'
 import Modal from '@components/Modal'
 import MUIButton from '@components/MUIButton'
-import { IFilteredWinners } from 'types/event'
+import { IFilteredWinnerList, IFilteredWinner } from 'types/event'
 
 interface IWinnerModal {
-  winners: IFilteredWinners[] | []
-  isClosed: boolean
+  winners: IFilteredWinnerList[] | []
 }
 
-const WinnerModal = ({ winners, isClosed }: IWinnerModal): JSX.Element => {
-  console.log(winners)
-
+const WinnerModal = ({ winners }: IWinnerModal): JSX.Element => {
   return (
     <WinnerSection>
       <Modal title="당첨자 목록" btnStyle={{ ...winnerBtnStyle }}>
         <MUIButton
           style={{
-            backgroundColor: isClosed ? COLORS.GREEN : COLORS.TEXT_GRAY_DARK,
+            backgroundColor: COLORS.GREEN,
             ...winnerBtnStyle,
           }}>
           당첨자 목록 보기
         </MUIButton>
+
         <>
-          {isClosed ? (
-            winners?.map(({ category, winners }: IFilteredWinners, index) => {
-              return (
-                <section key={index}>
-                  <Text color="WHITE" size="MEDIUM">
-                    {category}
-                  </Text>
-                  <Text color="WHITE" size="BASE">
-                    {winners._id}
-                    {winners.name}
-                  </Text>
-                </section>
-              )
-            })
-          ) : (
-            <Text color="WHITE" size="BASE">
-              이벤트가 종료되면 당첨자 목록을 확인할 수 있어요!
-            </Text>
-          )}
+          {winners?.map(({ category, winners }: IFilteredWinnerList, index) => {
+            return (
+              <section key={index}>
+                <Text color="WHITE" size="MEDIUM">
+                  {category}
+                </Text>
+                {winners.map(({ _id, name }: IFilteredWinner) => {
+                  return (
+                    <Text color="WHITE" size="BASE">
+                      {_id}
+                      {name}
+                    </Text>
+                  )
+                })}
+              </section>
+            )
+          })}
         </>
       </Modal>
     </WinnerSection>
