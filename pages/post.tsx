@@ -222,8 +222,7 @@ const post = () => {
 
   return memberId ? (
     <>
-      {/* {activeStep === steps.length ? ( */}
-      {eventLink ? (
+      {eventLink && activeStep === steps.length ? (
         <EventComplete eventLink={eventLink} giftChoiceType={giftChoiceType} />
       ) : (
         <PostContainer>
