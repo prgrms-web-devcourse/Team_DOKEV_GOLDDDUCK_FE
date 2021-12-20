@@ -34,7 +34,7 @@ export default {
 export const Default = (args: ICheckbox) => {
   return (
     <div style={{ backgroundColor: 'black', padding: 20 }}>
-      <Checkbox {...args} />
+      <Checkbox id={''} {...args} />
     </div>
   )
 }

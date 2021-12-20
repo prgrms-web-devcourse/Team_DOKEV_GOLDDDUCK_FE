@@ -18,7 +18,12 @@ export const Default = () => {
 
   return (
     <>
-      <Upload id="upload" name="abc" onClick={testShowfiles} />
+      <Upload
+        id="upload"
+        name="abc"
+        useRefCheck={false}
+        onClick={testShowfiles}
+      />
     </>
   )
 }
