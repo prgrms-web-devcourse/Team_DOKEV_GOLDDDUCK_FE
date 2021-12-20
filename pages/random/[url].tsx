@@ -202,7 +202,7 @@ const random = (): JSX.Element => {
       ) : isVideoEnded ? (
         <FadeInDownWrapper>
           <CardFlip
-            url="꽝!..."
+            url="boom"
             type="BOOM"
             front={
               <GiftItem
@@ -210,7 +210,7 @@ const random = (): JSX.Element => {
                 imageSrc="/boom.png"
                 imageStyle={{
                   width: '100%',
-                  height: '420px',
+                  height: '100%',
                   margin: '0 auto',
                   borderRadius: '8px',
                   objectFit: 'contain',

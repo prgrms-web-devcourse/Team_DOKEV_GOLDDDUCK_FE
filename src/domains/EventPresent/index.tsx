@@ -82,11 +82,7 @@ const EventPresent = ({
       totalQuantity + image.length + contentList.length
     ) {
       ErrorAlert('참여인원보다 선물이 많습니다.!')
-
-      return false
-    }
-
-    if (category && (image.length > 0 || contentList.length > 0)) {
+    } else if (category && (image.length > 0 || contentList.length > 0)) {
       const giftItems = {
         giftCheckId: uuidv4(),
         category,
@@ -95,8 +91,6 @@ const EventPresent = ({
       AddGiftItem(giftItems)
     } else {
       ErrorAlert('선물 이름과 이미지 or 메시지를 입력하세요!')
-
-      return false
     }
   }
 
