@@ -120,7 +120,7 @@ const PresentModal = ({
                   padding: 0,
                   color: 'red',
                 }}>
-                더보기
+                {currentSelectId === index ? '숨기기' : '더보기'}
               </MUIButton>
               <Icon
                 name="close"
