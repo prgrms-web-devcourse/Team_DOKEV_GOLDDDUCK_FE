@@ -36,6 +36,7 @@ interface GiftItem {
   content?: string
   image?: File
   giftType: 'TEXT' | 'IMAGE'
+  MessageId?: string
 }
 
 const EventPresent = ({
@@ -61,9 +62,19 @@ const EventPresent = ({
 
   const onCilckMessage = () => {
     if (content.length > 0) {
-      setContentList([...contentList, { content, giftType: 'TEXT' }])
+      setContentList([
+        ...contentList,
+        { content, giftType: 'TEXT', MessageId: uuidv4() },
+      ])
       setContent('')
     }
+  }
+
+  const delteMessage = (MessageId: string) => {
+    const filterMessage = contentList.filter(
+      (message) => message.MessageId !== MessageId,
+    )
+    setContentList(filterMessage)
   }
 
   const hadleImageUpload = (fileList: File[]) => {
@@ -146,6 +157,7 @@ const EventPresent = ({
               useRefCheck={useRefCheck}
               handleInput={handleInput}
               onCilckMessage={onCilckMessage}
+              delteMessage={delteMessage}
               hadleImageUpload={hadleImageUpload}></PresentModal>
             <MUIButton style={{ backgroundColor: '#CE000B' }} onClick={AddGift}>
               완료
