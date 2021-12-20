@@ -161,7 +161,7 @@ const fifo = (): JSX.Element => {
         {eventData.gifts.map(({ id, category, itemCount }: Igifts, index) => (
           <Gift key={id}>
             <Image
-              src={`/templates/template${(index % 6) + 1}.png`}
+              src={`/gifts/gift${(index % 8) + 1}.png`}
               width="60px"
               height="60px"
               mode="contain"
