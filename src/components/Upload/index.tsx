@@ -39,6 +39,9 @@ const Upload = ({
   useEffect(() => {
     setFileList([])
     setUrlList([])
+    if (inputRef.current?.value) {
+      inputRef.current.value = ''
+    }
   }, [useRefCheck])
 
   /**
