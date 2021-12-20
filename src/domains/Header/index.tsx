@@ -20,7 +20,7 @@ const Header = (): JSX.Element => {
         <Link href="/mypage">
           <a>
             <MUIAvatar
-              src={user.profileImage}
+              src={user?.profileImage}
               width={'60px'}
               height={'60px'}
               style={{ cursor: 'pointer' }}
