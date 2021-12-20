@@ -60,8 +60,10 @@ const EventPresent = ({
   }
 
   const onCilckMessage = () => {
-    setContentList([...contentList, { content, giftType: 'TEXT' }])
-    setContent('')
+    if (content.length > 0) {
+      setContentList([...contentList, { content, giftType: 'TEXT' }])
+      setContent('')
+    }
   }
 
   const hadleImageUpload = (fileList: File[]) => {
@@ -75,6 +77,15 @@ const EventPresent = ({
   }
 
   const AddGift = () => {
+    if (
+      maxParticipantCount <
+      totalQuantity + image.length + contentList.length
+    ) {
+      ErrorAlert('참여인원보다 선물이 많습니다.!')
+
+      return false
+    }
+
     if (category && (image.length > 0 || contentList.length > 0)) {
       const giftItems = {
         giftCheckId: uuidv4(),
