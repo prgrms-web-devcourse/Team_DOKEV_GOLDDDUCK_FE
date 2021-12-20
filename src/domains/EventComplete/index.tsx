@@ -18,9 +18,18 @@ interface Message {
 
 const EventComplete = ({ eventLink, giftChoiceType }: Props) => {
   const [copyMessage, setCopyMessage] = useState(false)
+  let host = ''
+
+  if (typeof window !== 'undefined') {
+    host = window.location.host
+  }
 
   const handleCopy = () => {
-    copy(eventLink)
+    copy(
+      giftChoiceType === 'FIFO'
+        ? `${host}/fifo/${eventLink}`
+        : `${host}/random/${eventLink}`,
+    )
     setCopyMessage(true)
 
     setTimeout(() => {
@@ -33,7 +42,7 @@ const EventComplete = ({ eventLink, giftChoiceType }: Props) => {
       <Header />
 
       <EventCompleteContainer>
-        {!!eventLink ? (
+        {!!eventLink && host ? (
           <>
             <Text style={{ textAlign: 'center' }} size="LARGE">
               링크가 생성되었습니다
@@ -48,14 +57,13 @@ const EventComplete = ({ eventLink, giftChoiceType }: Props) => {
             </Div>
 
             <Div>
-              <a
-                href={
-                  giftChoiceType === 'FIFO'
-                    ? `fifo/${eventLink}`
-                    : `random/${eventLink}`
-                }>
-                <Text size="MEDIUM">{eventLink}</Text>
-              </a>
+              <Text
+                size="MEDIUM"
+                style={{ textAlign: 'center', padding: '0 10%' }}>
+                {giftChoiceType === 'FIFO'
+                  ? `${host}/fifo/${eventLink}`
+                  : `${host}/random/${eventLink}`}
+              </Text>
             </Div>
 
             <Div>
