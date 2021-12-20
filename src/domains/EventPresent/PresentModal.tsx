@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import styled from '@emotion/styled'
 import { InputText } from '@components/Input'
 import Upload from '@components/Upload'
@@ -8,6 +8,8 @@ import AddIcon from '@mui/icons-material/Add'
 import Icon from '@components/Icon'
 import Text from '@components/Text'
 import MUIButton from '@components/MUIButton'
+import { COLORS } from '@utils/constants/colors'
+import { FONT_SIZES } from '@utils/constants/sizes'
 
 interface GiftItem {
   content?: string
@@ -36,6 +38,25 @@ const PresentModal = ({
   onCilckMessage,
   hadleImageUpload,
 }: Props) => {
+  const [prevSelectId, setPrevSelectId] = useState(-1)
+  const [currentSelectId, setCurrentSelectId] = useState(-1)
+
+  const handleMoreView = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>): void => {
+      const currentId = parseInt((e.target as HTMLElement).id, 10)
+      if (currentId !== prevSelectId) {
+        setCurrentSelectId(currentId)
+        setPrevSelectId(currentId)
+      }
+
+      if (currentId === prevSelectId) {
+        setCurrentSelectId(-1)
+        setPrevSelectId(-1)
+      }
+    },
+    [prevSelectId, currentSelectId],
+  )
+
   return (
     <>
       <PresentModalContainer>
@@ -64,53 +85,90 @@ const PresentModal = ({
           <TextareaWrapper>
             <LabelStyled htmlFor="textarea">메시지</LabelStyled>
             <Textarea
-              id="presentMessage"
+              id="textarea"
               name="presentMessage"
               value={content}
               onChange={handleInput}
+              style={{ height: '120px' }}
             />
             <PlusButton aria-label="add" onClick={onCilckMessage}>
               <AddIcon />
             </PlusButton>
           </TextareaWrapper>
         </Div>
-        <Div>
+        <Wrapper>
           {contentList.map(({ content }, index) => (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                width: 'calc(100% - 32px)',
-              }}>
+            <TextItem key={index}>
               <Text
-                key={index}
+                id={String(index)}
                 size="SMALL"
-                style={{
-                  borderTop: '1px solid #757575',
-                  paddingBottom: '8px',
-                  paddingTop: '8px',
-                  width: 'calc(100% - 32px)',
-                }}>
+                style={
+                  currentSelectId === index
+                    ? { ...TextMoreStyle }
+                    : { ...TextStyle }
+                }>
                 {content}
               </Text>
-
               <MUIButton
+                id={String(index)}
+                onClick={handleMoreView}
                 style={{
                   border: 'none',
                   background: 'none',
                   whiteSpace: 'normal',
-                  fontSize: '10px',
+                  fontSize: FONT_SIZES.MICRO,
+                  padding: 0,
                   color: 'red',
                 }}>
                 더보기
               </MUIButton>
-              <Icon name="close" color="TEXT_GRAY_DARK" size="LARGE" />
-            </div>
+              <Icon
+                name="close"
+                color="TEXT_GRAY_DARK"
+                size="LARGE"
+                style={{ width: '40px' }}
+              />
+            </TextItem>
           ))}
-        </Div>
+        </Wrapper>
       </PresentModalContainer>
     </>
   )
+}
+
+const Wrapper = styled.div`
+  border-top: 1px solid ${COLORS.WHITE};
+  margin-top: 5%;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
+`
+
+const TextItem = styled.div`
+  display: flex;
+  border-top: 1px solid ${COLORS.TEXT_GRAY_DARK};
+  &:first-of-type {
+    border: none;
+  }
+`
+
+const TextStyle: React.CSSProperties = {
+  padding: '12px 0 12px 12px',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  width: '100%',
+}
+
+const TextMoreStyle: React.CSSProperties = {
+  padding: '12px 0 12px 12px',
+  lineHeight: '1.5',
+  wordBreak: 'break-all',
+  whiteSpace: 'pre-wrap',
+  width: '100%',
 }
 
 const PresentModalContainer = styled.div`
@@ -122,7 +180,7 @@ const PresentModalContainer = styled.div`
   width: 100%;
 `
 const Div = styled.div`
-  margin-top: 8%;
+  margin-top: 5%;
 `
 
 const UploadWrapper = styled.div`
@@ -138,7 +196,7 @@ const UploadWrapper = styled.div`
 const LabelStyled = styled.label`
   font-size: 1.2rem;
   width: 100%;
-  padding-top: 5px;
+  padding: 8px;
   text-align: center;
   display: inline-block;
 `

@@ -10,6 +10,7 @@ interface Props {
     | 'TEXT_GRAY_LIGHT'
     | 'TEXT_GRAY_DARK'
     | 'TEXT_BLACK'
+  id?: string
   style?: CSSProperties
 }
 
@@ -17,6 +18,7 @@ const Text: React.FC<Props> = ({
   size = 'BASE',
   color = 'WHITE',
   style,
+  id,
   children,
 }) => {
   const { [size]: fontSize } = FONT_SIZES
@@ -24,6 +26,7 @@ const Text: React.FC<Props> = ({
 
   return (
     <div
+      id={id}
       style={{
         fontSize,
         color: fontColor,
