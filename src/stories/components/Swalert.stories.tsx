@@ -1,14 +1,10 @@
-import Swalert from '@components/Swalert'
+import ErrorAlert from '@components/Swalert/ErrorAlert'
 
 export default {
-  title: 'Components/Swalert',
-  component: Swalert,
+  title: 'Components/ErrorAlert',
+  component: ErrorAlert,
 }
 
 export const Default = () => {
-  const handleRemove = () => {
-    console.log('remove')
-  }
-
-  return <button onClick={() => Swalert(handleRemove)}>CLICK</button>
+  return <button onClick={() => ErrorAlert('error')}>CLICK</button>
 }
