@@ -5,12 +5,12 @@ import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
 import { keyframes } from '@emotion/react'
 import copy from 'copy-to-clipboard'
-import { GIFT_TYPE } from 'types/gift'
+import { ADD_GIFT_TYPE } from 'types/gift'
 
 interface ICardFlip {
   front: JSX.Element
   url: string
-  type: GIFT_TYPE
+  type: ADD_GIFT_TYPE
 }
 
 const CardFlip = ({ front, url, type }: ICardFlip): JSX.Element => {
@@ -48,7 +48,7 @@ const CardFlip = ({ front, url, type }: ICardFlip): JSX.Element => {
           position: 'absolute',
         }}>
         <Image
-          src="/card.jpg"
+          src={type === 'BOOM' ? '/card1.png' : '/card.jpg'}
           width="100%"
           height="420px"
           mode="fill"

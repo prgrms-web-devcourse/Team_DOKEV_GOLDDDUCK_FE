@@ -89,8 +89,12 @@ const random = (): JSX.Element => {
       }
       const res = await postRandomGiftReceipt({ eventId, memberId })
       if (Array.isArray(res)) {
-        const errorMessage = res[1]
-        ErrorAlert(errorMessage)
+        if (res[0] === 'G004') {
+          setIsVideoLoading(true)
+        } else {
+          const errorMessage = res[1]
+          ErrorAlert(errorMessage)
+        }
       } else {
         setGiftItem(res)
         setIsVideoLoading(true)
@@ -165,34 +169,58 @@ const random = (): JSX.Element => {
         eventMaster={eventData.member.name}
         message="두근두근 랜덤 박스!"
       />
-      {isVideoEnded && giftItem && (
+      {giftItem ? (
+        isVideoEnded && (
+          <FadeInDownWrapper>
+            <CardFlip
+              url={giftItem.content}
+              type={giftItem.giftType as GIFT_TYPE}
+              front={
+                giftItem.giftType === 'IMAGE' ? (
+                  <GiftItem
+                    type="IMAGE"
+                    imageSrc={giftItem.content}
+                    imageStyle={{
+                      width: '100%',
+                      height: '420px',
+                      margin: '0 auto',
+                      borderRadius: '8px',
+                      objectFit: 'contain',
+                    }}
+                  />
+                ) : (
+                  <GiftItem
+                    type="TEXT"
+                    template={giftItem.mainTemplate as EVENT_TEMPLATE}
+                    message={giftItem.content}
+                  />
+                )
+              }
+            />
+          </FadeInDownWrapper>
+        )
+      ) : isVideoEnded ? (
         <FadeInDownWrapper>
           <CardFlip
-            url={giftItem.content}
-            type={giftItem.giftType as GIFT_TYPE}
+            url="꽝!..."
+            type="BOOM"
             front={
-              giftItem.giftType === 'IMAGE' ? (
-                <GiftItem
-                  type="IMAGE"
-                  imageSrc={giftItem.content}
-                  imageStyle={{
-                    width: '100%',
-                    height: '420px',
-                    margin: '0 auto',
-                    borderRadius: '8px',
-                    objectFit: 'contain',
-                  }}
-                />
-              ) : (
-                <GiftItem
-                  type="TEXT"
-                  template={giftItem.mainTemplate as EVENT_TEMPLATE}
-                  message={giftItem.content}
-                />
-              )
+              <GiftItem
+                type="IMAGE"
+                imageSrc="/boom.png"
+                imageStyle={{
+                  width: '100%',
+                  height: '420px',
+                  margin: '0 auto',
+                  borderRadius: '8px',
+                  objectFit: 'contain',
+                }}
+              />
             }
           />
         </FadeInDownWrapper>
+      ) : (
+        ''
       )}
       {isVideoLoading ? (
         <FadeInWrapper>
