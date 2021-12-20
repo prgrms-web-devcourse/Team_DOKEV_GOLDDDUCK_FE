@@ -5,7 +5,9 @@ import Upload from '@components/Upload'
 import Textarea from '@components/Textarea'
 import Fab from '@mui/material/Fab'
 import AddIcon from '@mui/icons-material/Add'
+import Icon from '@components/Icon'
 import Text from '@components/Text'
+import MUIButton from '@components/MUIButton'
 
 interface GiftItem {
   content?: string
@@ -74,19 +76,36 @@ const PresentModal = ({
         </Div>
         <Div>
           {contentList.map(({ content }, index) => (
-            <Text
-              key={index}
-              size="SMALL"
+            <div
               style={{
-                borderTop: '1px solid #757575',
-                paddingBottom: '8px',
-                paddingTop: '8px',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
+                display: 'flex',
+                alignItems: 'center',
+                width: 'calc(100% - 32px)',
               }}>
-              {content}
-            </Text>
+              <Text
+                key={index}
+                size="SMALL"
+                style={{
+                  borderTop: '1px solid #757575',
+                  paddingBottom: '8px',
+                  paddingTop: '8px',
+                  width: 'calc(100% - 32px)',
+                }}>
+                {content}
+              </Text>
+
+              <MUIButton
+                style={{
+                  border: 'none',
+                  background: 'none',
+                  whiteSpace: 'normal',
+                  fontSize: '10px',
+                  color: 'red',
+                }}>
+                더보기
+              </MUIButton>
+              <Icon name="close" color="TEXT_GRAY_DARK" size="LARGE" />
+            </div>
           ))}
         </Div>
       </PresentModalContainer>
@@ -117,8 +136,9 @@ const UploadWrapper = styled.div`
 `
 
 const LabelStyled = styled.label`
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   width: 100%;
+  padding-top: 5px;
   text-align: center;
   display: inline-block;
 `
