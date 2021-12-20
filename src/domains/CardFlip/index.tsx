@@ -115,7 +115,7 @@ const FadeInWrapper = styled.div`
 `
 
 const BtnStyle: React.CSSProperties = {
-  width: '30%',
+  width: '40%',
   borderRadius: '50px',
   position: 'absolute',
   left: '50%',
