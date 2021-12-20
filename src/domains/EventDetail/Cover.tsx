@@ -25,7 +25,7 @@ const Cover = ({
   onRemoveEvent,
 }: ICover): JSX.Element => {
   const EVENT_LINK = `${
-    window.location.hostname
+    window.location.host
   }/${eventType?.toLowerCase()}/${code}`
   const TEMPLATE_IMAGE = template && `/templates/${template}.png`
 
