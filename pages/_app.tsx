@@ -21,5 +21,6 @@ const RootContainer = styled.div`
   height: 100vh;
   margin: 0 auto;
   background-color: #000000;
+  font-family: 'GmarketSansLight';
 `
 export default App

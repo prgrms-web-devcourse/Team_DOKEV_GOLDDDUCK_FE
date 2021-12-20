@@ -22,7 +22,17 @@ const Text: React.FC<Props> = ({
   const { [size]: fontSize } = FONT_SIZES
   const { [color]: fontColor } = COLORS
 
-  return <div style={{ fontSize, color: fontColor, ...style }}>{children}</div>
+  return (
+    <div
+      style={{
+        fontSize,
+        color: fontColor,
+        fontFamily: 'GmarketSansLight',
+        ...style,
+      }}>
+      {children}
+    </div>
+  )
 }
 
 export default Text
