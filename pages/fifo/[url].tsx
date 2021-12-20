@@ -4,13 +4,13 @@ import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import { getEvent, postGiftReceipt } from '../api/event'
 import { useCallback, useEffect, useState } from 'react'
 import { useUserContext } from '@contexts/UserProvider'
-import { useRouter } from 'next/dist/client/router'
 import { FONT_SIZES } from '@utils/constants/sizes'
 import { COLORS } from '@utils/constants/colors'
 import TimerHeader from '@domains/TimerHeader'
 import MUIButton from '@components/MUIButton'
 import useInterval from '@hooks/useInterval'
 import { getUesrInfo } from '../api/user'
+import { useRouter } from 'next/router'
 import Image from '@components/Image'
 import Header from '@domains/Header'
 import styled from '@emotion/styled'
@@ -70,25 +70,28 @@ const fifo = (): JSX.Element => {
         return
       }
       if (eventStart && eventData) {
+        const eventId = eventData.eventId
         const masterId = eventData.member.id
+        const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
         const memberId = user.id
         if (masterId === memberId) {
           ErrorAlert('선물은 참가자들에게 양보해주세요!!')
 
           return
         }
-      }
-      if (eventStart && eventData) {
-        const eventId = eventData.eventId
-        const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
-        const memberId = user.id
         const res = await postGiftReceipt({ eventId, giftId, memberId })
         if (Array.isArray(res)) {
+          if (res[0] === 'G002') {
+            ErrorAlert('재고가 없습니다!')
+
+            return
+          }
           const errorMessage = res[1]
           ErrorAlert(errorMessage)
         } else {
-          GiftGetAlert('선물 당첨!!')
-          router.push(`/gift/${res.id}`)
+          if (await GiftGetAlert('선물 당첨!!')) {
+            router.push(`/gift/${res.id}`)
+          }
         }
       }
     },

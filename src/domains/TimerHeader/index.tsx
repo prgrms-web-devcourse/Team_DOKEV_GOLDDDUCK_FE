@@ -26,7 +26,7 @@ const TimerHeader = ({
           }}>
           {eventMaster}
         </Text>
-        <Text size="LARGE" color="WHITE" style={{ display: 'inline' }}>
+        <Text size="MEDIUM" color="WHITE" style={{ display: 'inline' }}>
           님이 준비한 선물입니다!
         </Text>
       </TextWrapper>
@@ -41,26 +41,25 @@ const TimerHeader = ({
 }
 
 const TimerHeaderContainer = styled.div`
-  width: 70%;
   margin: 0 auto;
-  margin-top: 35%;
+  padding-top: 35%;
   @media all and (max-width: 425px) {
-    margin-top: 20%;
+    padding-top: 20%;
   }
 `
 
 const TextWrapper = styled.div`
   width: 100%;
   text-align: center;
+  white-space: nowrap;
 `
 
 const TimerWrapper = styled.div`
-  width: 85%;
   margin: 0 auto;
   text-align: center;
-  margin-top: 40px;
+  padding-top: 40px;
   @media all and (max-width: 425px) {
-    margin-top: 24px;
+    padding-top: 24px;
   }
 `
 
