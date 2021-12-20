@@ -144,13 +144,14 @@ table {
   color: #1a3c35;
 }
 
-.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.MuiStepIcon-root.Mui-completed.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root {
+.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
   color: #ce000b;
 }
 
 @font-face {
   font-family: 'GmarketSansLight';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff') format('woff');
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+    format('woff');
   font-weight: normal;
   font-style: normal;
 }
