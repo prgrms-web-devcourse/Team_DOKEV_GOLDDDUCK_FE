@@ -62,7 +62,12 @@ const MyPage = (): JSX.Element => {
 
         const isUsed =
           filter === 'used' ? true : filter === 'un_used' ? false : ''
-        const data = await getFilteredGiftList(isUsed, user?.id, currentPage, 4)
+        const data = await getFilteredGiftList(
+          isUsed,
+          user?.id,
+          currentPage,
+          10,
+        )
 
         if (data) {
           setGiftList(giftList.concat(filteredGiftList(data).giftList))
@@ -85,7 +90,7 @@ const MyPage = (): JSX.Element => {
           status,
           user?.id,
           currentPage,
-          4,
+          10,
         )
         if (data) {
           setEventList(eventList.concat(filteredEventList(data).eventList))
@@ -168,7 +173,7 @@ const MyPage = (): JSX.Element => {
           style={{ marginLeft: 'auto', marginTop: 100 }}
         />
       </Profile>
-      {router.isReady && currentTab === selectedTab && (
+      {currentTab === selectedTab && (
         <>
           <MUITab onChange={handleTabChange} />
           <MUITabPanel selectedTab={selectedTab} tab={'gift'} index={0}>
