@@ -15,6 +15,7 @@ interface GiftItem {
   content?: string
   image?: File
   giftType: 'TEXT' | 'IMAGE'
+  MessageId?: string
 }
 
 interface Props {
@@ -27,6 +28,7 @@ interface Props {
   ): void
   onCilckMessage(): void
   hadleImageUpload(fileList: File[]): void
+  delteMessage(e: string | undefined): void
 }
 
 const PresentModal = ({
@@ -37,6 +39,7 @@ const PresentModal = ({
   handleInput,
   onCilckMessage,
   hadleImageUpload,
+  delteMessage,
 }: Props) => {
   const [prevSelectId, setPrevSelectId] = useState(-1)
   const [currentSelectId, setCurrentSelectId] = useState(-1)
@@ -97,7 +100,7 @@ const PresentModal = ({
           </TextareaWrapper>
         </Div>
         <Wrapper>
-          {contentList.map(({ content }, index) => (
+          {contentList.map(({ content, MessageId }, index) => (
             <TextItem key={index}>
               <Text
                 id={String(index)}
@@ -127,6 +130,7 @@ const PresentModal = ({
                 color="TEXT_GRAY_DARK"
                 size="LARGE"
                 style={{ width: '40px' }}
+                onIconClick={() => delteMessage(MessageId)}
               />
             </TextItem>
           ))}

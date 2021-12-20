@@ -21,11 +21,9 @@ export const getFilteredGiftList = async (
 }
 
 // 선물 단건 조회
-export const getGiftDetail = async (userId: number, giftId: string) => {
+export const getGiftDetail = async (giftId: string) => {
   try {
-    const { data } = await authInstance.get(
-      `api/v1/members/${userId}/giftItems/${giftId}`,
-    )
+    const { data } = await authInstance.get(`api/v2/giftItems/${giftId}`)
 
     if (data.success) {
       return data.data

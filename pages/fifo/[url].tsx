@@ -4,13 +4,13 @@ import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import { getEvent, postGiftReceipt } from '../api/event'
 import { useCallback, useEffect, useState } from 'react'
 import { useUserContext } from '@contexts/UserProvider'
-import { useRouter } from 'next/dist/client/router'
 import { FONT_SIZES } from '@utils/constants/sizes'
 import { COLORS } from '@utils/constants/colors'
 import TimerHeader from '@domains/TimerHeader'
 import MUIButton from '@components/MUIButton'
 import useInterval from '@hooks/useInterval'
 import { getUesrInfo } from '../api/user'
+import { useRouter } from 'next/router'
 import Image from '@components/Image'
 import Header from '@domains/Header'
 import styled from '@emotion/styled'
@@ -35,6 +35,7 @@ interface Igifts {
   id: number
   category: string
   itemCount: number
+  soldOut: boolean
   giftItems: IgiftItem[]
 }
 
@@ -70,25 +71,28 @@ const fifo = (): JSX.Element => {
         return
       }
       if (eventStart && eventData) {
+        const eventId = eventData.eventId
         const masterId = eventData.member.id
+        const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
         const memberId = user.id
         if (masterId === memberId) {
           ErrorAlert('선물은 참가자들에게 양보해주세요!!')
 
           return
         }
-      }
-      if (eventStart && eventData) {
-        const eventId = eventData.eventId
-        const giftId = parseInt((e.target as HTMLElement).id, 10) // 카테고리 ID
-        const memberId = user.id
         const res = await postGiftReceipt({ eventId, giftId, memberId })
         if (Array.isArray(res)) {
+          if (res[0] === 'G002') {
+            ErrorAlert('재고가 없습니다!')
+
+            return
+          }
           const errorMessage = res[1]
           ErrorAlert(errorMessage)
         } else {
-          GiftGetAlert('선물 당첨!!')
-          router.push(`/gift/${res.id}`)
+          if (await GiftGetAlert('선물 당첨!!')) {
+            router.push(`/gift/${res.id}`)
+          }
         }
       }
     },
@@ -158,34 +162,36 @@ const fifo = (): JSX.Element => {
         message="선착순이에요. 서둘러주세요!"
       />
       <GiftWrapper>
-        {eventData.gifts.map(({ id, category, itemCount }: Igifts, index) => (
-          <Gift key={id}>
-            <Image
-              src={`/gifts/gift${(index % 8) + 1}.png`}
-              width="60px"
-              height="60px"
-              mode="contain"
-            />
-            <GiftTextWrapper>
-              <Text size="MEDIUM" color="WHITE">
-                {category}
-              </Text>
-              <Text size="BASE" color="TEXT_GRAY_DARK">
-                수량 : {itemCount}개
-              </Text>
-            </GiftTextWrapper>
-            {itemCount ? (
-              <MUIButton
-                id={String(id)}
-                onClick={handleGiftReceipt}
-                style={{ ...GetStyle }}>
-                GET
-              </MUIButton>
-            ) : (
-              <MUIButton style={{ ...SoldOutStyle }}>SOLD OUT</MUIButton>
-            )}
-          </Gift>
-        ))}
+        {eventData.gifts.map(
+          ({ id, category, itemCount, soldOut }: Igifts, index) => (
+            <Gift key={id}>
+              <Image
+                src={`/gifts/gift${(index % 8) + 1}.png`}
+                width="60px"
+                height="60px"
+                mode="contain"
+              />
+              <GiftTextWrapper>
+                <Text size="MEDIUM" color="WHITE">
+                  {category}
+                </Text>
+                <Text size="BASE" color="TEXT_GRAY_DARK">
+                  수량 : {itemCount}개
+                </Text>
+              </GiftTextWrapper>
+              {!soldOut ? (
+                <MUIButton
+                  id={String(id)}
+                  onClick={handleGiftReceipt}
+                  style={{ ...GetStyle }}>
+                  GET
+                </MUIButton>
+              ) : (
+                <MUIButton style={{ ...SoldOutStyle }}>SOLD OUT</MUIButton>
+              )}
+            </Gift>
+          ),
+        )}
       </GiftWrapper>
     </>
   )
