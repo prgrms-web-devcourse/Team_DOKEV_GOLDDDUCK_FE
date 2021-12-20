@@ -1,11 +1,12 @@
 import styled from '@emotion/styled'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Image from '@components/Image'
 import { COLORS } from '@utils/constants/colors'
 import MUIButton from '@components/MUIButton'
 import { keyframes } from '@emotion/react'
-import copy from 'copy-to-clipboard'
 import { ADD_GIFT_TYPE } from 'types/gift'
+import Text from '@components/Text'
+import html2canvas from 'html2canvas'
 
 interface ICardFlip {
   front: JSX.Element
@@ -15,19 +16,33 @@ interface ICardFlip {
 
 const CardFlip = ({ front, url, type }: ICardFlip): JSX.Element => {
   const [flip, setFlip] = useState(true)
+  const saveTarget = useRef(null)
 
   const handleCardFlip = () => {
     setFlip((prev) => !prev)
   }
 
-  const clipboardCopy = () => {
-    copy(url)
-    alert('클립보드 복사 완료!')
+  // download html as png
+  const onCapture = () => {
+    saveTarget.current &&
+      html2canvas(saveTarget?.current as HTMLElement).then((canvas) => {
+        onSaveAs(canvas.toDataURL('image/png'), `my_gift_${type}.png`)
+      })
+
+    const onSaveAs = (uri: string, filename: string) => {
+      const link = document.createElement('a')
+      document.body.appendChild(link)
+      link.href = uri
+      link.download = filename
+      link.click()
+      document.body.removeChild(link)
+    }
   }
 
   return (
     <CardContainer>
       <div
+        ref={saveTarget}
         onClick={handleCardFlip}
         style={{
           backfaceVisibility: 'hidden',
@@ -55,18 +70,24 @@ const CardFlip = ({ front, url, type }: ICardFlip): JSX.Element => {
           style={{ margin: '0 auto', borderRadius: '8px' }}
         />
       </div>
-      <FadeInWrapper style={{ display: flip ? 'none' : 'block' }}>
-        <MUIButton style={{ ...BtnStyle }}>
-          {type === 'IMAGE' ? (
-            <a href={url} download>
-              저장하기
-            </a>
-          ) : (
-            <a href="#" onClick={clipboardCopy}>
-              복사하기
-            </a>
-          )}
-        </MUIButton>
+      <FadeInWrapper
+        onClick={() => (type === 'TEXT' || type === 'BOOM') && onCapture()}
+        style={{ display: flip ? 'none' : 'block' }}>
+        {type === 'IMAGE' ? (
+          <a href={url} download>
+            <MUIButton style={{ ...BtnStyle }}>
+              <Text color="WHITE" size="BASE">
+                선물 저장
+              </Text>
+            </MUIButton>
+          </a>
+        ) : (
+          <MUIButton style={{ ...BtnStyle }}>
+            <Text color="WHITE" size="BASE">
+              선물 저장
+            </Text>
+          </MUIButton>
+        )}
       </FadeInWrapper>
     </CardContainer>
   )
@@ -98,7 +119,7 @@ const BtnStyle: React.CSSProperties = {
   borderRadius: '50px',
   position: 'absolute',
   left: '50%',
-  bottom: '-20%',
+  bottom: '-25%',
   transform: 'translate(-50%, -50%)',
   backgroundColor: COLORS.RED,
 }
