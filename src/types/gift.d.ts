@@ -1,5 +1,6 @@
 export type GIFT_TYPE = 'IMAGE' | 'TEXT' | 'URL'
 export type GIFT_FILTER = 'ALL' | 'USED' | 'UN_USED'
+export type ADD_GIFT_TYPE = 'IMAGE' | 'TEXT' | 'URL' | 'BOOM'
 
 // api로 부터 받아오는 선물 전체 목록 데이터 중 선물 단건
 export interface IGiftItem {
