@@ -49,7 +49,7 @@ const TimeInfo = ({ start, end }: ITimeInfo): JSX.Element => {
 const EventTimeSection = styled.section`
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 240px;
   height: 100px;
 `
 

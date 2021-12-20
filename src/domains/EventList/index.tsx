@@ -1,13 +1,14 @@
 import Checkbox from '@components/Checkbox'
 import CheckboxList from '@domains/CheckboxList'
-import Text from '@components/Text'
+import Image from '@components/Image'
 import styled from '@emotion/styled'
 import { DEFAULT_MARGIN, FONT_SIZES } from '@utils/constants/sizes'
 import { useCallback, useEffect, useState } from 'react'
-import { EVENT_FILTER, IFilteredEventItem } from 'types/event'
+import { IFilteredEventItem } from 'types/event'
 import { NextRouter, useRouter } from 'next/router'
 import Spinner from '@components/Spinner'
 import { COLORS } from '@utils/constants/colors'
+import EMPTY_IMAGE from '/public/empty.png'
 
 interface IProps {
   filteredEvents: IFilteredEventItem[]
@@ -35,7 +36,6 @@ const EventList = ({
 }: IProps): JSX.Element => {
   const router = useRouter()
   const [selectedChip, setSelectedChip] = useState(currentChip(router))
-  console.log(selectedChip)
   const handleFilterClick = useCallback(
     (e: React.MouseEvent<HTMLInputElement>): void => {
       onClick?.(e)
@@ -62,7 +62,7 @@ const EventList = ({
             filteredEvents.map(({ code, _id, template, title }) => {
               return (
                 <ItemWrapper
-                  key={_id}
+                  key={`event${_id}`}
                   onClick={() => code && router.push(`/event/${code}`)}
                   style={{
                     backgroundImage: `url(/templates/${template}.png)`,
@@ -72,7 +72,7 @@ const EventList = ({
               )
             })
           ) : (
-            <Text color="WHITE">텅</Text>
+            <Image src={EMPTY_IMAGE.src} width="100%" height="100%" />
           )}
         </ListWrapper>
       ) : (

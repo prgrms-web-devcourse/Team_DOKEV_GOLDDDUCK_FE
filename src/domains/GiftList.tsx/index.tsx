@@ -5,10 +5,11 @@ import Text from '@components/Text'
 import styled from '@emotion/styled'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import { useCallback, useEffect, useState } from 'react'
-import { GIFT_FILTER, IFilteredGiftItem } from 'types/gift'
+import { IFilteredGiftItem } from 'types/gift'
 import { useRouter } from 'next/router'
 import used_mark from '/src/assets/used_mark.png'
 import Spinner from '@components/Spinner'
+import EMPTY_IMAGE from '/public/empty.png'
 
 interface IProps {
   filteredGifts: IFilteredGiftItem[]
@@ -71,7 +72,7 @@ const GiftList = ({
               }) => {
                 return (
                   <ItemWrapper
-                    key={_id}
+                    key={`gift${_id}`}
                     id={_id}
                     onClick={() => router.push(`/gift/${_id}`)}>
                     <Image
@@ -120,7 +121,7 @@ const GiftList = ({
               },
             )
           ) : (
-            <Text></Text>
+            <Image src={EMPTY_IMAGE.src} width="100%" height="100%" />
           )}
         </ListWrapper>
       ) : (

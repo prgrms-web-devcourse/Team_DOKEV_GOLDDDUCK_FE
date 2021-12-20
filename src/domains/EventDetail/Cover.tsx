@@ -13,7 +13,6 @@ interface ICover {
   status: EVENT_FILTER
   eventType: EVENT_TYPE
   code: string
-  id: string
   onRemoveEvent: React.MouseEventHandler<SVGElement>
 }
 
@@ -23,10 +22,11 @@ const Cover = ({
   status,
   eventType,
   code,
-  id,
   onRemoveEvent,
 }: ICover): JSX.Element => {
-  const EVENT_LINK = `http://localhost:3000/${eventType?.toLowerCase()}/${code}`
+  const EVENT_LINK = `${
+    window.location.host
+  }/${eventType?.toLowerCase()}/${code}`
   const TEMPLATE_IMAGE = template && `/templates/${template}.png`
 
   const handleCopyUrl = useCallback(() => {

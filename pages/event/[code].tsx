@@ -17,15 +17,20 @@ import {
 import { getUesrInfo } from '../api/user'
 import { useUserContext } from '@contexts/UserProvider'
 import dynamic from 'next/dynamic'
+
 const TimeInfo = dynamic(() => import('@domains/EventDetail/TimeInfo'), {
   ssr: false,
 })
+
 const Cover = dynamic(() => import('@domains/EventDetail/Cover'), {
   ssr: false,
 })
+
 const WinnerModal = dynamic(() => import('@domains/EventDetail/WinnerModal'), {
   ssr: false,
 })
+
+const INFO_MESSAGE = '※ 이벤트가 종료되면당첨자 목록을 확인할 수 있어요!'
 
 const EventPage = (): JSX.Element => {
   const router = useRouter()
@@ -91,21 +96,21 @@ const EventPage = (): JSX.Element => {
   return !isLoading && userId ? (
     <Wrapper>
       <Header />
-      <Icon
-        name="arrowBack"
-        size="LARGE"
-        onIconClick={() =>
-          router.push(
-            `/mypage?tab=event&filter=${event?.status.toLocaleLowerCase()}`,
-          )
-        }
-        style={{
-          position: 'absolute',
-          top: 108,
-          left: DEFAULT_MARGIN,
-        }}
-      />
       <EventContainer>
+        <Icon
+          name="arrowBack"
+          size="LARGE"
+          onIconClick={() =>
+            router.push(
+              `/mypage?tab=event&filter=${event?.status.toLocaleLowerCase()}`,
+            )
+          }
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 16,
+          }}
+        />
         <Cover
           template={event?.template as EVENT_TEMPLATE}
           title={event?.title as string}
@@ -118,14 +123,14 @@ const EventPage = (): JSX.Element => {
         <TimeInfo start={event?.start as string} end={event?.end as string} />
       </EventContainer>
 
-      {/* eventProgressStatus 이벤트가 종료 되었을 경우 당첨자 모달 렌더링  */}
       {event?.status === 'CLOSED' ? (
-        <>
-          <WinnerModal winners={winners || []} />
-        </>
+        <WinnerModal winners={winners || []} />
       ) : (
-        <Text color="WHITE" size="BASE" style={{ textAlign: 'center' }}>
-          이벤트가 종료되면 당첨자 목록을 확인할 수 있어요!
+        <Text
+          color="TEXT_GRAY_DARK"
+          size="MICRO"
+          style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>
+          {INFO_MESSAGE}
         </Text>
       )}
     </Wrapper>
@@ -136,8 +141,13 @@ const EventPage = (): JSX.Element => {
 
 const Wrapper = styled.div`
   background-color: inherit;
-  padding-bottom: 16px;
   height: 100vh;
+  overflow: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `
 
 const EventContainer = styled.div`
@@ -145,10 +155,16 @@ const EventContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 70%;
-  height: 60%;
+  width: 100%;
+  height: 70%;
   margin: ${DEFAULT_MARGIN} auto;
   gap: 16px;
+  overflow: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `
 
 export default EventPage
