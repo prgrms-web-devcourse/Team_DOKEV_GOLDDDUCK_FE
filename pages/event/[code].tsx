@@ -34,8 +34,7 @@ const INFO_MESSAGE = '※ 이벤트가 종료되면당첨자 목록을 확인할
 
 const EventPage = (): JSX.Element => {
   const router = useRouter()
-  const { updateUser } = useUserContext()
-  const { id: userId } = useUserContext().user
+  const { user, updateUser } = useUserContext()
   const [isLoading, setIsLoading] = useState(false)
   const [event, setEvent] = useState<IFilteredEventItem | undefined>()
   const [winners, setWinners] = useState<IFilteredWinnerList[] | undefined>()
@@ -57,7 +56,7 @@ const EventPage = (): JSX.Element => {
   // 이벤트 데이터 조회
   const fetchEventDetail = useCallback(
     async (code) => {
-      if (userId) {
+      if (user?.id) {
         setIsLoading(true)
 
         const data = await getEventDetail(code)
@@ -66,34 +65,34 @@ const EventPage = (): JSX.Element => {
         setIsLoading(false)
       }
     },
-    [userId],
+    [user?.id],
   )
 
   useEffect(() => {
     fetchEventDetail(router.query?.code)
-  }, [userId, router.query.code])
+  }, [user?.id, router.query.code])
 
   // 이벤트 삭제
   const handleClickRemove = useCallback(async () => {
-    userId && event?._id && (await deleteEvent(userId, event._id))
-  }, [userId, event])
+    user?.id && event?._id && (await deleteEvent(user?.id, event._id))
+  }, [user?.id, event])
 
   // 당첨자 목록 조회
   const fetchEventWinners = useCallback(async () => {
-    if (userId && event?._id && event?.status === 'CLOSED') {
+    if (user?.id && event?._id && event?.status === 'CLOSED') {
       setIsLoading(true)
-      const data = await getEventWinners(userId, event?._id)
+      const data = await getEventWinners(user?.id, event?._id)
       data && setWinners(eventWinnerList(data))
 
       setIsLoading(false)
     }
-  }, [userId, event])
+  }, [user?.id, event])
 
   useEffect(() => {
     fetchEventWinners()
-  }, [userId, event?._id])
+  }, [user?.id, event?._id])
 
-  return !isLoading && userId ? (
+  return !isLoading && user?.id ? (
     <Wrapper>
       <Header />
       <EventContainer>
@@ -117,7 +116,6 @@ const EventPage = (): JSX.Element => {
           status={event?.status as EVENT_FILTER}
           eventType={event?.eventType as EVENT_TYPE}
           code={event?.code as string}
-          id={event?._id as string}
           onRemoveEvent={handleClickRemove}
         />
         <TimeInfo start={event?.start as string} end={event?.end as string} />
