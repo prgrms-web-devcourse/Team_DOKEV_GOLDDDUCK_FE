@@ -30,10 +30,10 @@ const GiftForm = ({
           mode="contain"
         />
         <GiftTextWrapper>
-          <Text size="MEDIUM" color="WHITE">
+          <Text size="BASE" color="WHITE">
             {category}
           </Text>
-          <Text size="BASE" color="TEXT_GRAY_DARK" style={{ paddingTop: 6 }}>
+          <Text size="MICRO" color="TEXT_GRAY_DARK" style={{ paddingTop: 6 }}>
             {`수량 : ${length}개`}
           </Text>
         </GiftTextWrapper>
