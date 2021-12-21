@@ -350,9 +350,10 @@ const CustomSlider = styled(Slider)(() => ({
 
 const StyledText = styled.div`
   position: absolute;
-  font-size: ${FONT_SIZES.LARGE};
-  top: 10%;
   right: -50px;
+  font-size: 1.125rem;
+  user-select: none;
+  top: 20%;
   transform: translate(-50%, 50%);
   background-image: linear-gradient(90deg, #111, #fff, #111);
   background-repeat: no-repeat;
