@@ -39,6 +39,7 @@ const Wrapper = styled.div`
   padding: 16px;
   position: relative;
   z-index: 99;
+  user-select: none;
 `
 
 export default Header

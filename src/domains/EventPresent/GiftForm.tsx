@@ -10,7 +10,7 @@ interface Props {
   index: number
   length: number
   category: string
-  delteGiftItem(e: string): void
+  deleteGiftItem(e: string): void
 }
 
 const GiftForm = ({
@@ -18,7 +18,7 @@ const GiftForm = ({
   index,
   category,
   length,
-  delteGiftItem,
+  deleteGiftItem,
 }: Props) => {
   return (
     <>
@@ -33,10 +33,7 @@ const GiftForm = ({
           <Text size="MEDIUM" color="WHITE">
             {category}
           </Text>
-          <Text
-            size="BASE"
-            color="TEXT_GRAY_DARK"
-            style={{ paddingTop: '3px' }}>
+          <Text size="BASE" color="TEXT_GRAY_DARK" style={{ paddingTop: 6 }}>
             {`수량 : ${length}개`}
           </Text>
         </GiftTextWrapper>
@@ -44,7 +41,7 @@ const GiftForm = ({
           name="close"
           color="TEXT_GRAY_DARK"
           size="LARGE"
-          onIconClick={() => delteGiftItem(giftCheckId)}></Icon>
+          onIconClick={() => deleteGiftItem(giftCheckId)}></Icon>
       </Gift>
     </>
   )

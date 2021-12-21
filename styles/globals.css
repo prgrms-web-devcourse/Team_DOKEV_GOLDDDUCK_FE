@@ -144,8 +144,8 @@ table {
   color: #1a3c35;
 }
 
-.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
-  color: #ce000b;
+.MuiStepLabel-iconContainer .Mui-completed {
+  color: #ce000b !important;
 }
 
 @font-face {

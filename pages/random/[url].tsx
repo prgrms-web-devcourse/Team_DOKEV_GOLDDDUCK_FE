@@ -10,8 +10,9 @@ import TextHeader from '@domains/TimerHeader'
 import useInterval from '@hooks/useInterval'
 import { EVENT_TEMPLATE } from 'types/event'
 import { keyframes } from '@emotion/react'
-import { getUesrInfo } from '../api/user'
+import { getUserInfo } from '../api/user'
 import Slider from '@mui/material/Slider'
+import Spinner from '@components/Spinner'
 import CardFlip from '@domains/CardFlip'
 import GiftItem from '@domains/GiftItem'
 import { useRouter } from 'next/router'
@@ -64,6 +65,7 @@ const random = (): JSX.Element => {
   const [muiSlider, setMuiSlider] = useState(0)
   const [giftItem, setGiftItem] = useState<IGiftItem | null>(null)
   const [isRandom, setIsRandom] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const { user, updateUser } = useUserContext()
   const router = useRouter()
 
@@ -132,13 +134,14 @@ const random = (): JSX.Element => {
 
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
-    const res = await getUesrInfo()
+    const res = await getUserInfo()
     res ? updateUser(res) : router.replace('/login')
   }, [])
 
   // 단일 이벤트 조회 API
   const getEventData = useCallback(async () => {
     if (router.query['url']) {
+      setIsLoading(true)
       const eventCode = router.query['url']
       const res = await getEvent(eventCode)
       if (res) {
@@ -146,6 +149,7 @@ const random = (): JSX.Element => {
         res.giftChoiceType !== 'RANDOM' && setIsRandom(false)
         setEventData(res)
       }
+      setIsLoading(false)
     }
   }, [router])
 
@@ -155,100 +159,113 @@ const random = (): JSX.Element => {
     getEventData()
   }, [router])
 
-  return eventOver ? (
-    <EventStateChecker state="EVENT_OVER" />
-  ) : !isRandom ? (
-    <EventStateChecker state="EVENT_INCORRECT" giftType="선착순" />
-  ) : !eventData ? (
-    <EventStateChecker />
-  ) : (
-    <>
-      <Header />
-      <TextHeader
-        eventStart={new Date(eventData.startAt)}
-        eventMaster={eventData.member.name}
-        message="두근두근 랜덤 박스!"
-      />
-      {giftItem ? (
-        isVideoEnded && (
+  return !isLoading && user.id ? (
+    eventOver ? (
+      <EventStateChecker state="EVENT_OVER" />
+    ) : !isRandom ? (
+      <EventStateChecker state="EVENT_INCORRECT" giftType="선착순" />
+    ) : !eventData ? (
+      <EventStateChecker />
+    ) : (
+      <>
+        <Header />
+        <TextHeader
+          eventStart={new Date(eventData.startAt)}
+          eventMaster={eventData.member.name}
+          message="두근두근 랜덤 박스!"
+        />
+        {giftItem ? (
+          isVideoEnded && (
+            <FadeInDownWrapper>
+              <CardFlip
+                url={giftItem.content}
+                type={giftItem.giftType as GIFT_TYPE}
+                front={
+                  giftItem.giftType === 'IMAGE' ? (
+                    <GiftItem
+                      type="IMAGE"
+                      imageSrc={giftItem.content}
+                      imageStyle={{
+                        width: '100%',
+                        height: '420px',
+                        margin: '0 auto',
+                        borderRadius: '8px',
+                        objectFit: 'contain',
+                      }}
+                    />
+                  ) : (
+                    <GiftItem
+                      type="TEXT"
+                      template={giftItem.mainTemplate as EVENT_TEMPLATE}
+                      message={giftItem.content}
+                    />
+                  )
+                }
+              />
+            </FadeInDownWrapper>
+          )
+        ) : isVideoEnded ? (
           <FadeInDownWrapper>
             <CardFlip
-              url={giftItem.content}
-              type={giftItem.giftType as GIFT_TYPE}
+              url="boom"
+              type="BOOM"
               front={
-                giftItem.giftType === 'IMAGE' ? (
-                  <GiftItem
-                    type="IMAGE"
-                    imageSrc={giftItem.content}
-                    imageStyle={{
-                      width: '100%',
-                      height: '420px',
-                      margin: '0 auto',
-                      borderRadius: '8px',
-                      objectFit: 'contain',
-                    }}
-                  />
-                ) : (
-                  <GiftItem
-                    type="TEXT"
-                    template={giftItem.mainTemplate as EVENT_TEMPLATE}
-                    message={giftItem.content}
-                  />
-                )
+                <GiftItem
+                  type="IMAGE"
+                  imageSrc="/boom.png"
+                  imageStyle={{
+                    width: '100%',
+                    height: '100%',
+                    margin: '0 auto',
+                    borderRadius: '8px',
+                    objectFit: 'contain',
+                  }}
+                />
               }
             />
           </FadeInDownWrapper>
-        )
-      ) : isVideoEnded ? (
-        <FadeInDownWrapper>
-          <CardFlip
-            url="boom"
-            type="BOOM"
-            front={
-              <GiftItem
-                type="IMAGE"
-                imageSrc="/boom.png"
-                imageStyle={{
-                  width: '100%',
-                  height: '100%',
-                  margin: '0 auto',
-                  borderRadius: '8px',
-                  objectFit: 'contain',
-                }}
-              />
-            }
-          />
-        </FadeInDownWrapper>
-      ) : (
-        ''
-      )}
-      {isVideoLoading ? (
-        <FadeInWrapper>
-          <VideoBox
-            src="/video/Stars.mp4"
-            muted
-            autoPlay
-            onEnded={() => setIsVideoEnded(true)}
-          />
-        </FadeInWrapper>
-      ) : (
-        <SliderWrapper>
-          <CustomSlider
-            disabled={eventStart ? false : true}
-            aria-label="Temperature"
-            onChange={handleSliderChange}
-            color="secondary"
-            sx={{
-              backgroundColor: 'transparent',
-              border: `3px solid ${COLORS.TEXT_GRAY_LIGHT}`,
-              height: '22px',
-              width: '100%',
-            }}
-          />
-          <StyledText>밀어서 랜덤 선물받기</StyledText>
-        </SliderWrapper>
-      )}
-    </>
+        ) : (
+          ''
+        )}
+        {isVideoLoading ? (
+          <FadeInWrapper>
+            <VideoBox
+              src="/video/Stars.mp4"
+              muted
+              autoPlay
+              onEnded={() => setIsVideoEnded(true)}
+            />
+          </FadeInWrapper>
+        ) : (
+          <SliderWrapper>
+            <CustomSlider
+              disabled={eventStart ? false : true}
+              aria-label="Temperature"
+              onChange={handleSliderChange}
+              color="secondary"
+              sx={{
+                backgroundColor: 'transparent',
+                border: `3px solid ${COLORS.TEXT_GRAY_LIGHT}`,
+                height: '22px',
+                width: '100%',
+              }}
+            />
+            <StyledText>밀어서 랜덤 선물받기</StyledText>
+          </SliderWrapper>
+        )}
+      </>
+    )
+  ) : (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        textAlign: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+      }}>
+      <Spinner />
+    </div>
   )
 }
 
@@ -333,9 +350,10 @@ const CustomSlider = styled(Slider)(() => ({
 
 const StyledText = styled.div`
   position: absolute;
-  font-size: ${FONT_SIZES.LARGE};
-  top: 10%;
   right: -50px;
+  font-size: 1.125rem;
+  user-select: none;
+  top: 20%;
   transform: translate(-50%, 50%);
   background-image: linear-gradient(90deg, #111, #fff, #111);
   background-repeat: no-repeat;

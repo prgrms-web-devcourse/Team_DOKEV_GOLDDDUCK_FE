@@ -7,7 +7,7 @@ import { FONT_SIZES } from '@utils/constants/sizes'
 import { useRouter } from 'next/router'
 import { useUserContext } from '@contexts/UserProvider'
 import { useCallback, useEffect } from 'react'
-import { getUesrInfo } from '../pages/api/user'
+import { getUserInfo } from '../pages/api/user'
 
 const INTRODUCE =
   '소중한 사람들에게 \n 색다르게 선물을 전달해보세요. \n\n 금뚝이가 도와드릴게요!'
@@ -19,7 +19,7 @@ export const main = () => {
 
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
-    const res = await getUesrInfo()
+    const res = await getUserInfo()
     res ? updateUser(res) : router.replace('/login')
   }, [])
 
@@ -70,6 +70,7 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  user-select: none;
 `
 
 const VideoBox = styled.video`

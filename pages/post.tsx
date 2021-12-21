@@ -14,7 +14,7 @@ import EventType from '@domains/EventType/index'
 import EventComplete from '@domains/EventComplete'
 import { useRouter } from 'next/router'
 import { useUserContext } from '@contexts/UserProvider'
-import { getUesrInfo } from '../pages/api/user'
+import { getUserInfo } from '../pages/api/user'
 import { addEventApi } from '../pages/api/post'
 import { COLORS } from '@utils/constants/colors'
 
@@ -33,7 +33,7 @@ const post = () => {
 
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
-    const res = await getUesrInfo()
+    const res = await getUserInfo()
     if (res) {
       setMemberId(res?.id)
       updateUser(res)
@@ -121,7 +121,7 @@ const post = () => {
   //step1 EventTitle 상태 로직
   const [title, setTitle] = useState('')
   const [maxParticipantCount, setMaxParticipantCount] = useState<number>()
-  const [mainTemplate, setMainTemplate] = useState<string>('template1')
+  const [mainTemplate, setMainTemplate] = useState('template1')
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.name === 'title'
@@ -158,7 +158,7 @@ const post = () => {
     setGifts((gifts) => [...gifts, { giftCheckId, category, giftItems }])
   }
 
-  const delteGiftItem = (giftCheckId: string) => {
+  const deleteGiftItem = (giftCheckId: string) => {
     const filterData = gifts.filter((gift) => gift.giftCheckId !== giftCheckId)
     setGifts(filterData)
   }
@@ -200,7 +200,7 @@ const post = () => {
           <EventPresent
             gifts={gifts}
             AddGiftItem={AddGiftItem}
-            delteGiftItem={delteGiftItem}
+            deleteGiftItem={deleteGiftItem}
             maxParticipantCount={maxParticipantCount}
             giftChoiceType={giftChoiceType}
           />
@@ -228,7 +228,7 @@ const post = () => {
           <Stepper
             activeStep={activeStep}
             alternativeLabel
-            sx={{ paddingTop: '15px' }}>
+            sx={{ paddingTop: '15px', whiteSpace: 'nowrap' }}>
             {steps.map((label, index) => {
               const stepProps: { completed?: boolean } = {}
               const labelProps: {
