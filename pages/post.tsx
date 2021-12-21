@@ -14,7 +14,7 @@ import EventType from '@domains/EventType/index'
 import EventComplete from '@domains/EventComplete'
 import { useRouter } from 'next/router'
 import { useUserContext } from '@contexts/UserProvider'
-import { getUesrInfo } from '../pages/api/user'
+import { getUserInfo } from '../pages/api/user'
 import { addEventApi } from '../pages/api/post'
 import { COLORS } from '@utils/constants/colors'
 
@@ -33,7 +33,7 @@ const post = () => {
 
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
-    const res = await getUesrInfo()
+    const res = await getUserInfo()
     if (res) {
       setMemberId(res?.id)
       updateUser(res)

@@ -13,7 +13,7 @@ import { giftDetail } from '../api/services/gift'
 import { getGiftDetail, updateGiftUsed } from '../api/gift'
 import { useUserContext } from '@contexts/UserProvider'
 import { GIFT_TYPE, IFilteredGiftDetail } from 'types/gift'
-import { getUesrInfo } from '../api/user'
+import { getUserInfo } from '../api/user'
 import { EVENT_TEMPLATE } from 'types/event'
 
 const GiftDetailPage = () => {
@@ -27,7 +27,7 @@ const GiftDetailPage = () => {
 
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
-    const data = await getUesrInfo()
+    const data = await getUserInfo()
     if (data) {
       updateUser(data)
     } else {

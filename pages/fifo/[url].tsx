@@ -10,7 +10,8 @@ import { COLORS } from '@utils/constants/colors'
 import TimerHeader from '@domains/TimerHeader'
 import MUIButton from '@components/MUIButton'
 import useInterval from '@hooks/useInterval'
-import { getUesrInfo } from '../api/user'
+import Spinner from '@components/Spinner'
+import { getUserInfo } from '../api/user'
 import Image from '@components/Image'
 import Header from '@domains/Header'
 import styled from '@emotion/styled'
@@ -58,6 +59,7 @@ const fifo = (): JSX.Element => {
   const [eventOver, setEventOver] = useState(false)
   const [distance, setDistance] = useState(0)
   const [isFifo, setIsFifo] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { user, updateUser } = useUserContext()
 
@@ -120,13 +122,14 @@ const fifo = (): JSX.Element => {
 
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
-    const res = await getUesrInfo()
+    const res = await getUserInfo()
     res ? updateUser(res) : router.replace('/login')
   }, [])
 
   // 단일 이벤트 조회 API
   const getEventData = useCallback(async () => {
     if (router.query['url']) {
+      setIsLoading(true)
       const eventCode = router.query['url']
       const res = await getEvent(eventCode)
       if (res) {
@@ -134,6 +137,7 @@ const fifo = (): JSX.Element => {
         res.giftChoiceType !== 'FIFO' && setIsFifo(false)
         setEventData(res)
       }
+      setIsLoading(false)
     }
   }, [router])
 
@@ -143,51 +147,64 @@ const fifo = (): JSX.Element => {
     getEventData()
   }, [router])
 
-  return eventOver ? (
-    <EventStateChecker state="EVENT_OVER" />
-  ) : !isFifo ? (
-    <EventStateChecker state="EVENT_INCORRECT" giftType="랜덤" />
-  ) : !eventData ? (
-    <EventStateChecker />
+  return !isLoading && user.id ? (
+    eventOver ? (
+      <EventStateChecker state="EVENT_OVER" />
+    ) : !isFifo ? (
+      <EventStateChecker state="EVENT_INCORRECT" giftType="랜덤" />
+    ) : !eventData ? (
+      <EventStateChecker />
+    ) : (
+      <>
+        <Header />
+        <TimerHeader
+          eventStart={new Date(eventData.startAt)}
+          eventMaster={eventData.member.name}
+          message="선착순이에요. 서둘러주세요!"
+        />
+        <GiftWrapper>
+          {eventData.gifts.map(({ id, category, itemCount }: Igifts, index) => (
+            <Gift key={id}>
+              <Image
+                src={`/gifts/gift${(index % 8) + 1}.png`}
+                width="60px"
+                height="60px"
+                mode="contain"
+              />
+              <GiftTextWrapper>
+                <Text size="MEDIUM" color="WHITE">
+                  {category}
+                </Text>
+                <Text size="BASE" color="TEXT_GRAY_DARK">
+                  수량 : {itemCount}개
+                </Text>
+              </GiftTextWrapper>
+              {itemCount ? (
+                <MUIButton
+                  id={String(id)}
+                  onClick={handleGiftReceipt}
+                  style={{ ...GetStyle }}>
+                  GET
+                </MUIButton>
+              ) : (
+                <MUIButton style={{ ...SoldOutStyle }}>SOLD OUT</MUIButton>
+              )}
+            </Gift>
+          ))}
+        </GiftWrapper>
+      </>
+    )
   ) : (
-    <>
-      <Header />
-      <TimerHeader
-        eventStart={new Date(eventData.startAt)}
-        eventMaster={eventData.member.name}
-        message="선착순이에요. 서둘러주세요!"
-      />
-      <GiftWrapper>
-        {eventData.gifts.map(({ id, category, itemCount }: Igifts, index) => (
-          <Gift key={id}>
-            <Image
-              src={`/gifts/gift${(index % 8) + 1}.png`}
-              width="60px"
-              height="60px"
-              mode="contain"
-            />
-            <GiftTextWrapper>
-              <Text size="MEDIUM" color="WHITE">
-                {category}
-              </Text>
-              <Text size="BASE" color="TEXT_GRAY_DARK">
-                수량 : {itemCount}개
-              </Text>
-            </GiftTextWrapper>
-            {itemCount ? (
-              <MUIButton
-                id={String(id)}
-                onClick={handleGiftReceipt}
-                style={{ ...GetStyle }}>
-                GET
-              </MUIButton>
-            ) : (
-              <MUIButton style={{ ...SoldOutStyle }}>SOLD OUT</MUIButton>
-            )}
-          </Gift>
-        ))}
-      </GiftWrapper>
-    </>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        textAlign: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+      }}>
+      <Spinner />
+    </div>
   )
 }
 

@@ -7,13 +7,13 @@ import dynamic from 'next/dynamic'
 import { getFilteredGiftList } from './api/gift'
 import { filteredGiftList } from './api/services/gift'
 import { IFilteredGiftItem } from 'types/gift'
-import GiftList from '@domains/GiftList.tsx'
+import GiftList from '@domains/GiftList'
 import { filteredEventList } from './api/services/event'
 import EventList from '@domains/EventList'
 import { getFilteredEventList } from './api/event'
 import { IFilteredEventItem } from 'types/event'
 import { useUserContext } from '@contexts/UserProvider'
-import { getUesrInfo } from './api/user'
+import { getUserInfo } from './api/user'
 import Text from '@components/Text'
 import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import Icon from '@components/Icon'
@@ -42,7 +42,7 @@ const MyPage = (): JSX.Element => {
   const [eventList, setEventList] = useState([] as IFilteredEventItem[])
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
-    const data = await getUesrInfo()
+    const data = await getUserInfo()
     if (data) {
       updateUser(data)
     } else {

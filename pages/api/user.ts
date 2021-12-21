@@ -1,6 +1,6 @@
 import { authInstance } from './utils'
 
-export const getUesrInfo = async () => {
+export const getUserInfo = async () => {
   try {
     const { data } = await authInstance.get('api/v1/members/me')
 
