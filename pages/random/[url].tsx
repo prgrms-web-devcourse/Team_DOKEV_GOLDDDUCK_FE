@@ -2,7 +2,6 @@ import { getEvent, postRandomGiftReceipt } from '../api/event'
 import EventStateChecker from '@domains/EventStateChecker'
 import { useCallback, useEffect, useState } from 'react'
 import { useUserContext } from '@contexts/UserProvider'
-import { FONT_SIZES } from '@utils/constants/sizes'
 import { GIFT_TYPE, IGiftItem } from 'types/gift'
 import { ErrorAlert } from '@components/Swalert'
 import { COLORS } from '@utils/constants/colors'
@@ -14,11 +13,12 @@ import { getUserInfo } from '../api/user'
 import Slider from '@mui/material/Slider'
 import Spinner from '@components/Spinner'
 import CardFlip from '@domains/CardFlip'
-import GiftItem from '@domains/GiftItem'
 import { useRouter } from 'next/router'
 import Header from '@domains/Header'
 import styled from '@emotion/styled'
+import dynamic from 'next/dynamic'
 
+const GiftItem = dynamic(() => import('@domains/GiftItem'))
 interface IMember {
   id: number
   name: string
