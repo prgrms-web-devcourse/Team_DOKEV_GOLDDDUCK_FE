@@ -52,7 +52,7 @@ const Cover = ({
         링크 복사
       </MUIButton>
       <Text color="TEXT_GRAY_DARK">
-        {`${eventType === 'FIFO' ? '#선착순' : '#랜덤'} ${
+        {`${eventType === 'FIFO' ? '#눈치게임' : '#랜덤박스'} ${
           status === 'READY'
             ? '#준비중'
             : status === 'RUNNING'
