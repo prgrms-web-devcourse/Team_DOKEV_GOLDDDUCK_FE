@@ -108,6 +108,8 @@ const EventTitle: React.FC<Props> = ({
 }
 
 const EventTitleContainer = styled.div`
+  width: 332px;
+  margin: 0 auto;
   height: calc(100% - 132px);
   padding: 16px 0;
   overflow: scroll;
@@ -120,7 +122,7 @@ const EventTitleContainer = styled.div`
 
 const Div = styled.div`
   padding-top: 5%;
-  width: calc(100% - 32px);
+  width: 100%;
   margin: 0 auto;
   display: flex;
   align-items: center;
