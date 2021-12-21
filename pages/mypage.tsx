@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import Header from '@domains/Header'
 import MUIAvatar from '@components/MUIAvatar'
 import { useRouter } from 'next/router'
-import { LegacyRef, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { getFilteredGiftList } from './api/gift'
 import { filteredGiftList } from './api/services/gift'
@@ -66,7 +66,7 @@ const MyPage = (): JSX.Element => {
           isUsed,
           user?.id,
           currentPage,
-          10,
+          20,
         )
 
         if (data) {
@@ -90,7 +90,7 @@ const MyPage = (): JSX.Element => {
           status,
           user?.id,
           currentPage,
-          10,
+          20,
         )
         if (data) {
           setEventList(eventList.concat(filteredEventList(data).eventList))
