@@ -29,7 +29,7 @@ const login = (): JSX.Element => {
               style={{ backgroundColor: 'white' }}
             />
             <Text
-              size="MEDIUM"
+              size="SMALL"
               color="WHITE"
               style={{
                 width: '100%',

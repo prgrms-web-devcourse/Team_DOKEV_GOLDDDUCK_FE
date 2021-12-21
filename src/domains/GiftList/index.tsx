@@ -139,6 +139,7 @@ const ListWrapper = styled.section`
   justify-content: space-between;
   flex-wrap: wrap;
   margin: ${DEFAULT_MARGIN} auto;
+  user-select: none;
 `
 
 const ItemWrapper = styled.div`

@@ -66,7 +66,7 @@ const MyPage = (): JSX.Element => {
           isUsed,
           user?.id,
           currentPage,
-          10,
+          20,
         )
 
         if (data) {
@@ -90,7 +90,7 @@ const MyPage = (): JSX.Element => {
           status,
           user?.id,
           currentPage,
-          10,
+          20,
         )
         if (data) {
           setEventList(eventList.concat(filteredEventList(data).eventList))
