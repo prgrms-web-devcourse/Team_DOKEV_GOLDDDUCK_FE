@@ -7,9 +7,7 @@ import dynamic from 'next/dynamic'
 import { getFilteredGiftList } from './api/gift'
 import { filteredGiftList } from './api/services/gift'
 import { IFilteredGiftItem } from 'types/gift'
-import GiftList from '@domains/GiftList'
 import { filteredEventList } from './api/services/event'
-import EventList from '@domains/EventList'
 import { getFilteredEventList } from './api/event'
 import { IFilteredEventItem } from 'types/event'
 import { useUserContext } from '@contexts/UserProvider'
@@ -19,13 +17,10 @@ import { DEFAULT_MARGIN } from '@utils/constants/sizes'
 import Icon from '@components/Icon'
 import { LogOutAlert } from '@components/Swalert'
 import useInfiniteScroll from '@hooks/useInfiniteScroll'
-
-const MUITab = dynamic(() => import('@components/MUITab/MUITab'), {
-  ssr: false,
-})
-const MUITabPanel = dynamic(() => import('@components/MUITab/MUITabPanel'), {
-  ssr: false,
-})
+const MUITab = dynamic(() => import('@components/MUITab/MUITab'))
+const MUITabPanel = dynamic(() => import('@components/MUITab/MUITabPanel'))
+const GiftList = dynamic(() => import('@domains/GiftList'))
+const EventList = dynamic(() => import('@domains/EventList'))
 
 const MyPage = (): JSX.Element => {
   const router = useRouter()
@@ -40,6 +35,7 @@ const MyPage = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState(false)
   const [giftList, setGiftList] = useState([] as IFilteredGiftItem[])
   const [eventList, setEventList] = useState([] as IFilteredEventItem[])
+
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
     const data = await getUserInfo()
