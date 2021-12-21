@@ -42,20 +42,18 @@ const GiftDetailPage = () => {
   // 선물 데이터 조회
   const fetchGiftDetail = useCallback(
     async (giftId) => {
-      if (userId) {
-        setIsLoading(true)
-        const data = await getGiftDetail(userId, giftId)
-        data && setGift(giftDetail(data))
-        setUsed(data.used)
-        setIsLoading(false)
-      }
+      setIsLoading(true)
+      const data = await getGiftDetail(giftId)
+      data && setGift(giftDetail(data))
+      setUsed(data.used)
+      setIsLoading(false)
     },
     [userId],
   )
 
   useEffect(() => {
     userId && router.isReady && fetchGiftDetail(router.query?.id)
-  }, [userId, router.query.id])
+  }, [userId, router.query.id, fetchGiftDetail])
 
   const handleChangeSwitch = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

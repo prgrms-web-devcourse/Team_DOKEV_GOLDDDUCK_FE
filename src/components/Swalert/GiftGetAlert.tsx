@@ -10,6 +10,12 @@ const GiftGetAlert = (title: string) => {
     title,
     confirmButtonColor: COLORS.RED,
     confirmButtonText: 'GET!',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      return true
+    } else {
+      return false
+    }
   })
 }
 

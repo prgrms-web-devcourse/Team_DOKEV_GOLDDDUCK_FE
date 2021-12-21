@@ -103,7 +103,6 @@ const post = () => {
 
     gifts.map((gift, i) => {
       formData.append(`gifts[${i}].category`, gift.category)
-      formData.append(`gifts[${i}].giftCheckId`, gift.giftCheckId)
       gift.giftItems.map((item, j) => {
         if (item.giftType === 'TEXT' && item.content) {
           formData.append(`gifts[${i}].giftItems[${j}].giftType`, 'TEXT')
