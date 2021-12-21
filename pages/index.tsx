@@ -70,6 +70,7 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  user-select: none;
 `
 
 const VideoBox = styled.video`

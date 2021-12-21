@@ -53,6 +53,7 @@ const textStyle: React.CSSProperties = {
   textAlign: 'center',
   whiteSpace: 'pre-wrap',
   lineHeight: 1.5,
+  userSelect: 'none',
 }
 
 const btnStyle: React.CSSProperties = {

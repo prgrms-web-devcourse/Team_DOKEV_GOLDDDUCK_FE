@@ -205,6 +205,7 @@ const Profile = styled.div`
   align-items: center;
   display: flex;
   gap: 40px;
+  user-select: none;
 `
 
 export default MyPage

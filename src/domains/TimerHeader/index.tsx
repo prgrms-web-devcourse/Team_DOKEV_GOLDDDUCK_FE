@@ -43,6 +43,7 @@ const TimerHeader = ({
 const TimerHeaderContainer = styled.div`
   margin: 0 auto;
   padding-top: 35%;
+  user-select: none;
   @media all and (max-width: 425px) {
     padding-top: 20%;
   }
