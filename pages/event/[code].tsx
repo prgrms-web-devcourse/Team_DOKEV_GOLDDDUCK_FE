@@ -14,7 +14,7 @@ import {
   IFilteredEventItem,
   IFilteredWinnerList,
 } from 'types/event'
-import { getUesrInfo } from '../api/user'
+import { getUserInfo } from '../api/user'
 import { useUserContext } from '@contexts/UserProvider'
 import dynamic from 'next/dynamic'
 
@@ -41,7 +41,7 @@ const EventPage = (): JSX.Element => {
 
   // 로그인 여부 확인
   const fetchUser = useCallback(async () => {
-    const data = await getUesrInfo()
+    const data = await getUserInfo()
     if (data) {
       updateUser(data)
     } else {
