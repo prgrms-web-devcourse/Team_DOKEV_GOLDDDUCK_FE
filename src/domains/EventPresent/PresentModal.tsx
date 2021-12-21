@@ -108,7 +108,12 @@ const PresentModal = ({
               <Text
                 id={String(index)}
                 size="SMALL"
-                style={{ marginRight: 'auto', width: '80%', lineHeight: 1.3 }}>
+                style={{
+                  marginRight: 'auto',
+                  width: '80%',
+                  lineHeight: 1.3,
+                  wordWrap: 'break-word',
+                }}>
                 {content && content.length > 16 && currentSelectId !== index
                   ? `${content.substring(0, 16)}...`
                   : content}
