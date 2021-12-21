@@ -56,7 +56,7 @@ const EventComplete = ({ eventLink, giftChoiceType }: Props) => {
               <Image src="/roudolf.png"></Image>
             </Div>
 
-            <Div>
+            {/* <Div>
               <Text
                 size="MEDIUM"
                 style={{ textAlign: 'center', padding: '0 10%' }}>
@@ -64,7 +64,7 @@ const EventComplete = ({ eventLink, giftChoiceType }: Props) => {
                   ? `${host}/fifo/${eventLink}`
                   : `${host}/random/${eventLink}`}
               </Text>
-            </Div>
+            </Div> */}
 
             <Div>
               <MUIButton
