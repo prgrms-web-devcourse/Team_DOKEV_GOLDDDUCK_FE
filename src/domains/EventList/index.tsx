@@ -89,6 +89,7 @@ const ListWrapper = styled.section`
   flex-wrap: wrap;
   width: 332px;
   margin: ${DEFAULT_MARGIN} auto;
+  user-select: none;
 `
 
 const ItemWrapper = styled.div`
