@@ -81,6 +81,7 @@ const WinnerSection = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  user-select: none;
 `
 
 const Contents = styled.div`

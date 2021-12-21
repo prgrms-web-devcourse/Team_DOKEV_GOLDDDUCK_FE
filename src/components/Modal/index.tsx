@@ -45,7 +45,8 @@ const Modal: React.FC<IModal> = ({
         {React.Children.toArray(children)[0]}
       </div>
       <StyledModal open={open}>
-        <ModalHeader style={{ display: open ? 'flex' : 'none' }}>
+        <ModalHeader
+          style={{ display: open ? 'flex' : 'none', userSelect: 'none' }}>
           <Text color="WHITE" size="BASE" style={{ marginRight: 'auto' }}>
             {title}
           </Text>
