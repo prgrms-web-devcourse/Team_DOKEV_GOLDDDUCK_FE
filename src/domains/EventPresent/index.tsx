@@ -166,7 +166,7 @@ const EventPresent = ({
             </MUIButton>
           </Modal>
 
-          <Text size="MEDIUM" color="WHITE" style={{ paddingLeft: '8px' }}>
+          <Text size="BASE" color="WHITE" style={{ paddingLeft: '8px' }}>
             선물 추가하기
           </Text>
         </div>
@@ -193,10 +193,10 @@ const EventPresent = ({
             style={{ margin: '0 10px' }}
           />
           <div>
-            <Text size="MEDIUM" color="WHITE">
+            <Text size="BASE" color="WHITE">
               꽝!
             </Text>
-            <Text size="BASE" color="TEXT_GRAY_DARK" style={{ paddingTop: 6 }}>
+            <Text size="MICRO" color="TEXT_GRAY_DARK" style={{ paddingTop: 6 }}>
               수량 : {maxParticipantCount - totalQuantity} 개
             </Text>
           </div>
@@ -204,11 +204,10 @@ const EventPresent = ({
             size="MICRO"
             style={{
               color: '#CE000B',
-              whiteSpace: 'nowrap',
               alignSelf: 'flex-start',
               marginLeft: 'auto',
             }}>
-            * 등록한 선물이 부족하면 꽝으로 채워집니다.
+            {`* 나머지는 꽝으로 채워집니다.`}
           </Text>
         </DisplayStyle>
       </EventPresentContainer>
