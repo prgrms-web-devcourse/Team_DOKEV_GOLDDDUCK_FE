@@ -21,7 +21,7 @@ interface Display {
 interface Props {
   gifts: Gift[]
   AddGiftItem(e: Gift): void
-  delteGiftItem(e: string): void
+  deleteGiftItem(e: string): void
   maxParticipantCount: number | undefined
   giftChoiceType: string
 }
@@ -42,7 +42,7 @@ interface GiftItem {
 const EventPresent = ({
   gifts,
   AddGiftItem,
-  delteGiftItem,
+  deleteGiftItem,
   maxParticipantCount = 0,
   giftChoiceType,
 }: Props) => {
@@ -61,7 +61,7 @@ const EventPresent = ({
   }
 
   const onCilckMessage = () => {
-    if (content.length > 0) {
+    if (content?.replace(/(\s*)/g, '').length > 0) {
       setContentList([
         ...contentList,
         { content, giftType: 'TEXT', MessageId: uuidv4() },
@@ -159,7 +159,9 @@ const EventPresent = ({
               onCilckMessage={onCilckMessage}
               delteMessage={delteMessage}
               hadleImageUpload={hadleImageUpload}></PresentModal>
-            <MUIButton style={{ backgroundColor: '#CE000B' }} onClick={AddGift}>
+            <MUIButton
+              style={{ backgroundColor: COLORS.RED }}
+              onClick={AddGift}>
               완료
             </MUIButton>
           </Modal>
@@ -179,7 +181,7 @@ const EventPresent = ({
                   index={index}
                   category={category}
                   length={giftItems.length}
-                  delteGiftItem={delteGiftItem}></GiftForm>
+                  deleteGiftItem={deleteGiftItem}></GiftForm>
               )
             })}
         </GiftWrapper>
@@ -194,10 +196,7 @@ const EventPresent = ({
             <Text size="MEDIUM" color="WHITE">
               꽝!
             </Text>
-            <Text
-              size="BASE"
-              color="TEXT_GRAY_DARK"
-              style={{ paddingTop: '3px' }}>
+            <Text size="BASE" color="TEXT_GRAY_DARK" style={{ paddingTop: 6 }}>
               수량 : {maxParticipantCount - totalQuantity} 개
             </Text>
           </div>

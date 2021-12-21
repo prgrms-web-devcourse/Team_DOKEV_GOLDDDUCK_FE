@@ -86,7 +86,7 @@ const PresentModal = ({
         </Div>
         <Div style={{ position: 'relative' }}>
           <TextareaWrapper>
-            <LabelStyled htmlFor="textarea">메시지</LabelStyled>
+            <LabelStyled htmlFor="textarea">메세지</LabelStyled>
             <Textarea
               id="textarea"
               name="presentMessage"
@@ -94,6 +94,9 @@ const PresentModal = ({
               onChange={handleInput}
               style={{ height: '120px' }}
             />
+            <Text size="MICRO" color="TEXT_GRAY_DARK" style={{ padding: 8 }}>
+              {content?.length} / 150
+            </Text>
             <PlusButton aria-label="add" onClick={onCilckMessage}>
               <AddIcon />
             </PlusButton>
@@ -105,31 +108,32 @@ const PresentModal = ({
               <Text
                 id={String(index)}
                 size="SMALL"
-                style={
-                  currentSelectId === index
-                    ? { ...TextMoreStyle }
-                    : { ...TextStyle }
-                }>
-                {content}
+                style={{ marginRight: 'auto', width: '80%', lineHeight: 1.3 }}>
+                {content && content.length > 16 && currentSelectId !== index
+                  ? `${content.substring(0, 16)}...`
+                  : content}
               </Text>
-              <MUIButton
-                id={String(index)}
-                onClick={handleMoreView}
-                style={{
-                  border: 'none',
-                  background: 'none',
-                  whiteSpace: 'normal',
-                  fontSize: FONT_SIZES.MICRO,
-                  padding: 0,
-                  color: 'red',
-                }}>
-                {currentSelectId === index ? '숨기기' : '더보기'}
-              </MUIButton>
+              {content && content.length > 16 && (
+                <MUIButton
+                  id={String(index)}
+                  onClick={handleMoreView}
+                  style={{
+                    width: 30,
+                    border: 'none',
+                    fontSize: FONT_SIZES.MICRO,
+                    padding: 0,
+                    margin: 0,
+                    color: COLORS.RED,
+                    background: 'none',
+                    alignSelf: 'flex-end',
+                  }}>
+                  {currentSelectId === index ? '숨기기' : '더보기'}
+                </MUIButton>
+              )}
               <Icon
                 name="close"
                 color="TEXT_GRAY_DARK"
-                size="LARGE"
-                style={{ width: '40px' }}
+                size="MEDIUM"
                 onIconClick={() => delteMessage(MessageId)}
               />
             </TextItem>
@@ -142,38 +146,32 @@ const PresentModal = ({
 
 const Wrapper = styled.div`
   border-top: 1px solid ${COLORS.WHITE};
-  margin-top: 5%;
-  overflow-y: scroll;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
-  }
+  margin-top: 16px;
 `
 
 const TextItem = styled.div`
   display: flex;
-  border-top: 1px solid ${COLORS.TEXT_GRAY_DARK};
-  &:first-of-type {
-    border: none;
-  }
+  border-bottom: 1px solid ${COLORS.TEXT_GRAY_DARK};
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px;
 `
 
-const TextStyle: React.CSSProperties = {
-  padding: '12px 0 12px 12px',
-  textOverflow: 'ellipsis',
-  overflow: 'hidden',
-  whiteSpace: 'nowrap',
-  width: '100%',
-}
+// const TextStyle: React.CSSProperties = {
+//   padding: '12px 0 12px 12px',
+//   textOverflow: 'ellipsis',
+//   overflow: 'hidden',
+//   whiteSpace: 'nowrap',
+//   width: '100%',
+// }
 
-const TextMoreStyle: React.CSSProperties = {
-  padding: '12px 0 12px 12px',
-  lineHeight: '1.5',
-  wordBreak: 'break-all',
-  whiteSpace: 'pre-wrap',
-  width: '100%',
-}
+// const TextMoreStyle: React.CSSProperties = {
+//   padding: '12px 0 12px 12px',
+//   lineHeight: '1.5',
+//   wordBreak: 'break-all',
+//   whiteSpace: 'pre-wrap',
+//   width: '100%',
+// }
 
 const PresentModalContainer = styled.div`
   height: 100%;
@@ -182,6 +180,12 @@ const PresentModalContainer = styled.div`
   flex-direction: column;
   margin: 0 auto;
   width: 100%;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+  }
 `
 const Div = styled.div`
   margin-top: 5%;
@@ -198,17 +202,15 @@ const UploadWrapper = styled.div`
 `
 
 const LabelStyled = styled.label`
-  font-size: 1.2rem;
   width: 100%;
   padding: 8px;
   text-align: center;
   display: inline-block;
 `
 const TextareaWrapper = styled.div`
-  width: 98%;
   margin: 0 auto;
-  margin-top: 16px;
   background-color: #ffffff;
+  position: relative;
 `
 
 const PlusButton = styled(Fab)(() => ({
@@ -218,8 +220,8 @@ const PlusButton = styled(Fab)(() => ({
   height: '40px',
   width: '40px',
   color: 'white',
-  backgroundColor: 'red',
-  '&:hover': { backgroundColor: 'red', filter: 'brightness(0.9)' },
+  backgroundColor: COLORS.RED,
+  '&:hover': { backgroundColor: COLORS.RED, filter: 'brightness(0.9)' },
 }))
 
 export default PresentModal

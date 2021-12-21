@@ -121,7 +121,7 @@ const post = () => {
   //step1 EventTitle 상태 로직
   const [title, setTitle] = useState('')
   const [maxParticipantCount, setMaxParticipantCount] = useState<number>()
-  const [mainTemplate, setMainTemplate] = useState<string>('template1')
+  const [mainTemplate, setMainTemplate] = useState('template1')
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.name === 'title'
@@ -158,7 +158,7 @@ const post = () => {
     setGifts((gifts) => [...gifts, { giftCheckId, category, giftItems }])
   }
 
-  const delteGiftItem = (giftCheckId: string) => {
+  const deleteGiftItem = (giftCheckId: string) => {
     const filterData = gifts.filter((gift) => gift.giftCheckId !== giftCheckId)
     setGifts(filterData)
   }
@@ -200,7 +200,7 @@ const post = () => {
           <EventPresent
             gifts={gifts}
             AddGiftItem={AddGiftItem}
-            delteGiftItem={delteGiftItem}
+            deleteGiftItem={deleteGiftItem}
             maxParticipantCount={maxParticipantCount}
             giftChoiceType={giftChoiceType}
           />
@@ -228,7 +228,7 @@ const post = () => {
           <Stepper
             activeStep={activeStep}
             alternativeLabel
-            sx={{ paddingTop: '15px' }}>
+            sx={{ paddingTop: '15px', whiteSpace: 'nowrap' }}>
             {steps.map((label, index) => {
               const stepProps: { completed?: boolean } = {}
               const labelProps: {

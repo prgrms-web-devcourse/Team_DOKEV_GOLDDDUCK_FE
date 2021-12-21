@@ -8,8 +8,12 @@ const TextLabel = ({ title }: Props) => {
   return (
     <>
       <LabelStyled htmlFor="participant">
-        <Text style={{ display: 'inline-block' }}>{title}</Text>
-        <Text style={{ color: 'red', display: 'inline-block' }}>*</Text>
+        <Text style={{ display: 'inline-block' }} size="SMALL">
+          {title}
+        </Text>
+        <Text style={{ color: 'red', display: 'inline-block' }} size="SMALL">
+          *
+        </Text>
       </LabelStyled>
     </>
   )
@@ -18,7 +22,6 @@ const TextLabel = ({ title }: Props) => {
 export default TextLabel
 
 const LabelStyled = styled.label`
-  display: block;
-  width: 25%;
-  font-size: 1.5rem;
+  width: 30%;
+  white-space: nowrap;
 `
