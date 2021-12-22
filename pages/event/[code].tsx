@@ -45,13 +45,14 @@ const EventPage = (): JSX.Element => {
     if (data) {
       updateUser(data)
     } else {
-      router.replace('/login')
+      sessionStorage.setItem('next_url', `/event/${router?.query.code}`)
+      router.push('/login')
     }
   }, [router])
 
   useEffect(() => {
     fetchUser()
-  }, [])
+  }, [router])
 
   // 이벤트 데이터 조회
   const fetchEventDetail = useCallback(

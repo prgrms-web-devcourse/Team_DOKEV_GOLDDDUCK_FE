@@ -1,18 +1,27 @@
 import { useUserContext } from '@contexts/UserProvider'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 const oauthPage = () => {
   const { updateToken } = useUserContext()
-  const route = useRouter()
+  const [nextUrl, setNextUrl] = useState<string | null>(null)
+  const router = useRouter()
 
   useEffect(() => {
-    if (route.query['token']) {
-      const token = route.query['token']
+    sessionStorage && setNextUrl(sessionStorage.getItem('next_url'))
+  }, [])
+
+  useEffect(() => {
+    if (router.query['token']) {
+      const token = router.query['token']
       updateToken(token)
-      route.replace('/')
+      if (nextUrl) {
+        router.push(nextUrl)
+      } else {
+        router.push('/')
+      }
     }
-  }, [route])
+  }, [router])
 
   return <div>OauthRedirectPage</div>
 }

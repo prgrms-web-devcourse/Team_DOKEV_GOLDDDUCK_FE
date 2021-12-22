@@ -31,13 +31,14 @@ const GiftDetailPage = () => {
     if (data) {
       updateUser(data)
     } else {
-      router.replace('/login')
+      sessionStorage.setItem('next_url', `/gift/${router?.query.id}`)
+      router.push('/login')
     }
   }, [router])
 
   useEffect(() => {
     fetchUser()
-  }, [])
+  }, [router])
 
   // 선물 데이터 조회
   const fetchGiftDetail = useCallback(
@@ -60,7 +61,7 @@ const GiftDetailPage = () => {
       setUsed(e.target.checked)
       userId && gift?._id && updateGiftUsed(userId, gift?._id, e.target.checked)
     },
-    [userId, gift?._id],
+    [router, userId, gift?._id],
   )
 
   // download html as png
@@ -88,6 +89,7 @@ const GiftDetailPage = () => {
           <Wrapper style={{ width: '100%' }}>
             <Icon
               name="arrowBack"
+              size="MEDIUM"
               color="WHITE"
               style={{ marginRight: 8 }}
               onIconClick={() =>
@@ -96,7 +98,7 @@ const GiftDetailPage = () => {
                 )
               }
             />
-            <Text size="BASE" color="WHITE">
+            <Text size="MEDIUM" color="WHITE">
               {gift?.category}
             </Text>
             <StyledSwitch>

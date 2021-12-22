@@ -42,13 +42,14 @@ const MyPage = (): JSX.Element => {
     if (data) {
       updateUser(data)
     } else {
-      router.replace('/login')
+      sessionStorage.setItem('next_url', router.asPath)
+      router.push(`/login`)
     }
   }, [router])
 
   useEffect(() => {
     fetchUser()
-  }, [])
+  }, [router])
 
   // 필터에 따른 받은 선물 목록 조회
   const fetchGiftList = useCallback(
@@ -158,7 +159,7 @@ const MyPage = (): JSX.Element => {
       <Header />
       <Profile>
         <MUIAvatar width={'120px'} height={'120px'} src={user?.profileImage} />
-        <Text color="WHITE" size="LARGE">
+        <Text color="WHITE" size="LARGE" style={{ wordBreak: 'break-word' }}>
           {user?.name}
         </Text>
         <Icon
@@ -166,7 +167,7 @@ const MyPage = (): JSX.Element => {
           color="TEXT_GRAY_DARK"
           size="MEDIUM"
           onIconClick={() => LogOutAlert(logOut)}
-          style={{ marginLeft: 'auto', marginTop: 100 }}
+          style={{ position: 'absolute', right: 0, bottom: 0 }}
         />
       </Profile>
       {currentTab === selectedTab && (
@@ -202,6 +203,7 @@ const Profile = styled.div`
   display: flex;
   gap: 40px;
   user-select: none;
+  position: relative;
 `
 
 export default MyPage

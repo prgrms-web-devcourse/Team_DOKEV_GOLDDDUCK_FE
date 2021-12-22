@@ -20,8 +20,13 @@ export const main = () => {
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
     const res = await getUserInfo()
-    res ? updateUser(res) : router.replace('/login')
-  }, [])
+    if (res) {
+      updateUser(res)
+    } else {
+      sessionStorage.setItem('next_url', router.asPath)
+      router.push('/login')
+    }
+  }, [router])
 
   useEffect(() => {
     getUserData()

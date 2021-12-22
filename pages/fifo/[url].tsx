@@ -126,9 +126,15 @@ const fifo = (): JSX.Element => {
 
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
+    console.log(router)
     const res = await getUserInfo()
-    res ? updateUser(res) : router.replace('/login')
-  }, [])
+    if (res) {
+      updateUser(res)
+    } else {
+      sessionStorage.setItem('next_url', `/fifo/${router?.query['url']}`)
+      router.push('/login')
+    }
+  }, [router])
 
   // 단일 이벤트 조회 API
   const getEventData = useCallback(async () => {
@@ -231,6 +237,7 @@ const SoldOutStyle: React.CSSProperties = {
   borderRadius: '50px',
   background: 'none',
   cursor: 'not-allowed',
+  whiteSpace: 'nowrap',
 }
 
 const GiftWrapper = styled.div`

@@ -38,13 +38,14 @@ const post = () => {
       setMemberId(res?.id)
       updateUser(res)
     } else {
+      sessionStorage.setItem('next_url', router.asPath)
       router.replace('/login')
     }
-  }, [])
+  }, [router])
 
   useEffect(() => {
     getUserData()
-  }, [])
+  }, [router])
 
   // stepper 로직
   const [activeStep, setActiveStep] = useState(0)
