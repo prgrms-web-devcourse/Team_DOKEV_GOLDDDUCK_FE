@@ -167,34 +167,36 @@ const fifo = (): JSX.Element => {
           message="선택의 기회는 단 한 번뿐!"
         />
         <GiftWrapper>
-          {eventData.gifts.map(({ id, category, itemCount }: Igifts, index) => (
-            <Gift key={id}>
-              <Image
-                src={`/gifts/gift${(index % 8) + 1}.png`}
-                width="60px"
-                height="60px"
-                mode="contain"
-              />
-              <GiftTextWrapper>
-                <Text size="MEDIUM" color="WHITE">
-                  {category}
-                </Text>
-                <Text size="BASE" color="TEXT_GRAY_DARK">
-                  수량 : {itemCount}개
-                </Text>
-              </GiftTextWrapper>
-              {itemCount ? (
-                <MUIButton
-                  id={String(id)}
-                  onClick={handleGiftReceipt}
-                  style={{ ...GetStyle }}>
-                  GET
-                </MUIButton>
-              ) : (
-                <MUIButton style={{ ...SoldOutStyle }}>SOLD OUT</MUIButton>
-              )}
-            </Gift>
-          ))}
+          {eventData.gifts.map(
+            ({ id, category, itemCount, soldOut }: Igifts, index) => (
+              <Gift key={id}>
+                <Image
+                  src={`/gifts/gift${(index % 8) + 1}.png`}
+                  width="60px"
+                  height="60px"
+                  mode="contain"
+                />
+                <GiftTextWrapper>
+                  <Text size="MEDIUM" color="WHITE">
+                    {category}
+                  </Text>
+                  <Text size="BASE" color="TEXT_GRAY_DARK">
+                    수량 : {itemCount}개
+                  </Text>
+                </GiftTextWrapper>
+                {!soldOut ? (
+                  <MUIButton
+                    id={String(id)}
+                    onClick={handleGiftReceipt}
+                    style={{ ...GetStyle }}>
+                    GET
+                  </MUIButton>
+                ) : (
+                  <MUIButton style={{ ...SoldOutStyle }}>SOLD OUT</MUIButton>
+                )}
+              </Gift>
+            ),
+          )}
         </GiftWrapper>
       </>
     )
