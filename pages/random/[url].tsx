@@ -135,8 +135,13 @@ const random = (): JSX.Element => {
   // 사용자 정보 API
   const getUserData = useCallback(async () => {
     const res = await getUserInfo()
-    res ? updateUser(res) : router.replace('/login')
-  }, [])
+    if (res) {
+      updateUser(res)
+    } else {
+      sessionStorage.setItem('next_url', `/random/${router?.query['url']}`)
+      router.push('/login')
+    }
+  }, [router])
 
   // 단일 이벤트 조회 API
   const getEventData = useCallback(async () => {
