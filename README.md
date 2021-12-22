@@ -40,10 +40,7 @@
 <img alt="Figma" src ="https://img.shields.io/badge/Figma-F24E1E.svg?&style=for-the-badge&logo=Figma&logoColor=white"/> 
 </a>
 <a href="https://maenguin.atlassian.net/jira/software/c/projects/GD/boards/6/backlog?issueLimit=100">
-<img alt="Jira Software
-" src ="https://img.shields.io/badge/Jira Software
--0052CC.svg?&style=for-the-badge&logo=Jira Software
-&logoColor=white"/> 
+<img alt="Jira Software" src ="https://img.shields.io/badge/Jira Software-0052CC.svg?&style=for-the-badge&logo=Jira Software&logoColor=white"/> 
 </a>
 
 ## 🐱 Git branch 전략
