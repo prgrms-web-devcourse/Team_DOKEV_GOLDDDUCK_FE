@@ -97,4 +97,12 @@
 - 랜덤으로 선물을 받아 가게 됩니다. (꽝 포함)
 ![랜덤선물받기](https://user-images.githubusercontent.com/52727782/147095150-c2c81936-0841-4faa-ac92-59d207240c86.gif)
 
+#### 눈치게임 선물받기
+- 이벤트 작성자는 해당 이벤트에 참여할 수 없습니다.
+- 오픈 시간이 되어야지 이벤트에 참여할 수 있습니다.
+- 여러개의 선물중에 참여자가 마음에 드는 선물을 선택합니다.
+- 눈치 게임으로 단 한번만 참여할 수 있습니다.
+  - 선택한 선물의 수량이 없어서 못 받은 경우, 다른 상품이 남아 있어도 다시 참여 불가!
+- ![눈치게임](https://user-images.githubusercontent.com/52727782/149651860-f7701283-658c-4766-a465-b9f7dd3bdb79.gif)
+
 ### 📃 [시연 영상](https://drive.google.com/file/d/1vDTEiCffnKVNp5GOowVuD8r9RS7-mGk1/view?usp=sharing)
