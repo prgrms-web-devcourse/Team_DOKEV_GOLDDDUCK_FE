@@ -35,7 +35,7 @@
 | [팀원 도가영](https://github.com/young-d)|
 
 ## 팀 활동 기록
-<a href="https://www.notion.so/backend-devcourse/1-e7e56923feb7463ca64075a2163cd653"><img alt="Notion" src ="https://img.shields.io/badge/Notion-ffffff.svg?&style=for-the-badge&logo=Notion&logoColor=black"/></a>
+<a href="https://flawless-oxygen-0b4.notion.site/79389e0ddede49c8a473c427878969e4"><img alt="Notion" src ="https://img.shields.io/badge/Notion-ffffff.svg?&style=for-the-badge&logo=Notion&logoColor=black"/></a>
 <a href="https://www.figma.com/file/FBKXfPFNdaUBmJOHv91l9I/%EA%B8%88%EB%82%98%EC%99%80%EB%9D%BC-%EB%9A%9D%EB%94%B1?node-id=233%3A686">
 <img alt="Figma" src ="https://img.shields.io/badge/Figma-F24E1E.svg?&style=for-the-badge&logo=Figma&logoColor=white"/> 
 </a>
